@@ -304,6 +304,11 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             self.pet.attacking = False
             self.pet.get_world().reset_attacking()
 
+        elif row == "Move":
+            self.pet.moving = True
+            self.pet.get_world().moving = True
+
+
     def attack(self, target):
         """
 

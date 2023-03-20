@@ -50,6 +50,7 @@ class Pet():
         self.health = 100
         self.strength = 10
         self.attacking = False
+        self.moving = False
 
 
     def set_name(self, name):
@@ -256,7 +257,21 @@ class Pet():
         else:   # collided with wall
             self.destroy()
             return False
-
+    def move_to(self, target):
+        current_square = self.get_location_square()
+        target_square = self.get_world().get_square(target)
+        #self.spin(direction)
+        if target_square.is_empty():
+            current_square.remove_robot()
+            self.location = target
+            target_square.set_robot(self)
+            return True
+        elif target_square.get_robot() is not None:
+            target_square.get_robot().destroy()
+            return False
+        else:  # collided with wall
+            self.destroy()
+            return False
 
     def move_forward(self):
         """
@@ -304,6 +319,9 @@ class Pet():
             self.destroy()
     def get_attack_state(self):
         return self.attacking
+
+    def get_moving_state(self):
+        return self.moving
 
 
     def __str__(self):

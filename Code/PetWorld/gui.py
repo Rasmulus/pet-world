@@ -32,7 +32,9 @@ class GUI(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.update_robots)
         self.timer.start(10) # Milliseconds
 
-
+        #do other things
+        self.pos = None
+        self.item = None
     def add_robot_world_grid_items(self):
         """
         Implement me in gui_exercise.py!
@@ -110,3 +112,47 @@ class GUI(QtWidgets.QMainWindow):
         self.view.adjustSize()
         self.view.show()
         self.horizontal.addWidget(self.view)
+
+    def mousePressEvent(self, event, *args, **kwargs):
+        if self.world.moving:
+            # Get the item that was clicked on
+            pos = self.view.mapToScene(event.pos())
+            self.pos = pos
+            #print(self.pos)
+            pos = self.view.mapFromScene(pos)
+            item = self.view.itemAt(pos)
+            self.item = item
+            #print(self.item.coordinates.get_x())
+            self.pos = pos
+            #print(self.pos)
+            print(item)
+            #print(self.gui_exercise.square_coordinates[self.item])
+            if isinstance(item, QtWidgets.QGraphicsRectItem):  # check if it's a SquareItem
+                menu = QtWidgets.QMenu()
+                font = menu.font()
+                font.setPointSize(font.pointSize() + 5)
+                menu.setFont(font)
+                rows = ["Move here", "Cancel"]
+                for row in rows:
+                    action = QtWidgets.QWidgetAction(menu)
+                    label = QtWidgets.QLabel(row)
+                    action.setDefaultWidget(label)
+                    menu.addAction(action)
+                    action.triggered.connect(
+                        lambda checked, row=row: self.handleContextMenuAction(row))
+                # Show the menu at the position of the event
+                #pos = self.view.mapFromGlobal(self.view.mapToGlobal(event.pos()))
+                menu.exec(pos)
+
+    def handleContextMenuAction(self, row):
+        if row == "Move here":
+            for i in self.world.get_robots():
+                if i.get_moving_state():
+                    i.move_to(self.gui_exercise.square_coordinates[self.item])
+                    self.world.reset_moving()
+
+
+
+
+        if row == "Cancel":
+            self.world.reset_moving()

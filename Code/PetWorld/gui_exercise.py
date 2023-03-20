@@ -21,6 +21,7 @@ class GuiExercise():
         self.scene = scene
         self.square_size = square_size
         self.added_robots = []
+        self.square_coordinates = {}
 
 
     def add_robot_world_grid_items(self):
@@ -93,6 +94,7 @@ class GuiExercise():
                 rect_item.setBrush(brush)
 
                 self.scene.addItem(rect_item)
+                self.square_coordinates[rect_item] = coordinates
 
     def add_robot_graphics_items(self):
         """

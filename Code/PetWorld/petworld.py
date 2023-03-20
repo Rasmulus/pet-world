@@ -33,6 +33,7 @@ class PetWorld():
         self.robots = []                        # container
         self.turn = 0                         # kinda like stepper (but not quite) index to robots list
         self.attacking = False
+        self.moving = False
 
     def get_width(self):
         """
@@ -187,3 +188,8 @@ class PetWorld():
         self.attacking = False
         for i in self.get_robots():
             i.attacking = False
+
+    def reset_moving(self):
+        self.moving = False
+        for i in self.get_robots():
+            i.moving = False
