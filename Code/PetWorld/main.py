@@ -11,6 +11,7 @@ from spinbot import *
 from drunkbot import *
 from nosebot import *
 from lovebot import *
+from dog import *
 
 
 def main():
@@ -33,11 +34,11 @@ def main():
     wall5_coordinates = Coordinates(3, 3)
     test_world.add_wall(wall5_coordinates)
 
-    nose_location = Coordinates(2, 3)
-    nose_body = Pet('Nose')
-    nose_brain = Nosebot(nose_body)
-    nose_body.set_brain(nose_brain)
-    test_world.add_robot(nose_body, nose_location, Direction.EAST)
+    dog_location = Coordinates(2, 3)
+    dog_body = Pet('Dog')
+    dog_brain = Dog(dog_body)
+    dog_body.set_brain(dog_brain)
+    test_world.add_robot(dog_body, dog_location, Direction.EAST)
 
     spin_location = Coordinates(9, 7)
     spin_body = Pet('Spin')

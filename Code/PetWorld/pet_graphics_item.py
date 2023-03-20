@@ -263,7 +263,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             print("attacker.get_location()")
             distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
 
-            if self.pet.att_range >= distance:  # Checks if target in range
+            if attacker.att_range >= distance:  # Checks if target in range
                 menu = QtWidgets.QMenu()
                 # make the font size larger
                 font = menu.font()

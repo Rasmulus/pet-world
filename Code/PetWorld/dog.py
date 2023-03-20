@@ -9,7 +9,11 @@ class Dog(PetBrain):
 
     See the documentation of PetWorld
     """
+    def __init__(self, body):
 
+        super().__init__(body)
+        self.body.range = 5
+        self.body.att_range = 2
     def move_body(self):
         """
         Moves the given "body", i.e., the robot given as a parameter. A dog first looks at the next square in the
