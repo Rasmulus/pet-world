@@ -48,10 +48,11 @@ class Pet():
         self.brain = None        # most-recent holder
         self.facing = None       # most-recent holder
         self.health = 100
-        self.strength = 10
+        self.strength = 50
         self.attacking = False
         self.moving = False
         self.range = 3
+        self.att_range = 1
 
 
     def set_name(self, name):
@@ -133,7 +134,8 @@ class Pet():
         """
         self.destroyed = True
         self.health = 0
-
+        current_square = self.get_location_square()
+        current_square.remove_robot()
 
     def fix(self):
         """

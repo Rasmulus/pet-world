@@ -22,6 +22,7 @@ class GUI(QtWidgets.QMainWindow):
         self.init_window()
         self.init_buttons()
         self.gui_exercise = GuiExercise(self.world, self.scene, self.square_size)
+        self.showMaximized()
 
         self.add_robot_world_grid_items()
         self.add_robot_graphics_items()
