@@ -1,6 +1,20 @@
 - implement teams
+- implement AI
+- implement breaking mind control (taking over AI pets)
 - implement death
 - implement proper turns
+- implement saving and loading game state
+- implement level graphical editor
+- implement pet classe:
+    - Dog -> Done
+    - Cat
+    - Rodent
+    - Reptile
+    - Bird
+- Implement mana/pp system
+- implement character sheet
+- implement showing and hiding information when necessary
+  (either when hovering over pets, or when in attack/move etc. states)
 
 - Implement movement controls -> Done
 - implement distance counting function for movement & attack radius -> Done
