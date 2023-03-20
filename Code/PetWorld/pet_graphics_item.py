@@ -35,7 +35,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def makeNameTag(self):
         self.name_tag = QtWidgets.QLabel()
-        self.name_tag.setText(self.pet.get_name())
+        self.name_tag.setText(f"{self.pet.get_name()}, at {self.pet.get_location()}")
 
         # make the font size larger
         font = self.name_tag.font()

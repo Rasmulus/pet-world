@@ -51,6 +51,7 @@ class Pet():
         self.strength = 10
         self.attacking = False
         self.moving = False
+        self.range = 3
 
 
     def set_name(self, name):
@@ -260,18 +261,16 @@ class Pet():
     def move_to(self, target):
         current_square = self.get_location_square()
         target_square = self.get_world().get_square(target)
-        #self.spin(direction)
-        if target_square.is_empty():
+        print(target.get_x())
+
+        print("debug")
+        print(self.get_location().get_x())
+        if target_square.is_empty() and self.distance_count(target) <= self.range:
             current_square.remove_robot()
             self.location = target
             target_square.set_robot(self)
             return True
-        elif target_square.get_robot() is not None:
-            target_square.get_robot().destroy()
-            return False
-        else:  # collided with wall
-            self.destroy()
-            return False
+
 
     def move_forward(self):
         """
@@ -322,6 +321,28 @@ class Pet():
 
     def get_moving_state(self):
         return self.moving
+
+    def distance_count(self, target):
+        """
+        Calculates the distance between a pet and a target.
+        """
+
+
+        current_square = self.get_location()
+        current_x = current_square.get_x()
+        current_y = current_square.get_y()
+        target_x = target.get_x()
+        target_y = target.get_y()
+
+        x_difference = current_x - target_x
+        if x_difference < 0:
+            x_difference = x_difference / -1
+
+        y_difference = current_y - target_y
+        if y_difference < 0:
+            y_difference = y_difference / -1
+
+        return x_difference + y_difference
 
 
     def __str__(self):

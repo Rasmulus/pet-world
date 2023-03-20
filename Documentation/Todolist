@@ -1,4 +1,8 @@
-- Implement movement controls
 - implement attack radius
 - implement teams
 - implement death
+- implement proper turns
+
+- Implement movement controls -> Done
+- implement distance counting function for movement & attack radius -> Done
+- implement movement radius -> Done
