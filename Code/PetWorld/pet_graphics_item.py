@@ -25,12 +25,55 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.setBrush(brush)
         self.constructTriangleVertices()
         self.health_bar_proxy = self.makeHealthBar()
+        self.name_tag_proxy = self.makeNameTag()
         self.updateAll()
 
 
         # create a progress bar widget to show health
 
         #self.health_bar_proxy.update()
+
+    def makeNameTag(self):
+        self.name_tag = QtWidgets.QLabel()
+        self.name_tag.setText(self.pet.get_name())
+
+        # make the font size larger
+        font = self.name_tag.font()
+        font.setPointSize(font.pointSize() + 5)
+        self.name_tag.setFont(font)
+
+        # create a proxy widget for the name tag
+        name_tag_proxy = QtWidgets.QGraphicsProxyWidget(self)
+        name_tag_proxy.setWidget(self.name_tag)
+
+        return name_tag_proxy
+
+    def updateNameTag(self):
+        """
+        Updates the name tag to follow the location of the parent pet.
+        """
+        # get the rotation of this item and set the rotation of the proxy widget
+        rotation = self.rotation()
+        self.name_tag_proxy.setRotation(-rotation)
+
+        # calculate the center point of the triangle
+        center_x = self.square_size / 2
+        center_y = self.square_size / 2
+
+        # calculate the offset for the name tag proxy widget
+        offset_x = center_x - 50
+        offset_y = -self.name_tag.height() - 65
+
+        # set the position of the proxy widget
+        self.name_tag_proxy.setPos(offset_x, offset_y)
+
+        # calculate the rotated offset using a transformation matrix
+        transformation = QtGui.QTransform()
+        transformation.rotate(-rotation)
+        offset = transformation.map(QtCore.QPointF(offset_x, offset_y))
+
+        # set the position of the health bar proxy widget relative to the center point
+        self.name_tag_proxy.setPos(center_x + offset.x(), center_y + offset.y())
 
 
     def makeHealthBar(self):
@@ -107,6 +150,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateRotation()
         self.updateColor()
         self.updateHealthBar()
+        self.updateNameTag()
         #self.health_bar_proxy.setWidget(self.health_bar)
 
     def updatePosition(self):
@@ -209,6 +253,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         #Check if attacking
         if not self.pet.get_attack_state() and self.pet.get_world().attacking:
             menu = QtWidgets.QMenu()
+            # make the font size larger
+            font = menu.font()
+            font.setPointSize(font.pointSize() + 5)
+            menu.setFont(font)
             # Create the menu items and add them to the menu
             rows = ["Choose Target", "Cancel"]
             for row in rows:
@@ -223,6 +271,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         elif not self.pet.get_attack_state():
             menu = QtWidgets.QMenu()
+            # make the font size larger
+            font = menu.font()
+            font.setPointSize(font.pointSize() + 5)
+            menu.setFont(font)
             # Create the menu items and add them to the menu
             rows = ["Move", "Attack", "Heal"]
             for row in rows:
