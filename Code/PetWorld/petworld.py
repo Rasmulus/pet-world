@@ -32,7 +32,7 @@ class PetWorld():
                 self.squares[x][y] = Square()    # fixed value
         self.robots = []                        # container
         self.turn = 0                         # kinda like stepper (but not quite) index to robots list
-
+        self.attacking = False
 
     def get_width(self):
         """
@@ -182,3 +182,8 @@ class PetWorld():
         Returns an array containing all the robots currently located in this world: list
         """
         return self.robots[:]
+
+    def reset_attacking(self):
+        self.attacking = False
+        for i in self.get_robots():
+            i.attacking = False

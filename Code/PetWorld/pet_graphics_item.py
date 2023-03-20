@@ -206,20 +206,61 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def mousePressEvent(self, event, *args, **kwargs):
 
-    #def contextMenuEvent(self, event):
-        menu = QtWidgets.QMenu()
-        # Create the menu items and add them to the menu
-        rows = ["Move", "Attack", "Heal"]
-        for row in rows:
-            action = QtWidgets.QWidgetAction(menu)
-            label = QtWidgets.QLabel(row)
-            action.setDefaultWidget(label)
-            menu.addAction(action)
-            # Connect the action to a method that handles it
-            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-        # Show the menu at the position of the event
-        menu.exec(event.screenPos())
+        #Check if attacking
+        if not self.pet.get_attack_state() and self.pet.get_world().attacking:
+            menu = QtWidgets.QMenu()
+            # Create the menu items and add them to the menu
+            rows = ["Choose Target", "Cancel"]
+            for row in rows:
+                action = QtWidgets.QWidgetAction(menu)
+                label = QtWidgets.QLabel(row)
+                action.setDefaultWidget(label)
+                menu.addAction(action)
+                # Connect the action to a method that handles it
+                action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+            # Show the menu at the position of the event
+            menu.exec(event.screenPos())
+
+        elif not self.pet.get_attack_state():
+            menu = QtWidgets.QMenu()
+            # Create the menu items and add them to the menu
+            rows = ["Move", "Attack", "Heal"]
+            for row in rows:
+                action = QtWidgets.QWidgetAction(menu)
+                label = QtWidgets.QLabel(row)
+                action.setDefaultWidget(label)
+                menu.addAction(action)
+                # Connect the action to a method that handles it
+                action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+            # Show the menu at the position of the event
+            menu.exec(event.screenPos())
+        else:
+            pass
 
     def handleContextMenuAction(self, row):
         if row == "Heal" and self.pet.is_broken:
             self.pet.fix()
+
+        elif row == "Attack":
+            self.pet.attacking = True
+            self.pet.get_world().attacking = True
+
+        elif row == "Choose Target":
+            self.attack(self)
+
+        elif row == "Cancel":
+            self.pet.attacking = False
+            self.pet.get_world().reset_attacking()
+
+    def attack(self, target):
+        """
+
+        Attacks the target pet.
+
+        """
+        target.pet.set_health(target.pet.get_health() - self.pet.strength)
+        if target.pet.get_health() < 0:
+            target.pet.set_health(0)
+        self.pet.attacking = False
+        self.pet.get_world().reset_attacking()
+

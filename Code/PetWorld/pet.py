@@ -48,6 +48,8 @@ class Pet():
         self.brain = None        # most-recent holder
         self.facing = None       # most-recent holder
         self.health = 100
+        self.strength = 10
+        self.attacking = False
 
 
     def set_name(self, name):
@@ -296,7 +298,12 @@ class Pet():
 
     def set_health(self, value):
         self.health = value
-
+        if self.health < 0:
+            self.health = 0
+        if self.health == 0:
+            self.destroy()
+    def get_attack_state(self):
+        return self.attacking
 
 
     def __str__(self):
