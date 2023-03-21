@@ -18,6 +18,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         # Call init of the parent object
         super(PetGraphicsItem, self).__init__()
 
+        self.setAcceptHoverEvents(True)
+
         # Do other stuff
         self.pet = pet
         self.square_size = square_size
@@ -26,16 +28,26 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.constructTriangleVertices()
         self.health_bar_proxy = self.makeHealthBar()
         self.name_tag_proxy = self.makeNameTag()
+        self.char_sheet_proxy = self.makeCharSheet()
         self.updateAll()
+        self.health_bar_proxy.setVisible(False)
+        self.name_tag_proxy.setVisible(False)
+        self.char_sheet_proxy.setVisible(False)
 
+    def hoverEnterEvent(self, event):
+        self.char_sheet_proxy.setVisible(True)
+        self.health_bar_proxy.setVisible(True)
+        self.name_tag_proxy.setVisible(True)
 
-        # create a progress bar widget to show health
+    def hoverLeaveEvent(self, event):
+        self.char_sheet_proxy.setVisible(False)
+        self.health_bar_proxy.setVisible(False)
+        self.name_tag_proxy.setVisible(False)
 
-        #self.health_bar_proxy.update()
 
     def makeNameTag(self):
         self.name_tag = QtWidgets.QLabel()
-        self.name_tag.setText(f"{self.pet.get_name()}, {self.pet.team}" )
+        self.name_tag.setText(f"{self.pet.get_name()}")
 
         # make the font size larger
         font = self.name_tag.font()
@@ -72,9 +84,52 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         transformation.rotate(-rotation)
         offset = transformation.map(QtCore.QPointF(offset_x, offset_y))
 
-        # set the position of the health bar proxy widget relative to the center point
+        # set the position of the proxy widget relative to the center point
         self.name_tag_proxy.setPos(center_x + offset.x(), center_y + offset.y())
 
+
+    def makeCharSheet(self):
+        self.char_sheet = QtWidgets.QLabel()
+
+
+        # make the font size larger
+        font = self.char_sheet.font()
+        font.setPointSize(font.pointSize() + 5)
+        self.char_sheet.setFont(font)
+
+        # create a proxy widget for the character sheet
+        char_sheet_proxy = QtWidgets.QGraphicsProxyWidget(self)
+        char_sheet_proxy.setWidget(self.char_sheet)
+
+        return char_sheet_proxy
+
+    def updateCharSheet(self):
+        """
+        Updates the character sheet to follow the location of the parent pet.
+        """
+        # get the rotation of this item and set the rotation of the proxy widget
+        rotation = self.rotation()
+        self.char_sheet_proxy.setRotation(-rotation)
+        self.char_sheet.setText(f"Name: {self.pet.get_name()}\nTeam: {self.pet.team}\nHealth: {self.pet.health}/{self.pet.max_health}\n"
+                                f"Movement range: {self.pet.range}\nAttack range: {self.pet.att_range}\nStrength: {self.pet.strength}\nArmour: -")
+        # calculate the center point of the triangle
+        center_x = self.square_size / 2
+        center_y = self.square_size / 2
+
+        # calculate the offset for the name tag proxy widget
+        offset_x = center_x - 225
+        offset_y = -self.char_sheet.height() + 150
+
+        # set the position of the proxy widget
+        self.char_sheet_proxy.setPos(offset_x, offset_y)
+
+        # calculate the rotated offset using a transformation matrix
+        transformation = QtGui.QTransform()
+        transformation.rotate(-rotation)
+        offset = transformation.map(QtCore.QPointF(offset_x, offset_y))
+
+        # set the position of the proxy widget relative to the center point
+        self.char_sheet_proxy.setPos(center_x + offset.x(), center_y + offset.y())
 
     def makeHealthBar(self):
         self.health_bar = QtWidgets.QProgressBar()
@@ -151,6 +206,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateColor()
         self.updateHealthBar()
         self.updateNameTag()
+        self.updateCharSheet()
         #self.health_bar_proxy.setWidget(self.health_bar)
 
     def updatePosition(self):
@@ -244,6 +300,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     #def updateHealthBar(self):
         #self.health_bar_proxy.setWidget(self.health_bar)
+
 
 
 

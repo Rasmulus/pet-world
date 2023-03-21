@@ -47,7 +47,8 @@ class Pet():
         self.destroyed = False   # flag
         self.brain = None        # most-recent holder
         self.facing = None       # most-recent holder
-        self.health = 100
+        self.max_health = 100
+        self.health = self.max_health
         self.strength = 50
         self.attacking = False
         self.moving = False
