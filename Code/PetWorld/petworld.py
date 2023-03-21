@@ -34,6 +34,7 @@ class PetWorld():
         self.turn = 0                         # kinda like stepper (but not quite) index to robots list
         self.attacking = False
         self.moving = False
+        self.active_team = "Blue"
 
     def get_width(self):
         """
@@ -193,3 +194,9 @@ class PetWorld():
         self.moving = False
         for i in self.get_robots():
             i.moving = False
+
+    def change_active_team(self):
+        if self.active_team == "Blue":
+            self.active_team = "Red"
+        else:
+            self.active_team = "Blue"

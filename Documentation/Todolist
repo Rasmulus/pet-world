@@ -1,4 +1,3 @@
-- implement teams
 - implement AI
 - implement breaking mind control (taking over AI pets)
 - implement death
@@ -16,6 +15,8 @@
 - implement showing and hiding information when necessary
   (either when hovering over pets, or when in attack/move etc. states)
 
+- Implement team colours to the UI -> Done
+- implement teams -> Done
 - Implement movement controls -> Done
 - implement distance counting function for movement & attack radius -> Done
 - implement movement radius -> Done

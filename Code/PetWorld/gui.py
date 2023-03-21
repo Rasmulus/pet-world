@@ -104,6 +104,7 @@ class GUI(QtWidgets.QMainWindow):
         self.setWindowTitle('PetWorld')
         self.show()
 
+
         # Add a scene for drawing 2d objects
         self.scene = QtWidgets.QGraphicsScene()
         self.scene.setSceneRect(0, 0, 700, 700)
@@ -113,6 +114,12 @@ class GUI(QtWidgets.QMainWindow):
         self.view.adjustSize()
         self.view.show()
         self.horizontal.addWidget(self.view)
+
+        # Set the background color
+        if self.world.active_team == "Blue":
+            self.view.setStyleSheet("background-color: blue;")
+        else:
+            self.view.setStyleSheet("background-color: red;")
 
     def mousePressEvent(self, event, *args, **kwargs):
         if self.world.moving:

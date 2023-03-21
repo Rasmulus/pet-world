@@ -53,6 +53,7 @@ class Pet():
         self.moving = False
         self.range = 3
         self.att_range = 1
+        self.team = "Blue"
 
 
     def set_name(self, name):
@@ -345,6 +346,12 @@ class Pet():
             y_difference = y_difference / -1
 
         return x_difference + y_difference
+
+    def change_team(self):
+        if self.team == "Blue":
+            self.team = "Red"
+        else:
+            self.team = "Blue"
 
 
     def __str__(self):

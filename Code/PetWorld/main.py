@@ -40,6 +40,13 @@ def main():
     dog_body.set_brain(dog_brain)
     test_world.add_robot(dog_body, dog_location, Direction.EAST)
 
+    dog_location = Coordinates(5, 3)
+    dog_body = Pet('Bad Dog')
+    dog_brain = Dog(dog_body)
+    dog_body.set_brain(dog_brain)
+    dog_body.change_team()
+    test_world.add_robot(dog_body, dog_location, Direction.EAST)
+
     spin_location = Coordinates(9, 7)
     spin_body = Pet('Spin')
     spin_brain = Spinbot(spin_body)

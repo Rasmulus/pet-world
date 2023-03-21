@@ -35,7 +35,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def makeNameTag(self):
         self.name_tag = QtWidgets.QLabel()
-        self.name_tag.setText(self.pet.get_name())
+        self.name_tag.setText(f"{self.pet.get_name()}, {self.pet.team}" )
 
         # make the font size larger
         font = self.name_tag.font()
@@ -223,18 +223,17 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         Look at pet.py for checking the status of the pet.
         """
         state = ""
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 255))
         self.setBrush(brush)
 
 
 
-        if self.pet.is_broken():
+        if self.pet.team == "Red":
             brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
-            state = "broken"
             self.setBrush(brush)
 
-        elif not self.pet.is_broken():
-            brush = QtGui.QBrush(QtGui.QColor(0, 255, 0))
+        elif not self.pet.team == "Blue":
+            brush = QtGui.QBrush(QtGui.QColor(0, 0, 255))
 
 
         if self.pet.is_stuck():
@@ -249,28 +248,45 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
 
     def mousePressEvent(self, event, *args, **kwargs):
-
-        #Check if attacking
-        if not self.pet.get_attack_state() and self.pet.get_world().attacking:
-            target = self.pet
-            attacker = None
-            print("debug")
-            for i in self.pet.get_world().get_robots():
+            #Check if attacking
+            if not self.pet.get_attack_state() and self.pet.get_world().attacking:
+                target = self.pet
+                attacker = None
                 print("debug")
-                if i.attacking:
-                    attacker = i
-            print("debug")
-            print("attacker.get_location()")
-            distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
+                for i in self.pet.get_world().get_robots():
+                    print("debug")
+                    if i.attacking:
+                        attacker = i
+                print("debug")
+                print("attacker.get_location()")
+                distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
 
-            if attacker.att_range >= distance:  # Checks if target in range
+                if attacker.att_range >= distance:  # Checks if target in range
+                    menu = QtWidgets.QMenu()
+                    # make the font size larger
+                    font = menu.font()
+                    font.setPointSize(font.pointSize() + 5)
+                    menu.setFont(font)
+                    # Create the menu items and add them to the menu
+                    rows = ["Choose Target", "Cancel"]
+                    for row in rows:
+                        action = QtWidgets.QWidgetAction(menu)
+                        label = QtWidgets.QLabel(row)
+                        action.setDefaultWidget(label)
+                        menu.addAction(action)
+                        # Connect the action to a method that handles it
+                        action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                    # Show the menu at the position of the event
+                    menu.exec(event.screenPos())
+
+            elif not self.pet.get_attack_state() and self.pet.team == self.pet.get_world().active_team:
                 menu = QtWidgets.QMenu()
                 # make the font size larger
                 font = menu.font()
                 font.setPointSize(font.pointSize() + 5)
                 menu.setFont(font)
                 # Create the menu items and add them to the menu
-                rows = ["Choose Target", "Cancel"]
+                rows = ["Move", "Attack", "Heal"]
                 for row in rows:
                     action = QtWidgets.QWidgetAction(menu)
                     label = QtWidgets.QLabel(row)
@@ -280,29 +296,11 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                     action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
                 # Show the menu at the position of the event
                 menu.exec(event.screenPos())
-
-        elif not self.pet.get_attack_state():
-            menu = QtWidgets.QMenu()
-            # make the font size larger
-            font = menu.font()
-            font.setPointSize(font.pointSize() + 5)
-            menu.setFont(font)
-            # Create the menu items and add them to the menu
-            rows = ["Move", "Attack", "Heal"]
-            for row in rows:
-                action = QtWidgets.QWidgetAction(menu)
-                label = QtWidgets.QLabel(row)
-                action.setDefaultWidget(label)
-                menu.addAction(action)
-                # Connect the action to a method that handles it
-                action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-            # Show the menu at the position of the event
-            menu.exec(event.screenPos())
-        else:
-            self.pet.attacking = False
-            self.pet.get_world().reset_attacking()
-            self.pet.moving = False
-            self.pet.get_world().moving = False
+            else:
+                self.pet.attacking = False
+                self.pet.get_world().reset_attacking()
+                self.pet.moving = False
+                self.pet.get_world().moving = False
 
     def handleContextMenuAction(self, row):
         if row == "Heal" and self.pet.is_broken:
