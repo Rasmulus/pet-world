@@ -85,7 +85,9 @@ class GUI(QtWidgets.QMainWindow):
         self.next_turn_btn = QtWidgets.QPushButton("Next full turn")
         self.next_turn_btn.clicked.connect(self.world.next_full_turn)
         self.horizontal.addWidget(self.next_turn_btn)
-
+        self.end_turn_btn = QtWidgets.QPushButton("End turn")
+        self.end_turn_btn.clicked.connect(self.world.change_active_team)
+        self.horizontal.addWidget(self.end_turn_btn)
 
     def update_robots(self):
         """
@@ -95,6 +97,7 @@ class GUI(QtWidgets.QMainWindow):
         for robot_item in self.get_robot_graphics_items():
             robot_item.updateAll()
         self.scene.update()
+        self.update_window()
 
     def init_window(self):
         """
@@ -116,6 +119,12 @@ class GUI(QtWidgets.QMainWindow):
         self.horizontal.addWidget(self.view)
 
         # Set the background color
+        if self.world.active_team == "Blue":
+            self.view.setStyleSheet("background-color: blue;")
+        else:
+            self.view.setStyleSheet("background-color: red;")
+
+    def update_window(self):
         if self.world.active_team == "Blue":
             self.view.setStyleSheet("background-color: blue;")
         else:

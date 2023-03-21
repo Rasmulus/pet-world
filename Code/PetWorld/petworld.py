@@ -1,6 +1,5 @@
 from square import Square
 
-
 class PetWorld():
     """
     The class PetWorld describes a two dimensional world made up
@@ -194,9 +193,23 @@ class PetWorld():
         self.moving = False
         for i in self.get_robots():
             i.moving = False
+    def reset_attacked(self):
+        for i in self.get_robots():
+            i.attacked = False
+
+    def reset_moved(self):
+        for i in self.get_robots():
+            i.moved = False
+
+    def reset_all(self):
+        self.reset_moved()
+        self.reset_attacked()
+        self.reset_moving()
+        self.reset_attacking()
 
     def change_active_team(self):
         if self.active_team == "Blue":
             self.active_team = "Red"
         else:
             self.active_team = "Blue"
+        self.reset_all()

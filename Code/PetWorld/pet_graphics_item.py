@@ -285,8 +285,16 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 font = menu.font()
                 font.setPointSize(font.pointSize() + 5)
                 menu.setFont(font)
-                # Create the menu items and add them to the menu
-                rows = ["Move", "Attack", "Heal"]
+                # Create the menu items based on pet status and add them to the menu
+                if not self.pet.attacked and not self.pet.moved:
+                    rows = ["Move", "Attack", "Heal"]
+                elif not self.pet.attacked and self.pet.moved:
+                    rows = ["Attack", "Heal"]
+                elif not self.pet.moved:
+                    rows = ["Move"]
+                else:
+                    rows = []
+
                 for row in rows:
                     action = QtWidgets.QWidgetAction(menu)
                     label = QtWidgets.QLabel(row)
@@ -305,6 +313,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
     def handleContextMenuAction(self, row):
         if row == "Heal" and self.pet.is_broken:
             self.pet.fix()
+            self.pet.attacked = True
 
         elif row == "Attack":
             self.pet.attacking = True
@@ -332,5 +341,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         if target.pet.get_health() < 0:
             target.pet.set_health(0)
         self.pet.attacking = False
+        for i in self.pet.get_world().get_robots():
+            if i.attacking == True:
+                i.attacked = True
         self.pet.get_world().reset_attacking()
 

@@ -54,6 +54,8 @@ class Pet():
         self.range = 3
         self.att_range = 1
         self.team = "Blue"
+        self.moved = False
+        self.attacked = False
 
 
     def set_name(self, name):
@@ -272,6 +274,7 @@ class Pet():
             current_square.remove_robot()
             self.location = target
             target_square.set_robot(self)
+            self.moved = True
             return True
 
 
