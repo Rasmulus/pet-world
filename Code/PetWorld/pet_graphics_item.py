@@ -35,6 +35,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.char_sheet_proxy.setVisible(False)
 
     def hoverEnterEvent(self, event):
+        self.updateAll()
         self.char_sheet_proxy.setVisible(True)
         self.health_bar_proxy.setVisible(True)
         self.name_tag_proxy.setVisible(True)
@@ -76,6 +77,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         offset_x = center_x - 50
         offset_y = -self.name_tag.height() - 65
 
+        #raise to front
+        self.name_tag.raise_()
+
         # set the position of the proxy widget
         self.name_tag_proxy.setPos(offset_x, offset_y)
 
@@ -91,6 +95,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
     def makeCharSheet(self):
         self.char_sheet = QtWidgets.QLabel()
 
+        # raise to front
+        self.char_sheet.raise_()
 
         # make the font size larger
         font = self.char_sheet.font()
@@ -119,6 +125,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         # calculate the offset for the name tag proxy widget
         offset_x = center_x - 225
         offset_y = -self.char_sheet.height() + 150
+
+        # raise to front
+        self.char_sheet.raise_()
 
         # set the position of the proxy widget
         self.char_sheet_proxy.setPos(offset_x, offset_y)
@@ -158,6 +167,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         # calculate the center point of the triangle
         center_x = self.square_size / 2
         center_y = self.square_size / 2
+
+        # raise to front
+        self.health_bar.raise_()
 
         # calculate the offset for the health bar proxy widget
         offset_x = center_x - 100

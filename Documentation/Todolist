@@ -1,4 +1,3 @@
-- implement timer
 - implement AI
 - implement breaking mind control (taking over AI pets)
 - implement death
@@ -15,6 +14,7 @@
   - either when hovering over pets  -> Done
   - or when in attack/move etc. states
 
+- implement timer -> Done
 - implement character sheet -> Done
 - implement proper turns -> Done
 - Implement team colours to the UI -> Done

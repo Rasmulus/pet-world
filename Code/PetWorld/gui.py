@@ -23,6 +23,9 @@ class GUI(QtWidgets.QMainWindow):
         self.init_buttons()
         self.gui_exercise = GuiExercise(self.world, self.scene, self.square_size)
         self.showMaximized()
+        #self.showFullScreen()
+
+
 
         self.add_robot_world_grid_items()
         self.add_robot_graphics_items()
@@ -33,9 +36,36 @@ class GUI(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.update_robots)
         self.timer.start(10) # Milliseconds
 
+
         #do other things
         self.pos = None
         self.item = None
+
+        # Create a timer that fires every second
+        self.elapsed_time = QtCore.QTime(0, 0, 0)  # initialize elapsed time to 0
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.showTime)
+        self.timer.start(1000)  # update elapsed time every second
+
+        # Create a LCD display widget
+        self.lcd = QtWidgets.QLCDNumber(self)
+        self.lcd.setSegmentStyle(QtWidgets.QLCDNumber.SegmentStyle.Flat)
+        self.lcd.setFixedSize(200, 80) # Set the size of the clock widget
+        self.layout().addWidget(self.lcd)
+        self.lcd.setStyleSheet("background-color: white;")
+
+
+
+
+    def showTime(self):
+        # Increment elapsed time by 1 second
+        self.elapsed_time = self.elapsed_time.addSecs(1)
+
+        # Set the format of the time
+        timeString = self.elapsed_time.toString('hh:mm:ss')
+
+        # Display the time on the LCD display widget
+        self.lcd.display(timeString)
     def add_robot_world_grid_items(self):
         """
         Implement me in gui_exercise.py!
