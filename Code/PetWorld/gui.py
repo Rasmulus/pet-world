@@ -43,9 +43,9 @@ class GUI(QtWidgets.QMainWindow):
 
         # Create a timer that fires every second
         self.elapsed_time = QtCore.QTime(0, 0, 0)  # initialize elapsed time to 0
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.showTime)
-        self.timer.start(1000)  # update elapsed time every second
+        self.clock = QtCore.QTimer(self)
+        self.clock.timeout.connect(self.showTime)
+        self.clock.start(1000)  # update elapsed time every second
 
         # Create a LCD display widget
         self.lcd = QtWidgets.QLCDNumber(self)
