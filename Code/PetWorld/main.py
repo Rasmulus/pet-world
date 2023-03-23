@@ -31,8 +31,7 @@ def main():
     test_world.add_wall(wall3_coordinates)
     wall4_coordinates = Coordinates(1, 3)
     test_world.add_wall(wall4_coordinates)
-    wall5_coordinates = Coordinates(3, 3)
-    test_world.add_wall(wall5_coordinates)
+
 
     dog_location = Coordinates(2, 3)
     dog_body = Pet('Dog')
@@ -40,31 +39,27 @@ def main():
     dog_body.set_brain(dog_brain)
     test_world.add_robot(dog_body, dog_location, Direction.EAST)
 
-    dog_location = Coordinates(5, 3)
+    bad_dog_location = Coordinates(5, 3)
     dog_body = Pet('Bad Dog')
     dog_brain = Dog(dog_body)
     dog_body.set_brain(dog_brain)
     dog_body.change_team()
+    test_world.add_robot(dog_body, bad_dog_location, Direction.EAST)
+
+    dog_location = Coordinates(9, 7)
+    dog_body = Pet('Dog')
+    dog_brain = Dog(dog_body)
+    dog_body.set_brain(dog_brain)
     test_world.add_robot(dog_body, dog_location, Direction.EAST)
 
-    spin_location = Coordinates(9, 7)
-    spin_body = Pet('Spin')
-    spin_brain = Spinbot(spin_body)
-    spin_body.set_brain(spin_brain)
-    test_world.add_robot(spin_body, spin_location, Direction.SOUTH)
+    bad_dog_location = Coordinates(8, 5)
+    dog_body = Pet('Bad Dog')
+    dog_brain = Dog(dog_body)
+    dog_body.set_brain(dog_brain)
+    dog_body.change_team()
+    test_world.add_robot(dog_body, bad_dog_location, Direction.EAST)
 
-    love_location = Coordinates(8, 5)
-    love_body = Pet('Love')
-    love_brain = Lovebot(love_body, spin_body)
-    love_body.set_brain(love_brain)
-    test_world.add_robot(love_body, love_location, Direction.EAST)
 
-    drunk_location = Coordinates(5, 5)
-    drunk_body = Pet('Drunk')
-    seed = 2
-    drunk_brain = Drunkbot(drunk_body, seed)
-    drunk_body.set_brain(drunk_brain)
-    test_world.add_robot(drunk_body, drunk_location, Direction.EAST)
 
     # Every Qt application must have one instance of QApplication.
     global app # Use global to prevent crashing on exit

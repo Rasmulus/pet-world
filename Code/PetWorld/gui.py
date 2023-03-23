@@ -112,9 +112,9 @@ class GUI(QtWidgets.QMainWindow):
         Adds buttons to the window and connects them to their respective functions
         See: QPushButton at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QPushButton.html
         """
-        self.next_turn_btn = QtWidgets.QPushButton("Next full turn")
-        self.next_turn_btn.clicked.connect(self.world.next_full_turn)
-        self.horizontal.addWidget(self.next_turn_btn)
+        #self.next_turn_btn = QtWidgets.QPushButton("Next full turn")
+        #self.next_turn_btn.clicked.connect(self.world.next_full_turn)
+        #self.horizontal.addWidget(self.next_turn_btn)
         self.end_turn_btn = QtWidgets.QPushButton("End turn")
         self.end_turn_btn.clicked.connect(self.world.change_active_team)
         self.horizontal.addWidget(self.end_turn_btn)
