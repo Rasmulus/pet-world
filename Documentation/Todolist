@@ -14,6 +14,8 @@
   - either when hovering over pets  -> Done
   - or when in attack/move etc. states
 
+- implement graphics for showing all possible moves when moving
+- implement barrier logic (possible moves going around barriers) -> Done
 - implement timer -> Done
 - implement character sheet -> Done
 - implement proper turns -> Done
