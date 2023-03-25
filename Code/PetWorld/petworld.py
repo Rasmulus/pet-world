@@ -34,6 +34,7 @@ class PetWorld():
         self.attacking = False
         self.moving = False
         self.active_team = "Blue"
+        self.obstacles = []
 
     def get_width(self):
         """
@@ -82,7 +83,11 @@ class PetWorld():
         Parameter location is the location of the wall: Coordinates
 
         Returns a boolean value indicating if the operation succeeded: boolean
+
         """
+        string_tuple = location.__str__()
+        tuple_result = tuple(map(int, string_tuple.strip("()").split(",")))
+        self.obstacles.append(tuple_result)
         return self.get_square(location).set_wall()
 
 
