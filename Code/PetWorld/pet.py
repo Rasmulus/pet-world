@@ -1,5 +1,6 @@
 from direction import Direction
-
+import sys
+sys.setrecursionlimit(10000) # or some other large value
 
 class Pet():
     """
@@ -267,11 +268,14 @@ class Pet():
     def move_to(self, target):
         current_square = self.get_location_square()
         target_square = self.get_world().get_square(target)
-        print(target.get_x())
+        #print(target.get_x())
 
-        print("debug")
-        print(self.get_location().get_x())
-        if target_square.is_empty() and self.distance_count(target) <= self.range:
+        #print("debug")
+        #print(self.get_location().get_x())
+        print(target, "test")
+        tuple_result = tuple(map(int, str(target).strip("()").split(",")))
+        print("test")
+        if tuple_result in self.get_possible_moves():
             current_square.remove_robot()
             self.location = target
             target_square.set_robot(self)
@@ -328,6 +332,43 @@ class Pet():
 
     def get_moving_state(self):
         return self.moving
+
+    def get_possible_moves(self, x=None, y=None, r=None, obstacles=None):
+        if x is None:
+            x = self.get_location().get_x()
+        if y is None:
+            y = self.get_location().get_y()
+        if r is None:
+            r = self.range
+        if obstacles is None:
+            obstacles = self.get_world().obstacles
+
+        # Base case: character can't move
+        if r == 0:
+            return [(x, y)]
+
+        # Generate all possible moves based on directions
+        moves = []
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        for d in directions:
+            new_x, new_y = x + d[0], y + d[1]
+            distance = abs(d[0]) + abs(d[1])
+            # Check if new position is not an obstacle
+            if (new_x, new_y) not in obstacles:
+                # Recursively find possible moves from new position
+                possible_moves = self.get_possible_moves(new_x, new_y, r - distance, obstacles)
+                # Check if new position is within range
+                if distance <= r:
+                    moves += possible_moves
+
+        # Add the current position if it is within range
+        if r >= 0:
+            moves.append((x, y))
+
+        # Remove duplicates
+        moves = list(set(moves))
+
+        return moves
 
     def distance_count(self, target):
         """
