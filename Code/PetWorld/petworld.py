@@ -35,6 +35,8 @@ class PetWorld():
         self.moving = False
         self.active_team = "Blue"
         self.obstacles = []
+        self.width = width
+        self.height = height
 
     def get_width(self):
         """

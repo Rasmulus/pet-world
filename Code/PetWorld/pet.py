@@ -327,6 +327,9 @@ class Pet():
             self.health = 0
         if self.health == 0:
             self.destroy()
+            current_square = self.get_location_square()
+            current_square.remove_robot()
+
     def get_attack_state(self):
         return self.attacking
 
@@ -351,7 +354,7 @@ class Pet():
         moves = []
         directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         for d in directions:
-            new_x, new_y = x + d[0], y + d[1]
+            new_x, new_y = min(max(0, x + d[0]), self.world.width - 1), min(max(0, y + d[1]), self.world.height - 1)
             distance = abs(d[0]) + abs(d[1])
             # Check if new position is not an obstacle
             if (new_x, new_y) not in obstacles:
@@ -361,7 +364,7 @@ class Pet():
                 if distance <= r:
                     moves += possible_moves
 
-        # Add the current position if it is within range
+        # Add the current position if it is within range and inside game bounds
         if r >= 0:
             moves.append((x, y))
 

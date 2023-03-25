@@ -141,25 +141,25 @@ class GuiExercise():
 
             if self.pet_world.active_team == "Red":
                 # Set border color to solid red
-                pen = QtGui.QPen(QtGui.QColor(255, 0, 0))
+                pen = QtGui.QPen(QtGui.QColor(254, 1, 154))
                 pen.setWidth(1)
                 rect_item.setPen(pen)
 
                 # Set fill color to transparent red
-                brush = QtGui.QBrush(QtGui.QColor(255, 0, 0, 25))
+                brush = QtGui.QBrush(QtGui.QColor(254, 1, 154, 25))
                 rect_item.setBrush(brush)
                 rect_item.setOpacity(0.75)
                 self.highlighted_squares.append(rect_item)
                 self.scene.addItem(rect_item)
                 self.square_coordinates[rect_item] = Coordinates(x, y)
             else:
-                # Set border color to solid red
-                pen = QtGui.QPen(QtGui.QColor(0, 0, 255))
+                # Set border color to solid blue
+                pen = QtGui.QPen(QtGui.QColor(0, 255, 255))
                 pen.setWidth(1)
                 rect_item.setPen(pen)
 
-                # Set fill color to transparent red
-                brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 25))
+                # Set fill color to transparent blue
+                brush = QtGui.QBrush(QtGui.QColor(0, 255, 255, 25))
                 rect_item.setBrush(brush)
                 rect_item.setOpacity(0.75)
                 self.highlighted_squares.append(rect_item)
