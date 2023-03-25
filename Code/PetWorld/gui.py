@@ -19,6 +19,8 @@ class GUI(QtWidgets.QMainWindow):
         self.centralWidget().setLayout(self.horizontal)
         self.world = world
         self.square_size = square_size
+        self.possible_squares = None
+        self.possible_drawn = False
         self.init_window()
         self.init_buttons()
         self.gui_exercise = GuiExercise(self.world, self.scene, self.square_size)
@@ -27,7 +29,7 @@ class GUI(QtWidgets.QMainWindow):
 
 
 
-        self.add_robot_world_grid_items()
+        self.add_pet_world_grid_items()
         self.add_robot_graphics_items()
         self.update_robots()
 
@@ -66,7 +68,7 @@ class GUI(QtWidgets.QMainWindow):
 
         # Display the time on the LCD display widget
         self.lcd.display(timeString)
-    def add_robot_world_grid_items(self):
+    def add_pet_world_grid_items(self):
         """
         Implement me in gui_exercise.py!
 
@@ -77,7 +79,7 @@ class GUI(QtWidgets.QMainWindow):
         This method should only be called once, otherwise it creates duplicates!
         """
         # Calls your code in gui_exercise.py
-        self.gui_exercise.add_robot_world_grid_items()
+        self.gui_exercise.add_pet_world_grid_items()
 
 
     def get_robot_graphics_items(self):
@@ -128,6 +130,13 @@ class GUI(QtWidgets.QMainWindow):
             robot_item.updateAll()
         self.scene.update()
         self.update_window()
+        if self.world.moving and self.possible_squares is None and self.possible_drawn is False:
+            self.possible_drawn = True
+            for i in self.world.get_robots():
+                #print("debug")
+                if i.get_moving_state():
+                    possible_moves = i.get_possible_moves()
+                    self.possible_squares = self.gui_exercise.draw_possible_squares(possible_moves)
 
     def init_window(self):
         """
@@ -195,8 +204,20 @@ class GUI(QtWidgets.QMainWindow):
         if row == "Move here":
             for i in self.world.get_robots():
                 if i.get_moving_state():
+                    print(i.get_possible_moves())
+                    print(self.gui_exercise.square_coordinates[self.item])
+                    #print(self.world.squares)
                     i.move_to(self.gui_exercise.square_coordinates[self.item])
                     self.world.reset_moving()
+            for square in self.gui_exercise.highlighted_squares:
+                self.gui_exercise.scene.removeItem(square)
+            self.possible_drawn = False
+
+
+        if row == "Cancel":
+            for square in self.gui_exercise.highlighted_squares:
+                self.gui_exercise.scene.removeItem(square)
+            self.possible_drawn = False
 
 
 
