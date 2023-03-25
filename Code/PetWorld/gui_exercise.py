@@ -10,21 +10,21 @@ class GuiExercise():
     exercise grading easier, they are implemented here.
     """
 
-    def __init__(self, robot_world, scene, square_size):
+    def __init__(self, pet_world, scene, square_size):
         """
         Parameters:
-        robot_world: PetWorld of the Gui-class
+        pet_world: PetWorld of the Gui-class
         scene: The QGraphicsScene of the Gui-class
         square_size: The width and height of a single square
         """
-        self.robot_world = robot_world
+        self.pet_world = pet_world
         self.scene = scene
         self.square_size = square_size
         self.added_robots = []
         self.square_coordinates = {}
+        self.highlighted_squares = []
 
-
-    def add_robot_world_grid_items(self):
+    def add_pet_world_grid_items(self):
         """
         Implement me!
 
@@ -78,12 +78,12 @@ class GuiExercise():
         # for x...:
             # for y...:
 
-        height = PetWorld.get_height(self.robot_world)
-        width = PetWorld.get_width(self.robot_world)
+        height = PetWorld.get_height(self.pet_world)
+        width = PetWorld.get_width(self.pet_world)
         for x in range(width):
             for y in range(height):
                 coordinates = Coordinates(x, y)
-                square = self.robot_world.get_square(coordinates)
+                square = self.pet_world.get_square(coordinates)
 
                 rect_item = QtWidgets.QGraphicsRectItem(x * self.square_size, y * self.square_size, self.square_size, self.square_size)
 
@@ -116,7 +116,7 @@ class GuiExercise():
         See: PetGraphicsItem and PetWorld
         """
 
-        robot_list = self.robot_world.get_robots()
+        robot_list = self.pet_world.get_robots()
 
         for i in robot_list:
             if i not in self.added_robots:
@@ -127,3 +127,41 @@ class GuiExercise():
                 self.scene.addItem(robot)
                 #self.scene.addItem(robot.makeHealthBar())
 
+
+    def draw_possible_squares(self, possible_moves):
+
+        # Iterate over all possible moves
+        for move in possible_moves:
+            print("debug")
+            x, y = move[0], move[1]
+            print("debug")
+            rect_item = QtWidgets.QGraphicsRectItem(x * self.square_size, y * self.square_size, self.square_size,
+                                                    self.square_size)
+
+
+            if self.pet_world.active_team == "Red":
+                # Set border color to solid red
+                pen = QtGui.QPen(QtGui.QColor(255, 0, 0))
+                pen.setWidth(1)
+                rect_item.setPen(pen)
+
+                # Set fill color to transparent red
+                brush = QtGui.QBrush(QtGui.QColor(255, 0, 0, 25))
+                rect_item.setBrush(brush)
+                rect_item.setOpacity(0.75)
+                self.highlighted_squares.append(rect_item)
+                self.scene.addItem(rect_item)
+                self.square_coordinates[rect_item] = Coordinates(x, y)
+            else:
+                # Set border color to solid red
+                pen = QtGui.QPen(QtGui.QColor(0, 0, 255))
+                pen.setWidth(1)
+                rect_item.setPen(pen)
+
+                # Set fill color to transparent red
+                brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 25))
+                rect_item.setBrush(brush)
+                rect_item.setOpacity(0.75)
+                self.highlighted_squares.append(rect_item)
+                self.scene.addItem(rect_item)
+                self.square_coordinates[rect_item] = Coordinates(x, y)
