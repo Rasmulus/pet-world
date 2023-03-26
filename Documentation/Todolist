@@ -1,6 +1,5 @@
 - implement AI
 - implement breaking mind control (taking over AI pets)
-- implement death
 - implement saving and loading game state
 - implement level graphical editor
 - implement pet classe:
@@ -14,7 +13,8 @@
   - either when hovering over pets  -> Done
   - or when in attack/move etc. states
 
-- Fixed moving algorithm disallow out-of bounds movement
+- implement death -> Done
+- Fixed moving algorithm to disallow out-of bounds movement -> Done
 - implement graphics for showing all possible moves when moving -> Done
 - implement barrier logic (possible moves going around barriers) -> Done
 - implement timer -> Done

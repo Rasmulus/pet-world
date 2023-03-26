@@ -34,6 +34,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.name_tag_proxy.setVisible(False)
         self.char_sheet_proxy.setVisible(False)
 
+    def hide_pet(self):
+        self.hide()
+
     def hoverEnterEvent(self, event):
         self.updateAll()
         self.char_sheet_proxy.setVisible(True)
@@ -219,6 +222,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateHealthBar()
         self.updateNameTag()
         self.updateCharSheet()
+        if self.pet.is_broken():
+            self.hide_pet()
         #self.health_bar_proxy.setWidget(self.health_bar)
 
     def updatePosition(self):
