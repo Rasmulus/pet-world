@@ -27,10 +27,12 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.setBrush(brush)
         self.constructTriangleVertices()
         self.health_bar_proxy = self.makeHealthBar()
+        self.mana_bar_proxy = self.makeManaBar()
         self.name_tag_proxy = self.makeNameTag()
         self.char_sheet_proxy = self.makeCharSheet()
         self.updateAll()
         self.health_bar_proxy.setVisible(False)
+        self.mana_bar_proxy.setVisible(False)
         self.name_tag_proxy.setVisible(False)
         self.char_sheet_proxy.setVisible(False)
 
@@ -41,11 +43,13 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateAll()
         self.char_sheet_proxy.setVisible(True)
         self.health_bar_proxy.setVisible(True)
+        self.mana_bar_proxy.setVisible(True)
         self.name_tag_proxy.setVisible(True)
 
     def hoverLeaveEvent(self, event):
         self.char_sheet_proxy.setVisible(False)
         self.health_bar_proxy.setVisible(False)
+        self.mana_bar_proxy.setVisible(False)
         self.name_tag_proxy.setVisible(False)
 
 
@@ -78,7 +82,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # calculate the offset for the name tag proxy widget
         offset_x = center_x - 50
-        offset_y = -self.name_tag.height() - 65
+        offset_y = -self.name_tag.height() - 75
 
         #raise to front
         self.name_tag.raise_()
@@ -119,15 +123,15 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         # get the rotation of this item and set the rotation of the proxy widget
         rotation = self.rotation()
         self.char_sheet_proxy.setRotation(-rotation)
-        self.char_sheet.setText(f"Name: {self.pet.get_name()}\nTeam: {self.pet.team}\nHealth: {self.pet.health}/{self.pet.max_health}\n"
-                                f"Movement range: {self.pet.range}\nAttack range: {self.pet.att_range}\nStrength: {self.pet.strength}\nArmour: -")
+        self.char_sheet.setText(f"Name: {self.pet.get_name()}\nTeam: {self.pet.team}\nHealth: {self.pet.health}/{self.pet.max_health}\nMana: {self.pet.mana}/{self.pet.max_mana}\n"
+                                f"Movement range: {self.pet.range}\nAttack range: {self.pet.att_range}\nStrength: {self.pet.strength}\nArmour: {self.pet.armour}")
         # calculate the center point of the triangle
         center_x = self.square_size / 2
         center_y = self.square_size / 2
 
         # calculate the offset for the name tag proxy widget
         offset_x = center_x - 225
-        offset_y = -self.char_sheet.height() + 150
+        offset_y = -self.char_sheet.height() + 200
 
         # raise to front
         self.char_sheet.raise_()
@@ -145,10 +149,13 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def makeHealthBar(self):
         self.health_bar = QtWidgets.QProgressBar()
-        self.health_bar.setMaximum(100)
+        self.health_bar.setMaximum(self.pet.max_health)
         self.health_bar.setMinimum(0)
         self.health_bar.setValue(self.pet.get_health())
-
+        self.health_bar.setFormat("%v/%m HP")
+        self.health_bar.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.health_bar.setStyleSheet(
+            "QProgressBar::chunk { background-color: lawngreen } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
         # create a proxy widget for the progress bar
         self.health_bar_proxy = QtWidgets.QGraphicsProxyWidget(self)
         self.health_bar_proxy.setWidget(self.health_bar)
@@ -162,6 +169,17 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         Updates the health bar to match the health of the parent pet.
         """
         self.health_bar.setValue(self.pet.get_health())
+        self.health_bar.setFormat(f"{self.pet.get_health()}/{self.pet.max_health} HP")
+        percentage_left = self.pet.get_health() / self.pet.max_health
+        if percentage_left > 0.5:
+            self.health_bar.setStyleSheet(
+                "QProgressBar::chunk { background-color: lawngreen } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
+        elif percentage_left > 0.2:
+            self.health_bar.setStyleSheet(
+                "QProgressBar::chunk { background-color: orange } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
+        else:
+            self.health_bar.setStyleSheet(
+                "QProgressBar::chunk { background-color: red } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
 
         # get the rotation of this item and set the rotation of the proxy widget
         rotation = self.rotation()
@@ -176,7 +194,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # calculate the offset for the health bar proxy widget
         offset_x = center_x - 100
-        offset_y = - 50 - self.health_bar_proxy.size().height() / 2
+        offset_y = - 50 - self.health_bar_proxy.size().height()
 
         # calculate the rotated offset using a transformation matrix
         transformation = QtGui.QTransform()
@@ -185,6 +203,53 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # set the position of the health bar proxy widget relative to the center point
         self.health_bar_proxy.setPos(center_x + offset.x(), center_y + offset.y())
+
+    def makeManaBar(self):
+        self.mana_bar = QtWidgets.QProgressBar()
+        self.mana_bar.setMaximum(self.pet.max_mana)
+        self.mana_bar.setMinimum(0)
+        self.mana_bar.setValue(self.pet.get_mana())
+        self.mana_bar.setFormat("%v/%m MP")
+        self.mana_bar.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.mana_bar.setStyleSheet(
+            "QProgressBar::chunk { background-color: lightskyblue } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
+
+        # create a proxy widget for the progress bar
+        self.mana_bar_proxy = QtWidgets.QGraphicsProxyWidget(self)
+        self.mana_bar_proxy.setWidget(self.mana_bar)
+
+        #self.health_bar_proxy.setRotation(-self.rotation())
+
+        return self.mana_bar_proxy
+    def updateManaBar(self):
+        """
+        Updates the mana bar to reflect the current mana of the parent pet.
+        """
+        self.mana_bar.setValue(self.pet.get_mana())
+        self.mana_bar.setFormat(f"{self.pet.get_mana()}/{self.pet.max_mana} MP")
+
+        # get the rotation of this item and set the rotation of the proxy widget
+        rotation = self.rotation()
+        self.mana_bar_proxy.setRotation(
+            -rotation)  # set the rotation of the proxy widget to the negative of this item's rotation
+        # calculate the center point of the triangle
+        center_x = self.square_size / 2
+        center_y = self.square_size / 2
+
+        # raise to front
+        self.mana_bar.raise_()
+
+        # calculate the offset for the health bar proxy widget
+        offset_x = center_x - 100
+        offset_y = - 25 - self.mana_bar_proxy.size().height()
+
+        # calculate the rotated offset using a transformation matrix
+        transformation = QtGui.QTransform()
+        transformation.rotate(-rotation)
+        offset = transformation.map(QtCore.QPointF(offset_x, offset_y))
+
+        # set the position of the health bar proxy widget relative to the center point
+        self.mana_bar_proxy.setPos(center_x + offset.x(), center_y + offset.y())
 
     def constructTriangleVertices(self):
         """
@@ -222,6 +287,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateHealthBar()
         self.updateNameTag()
         self.updateCharSheet()
+        self.updateManaBar()
         if self.pet.is_broken():
             self.hide_pet()
         #self.health_bar_proxy.setWidget(self.health_bar)

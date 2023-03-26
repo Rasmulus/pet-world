@@ -50,7 +50,10 @@ class Pet():
         self.facing = None       # most-recent holder
         self.max_health = 100
         self.health = self.max_health
+        self.max_mana = 20
+        self.mana = self.max_mana
         self.strength = 50
+        self.armour = 0
         self.attacking = False
         self.moving = False
         self.range = 3
@@ -330,6 +333,8 @@ class Pet():
             current_square = self.get_location_square()
             current_square.remove_robot()
 
+    def get_mana(self):
+        return self.mana
     def get_attack_state(self):
         return self.attacking
 

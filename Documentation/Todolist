@@ -13,6 +13,7 @@
   - either when hovering over pets  -> Done
   - or when in attack/move etc. states
 
+- Implement mana/mp system -> Done
 - implement death -> Done
 - Fixed moving algorithm to disallow out-of bounds movement -> Done
 - implement graphics for showing all possible moves when moving -> Done
