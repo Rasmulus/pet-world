@@ -56,11 +56,11 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
     def makeNameTag(self):
         self.name_tag = QtWidgets.QLabel()
         self.name_tag.setText(f"{self.pet.get_name()}")
-
-        # make the font size larger
-        font = self.name_tag.font()
-        font.setPointSize(font.pointSize() + 5)
-        self.name_tag.setFont(font)
+        self.name_tag.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.name_tag.setStyleSheet(
+            "QLabel { font-size: 16px; font-weight: bold; border: 2px solid black; background-color: beige }")
+        self.name_tag.setFixedWidth(self.health_bar.width())
+        self.name_tag.setFixedHeight(self.health_bar.height())
 
         # create a proxy widget for the name tag
         name_tag_proxy = QtWidgets.QGraphicsProxyWidget(self)
@@ -81,8 +81,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         center_y = self.square_size / 2
 
         # calculate the offset for the name tag proxy widget
-        offset_x = center_x - 50
-        offset_y = -self.name_tag.height() - 75
+        offset_x = center_x - self.health_bar_proxy.size().width() / 2
+        offset_y = -self.health_bar_proxy.size().height() - 80
 
         #raise to front
         self.name_tag.raise_()
@@ -101,7 +101,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def makeCharSheet(self):
         self.char_sheet = QtWidgets.QLabel()
-
+        self.char_sheet.setStyleSheet(
+            "QLabel { font-size: 16px; font-weight: bold; border: 2px solid black; background-color: ghostwhite }")
         # raise to front
         self.char_sheet.raise_()
 
@@ -240,8 +241,8 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.mana_bar.raise_()
 
         # calculate the offset for the health bar proxy widget
-        offset_x = center_x - 100
-        offset_y = - 25 - self.mana_bar_proxy.size().height()
+        offset_x = center_x - self.health_bar_proxy.size().width() / 2
+        offset_y = -self.health_bar_proxy.size().height() - 20
 
         # calculate the rotated offset using a transformation matrix
         transformation = QtGui.QTransform()
@@ -389,7 +390,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def mousePressEvent(self, event, *args, **kwargs):
             #Check if attacking
-            if not self.pet.get_attack_state() and self.pet.get_world().attacking:
+            if not self.pet.team == self.pet.get_world().active_team and self.pet.get_world().attacking:
                 target = self.pet
                 attacker = None
                 print("debug")

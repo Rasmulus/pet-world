@@ -13,6 +13,7 @@
   - either when hovering over pets  -> Done
   - or when in attack/move etc. states
 
+- Fixed pets being able to attack teammates -> Done
 - Implement mana/mp system -> Done
 - implement death -> Done
 - Fixed moving algorithm to disallow out-of bounds movement -> Done
