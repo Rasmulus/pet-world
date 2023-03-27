@@ -55,6 +55,7 @@ class Pet():
         self.strength = 50
         self.armour = 0
         self.attacking = False
+        self.heavy_attacking = False
         self.moving = False
         self.range = 3
         self.att_range = 1

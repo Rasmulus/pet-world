@@ -428,9 +428,20 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 menu.setFont(font)
                 # Create the menu items based on pet status and add them to the menu
                 if not self.pet.attacked and not self.pet.moved:
-                    rows = ["Move", "Attack", "Heal"]
+                    if self.pet.get_mana() >= 10:
+                        rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal"]
+                    elif self.pet.get_mana() >= 5:
+                        rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal"]
+                    else:
+                        rows = ["Move", "Rest (Restore MP)", "Heal"]
                 elif not self.pet.attacked and self.pet.moved:
-                    rows = ["Attack", "Heal"]
+                    if self.pet.get_mana() >= 10:
+                        rows = ["Heavy Attack (10 MP)", "Light Attack (5 MP)", "Heal"]
+                    elif self.pet.get_mana() >= 5:
+                        rows = ["Light Attack (5 MP)", "Heal"]
+                    else:
+                        rows = ["Heal"]
+
                 elif not self.pet.moved:
                     rows = ["Move"]
                 else:
@@ -456,12 +467,20 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             self.pet.fix()
             self.pet.attacked = True
 
-        elif row == "Attack":
+        elif row == "Light Attack (5 MP)":
             self.pet.attacking = True
             self.pet.get_world().attacking = True
+            self.pet.mana -= 5
+
+        elif row == "Heavy Attack (10 MP)":
+            self.pet.attacking = True
+            self.pet.get_world().attacking = True
+            self.pet.heavy_attacking = True
+            self.pet.mana -= 10
 
         elif row == "Choose Target":
-            self.attack(self)
+            self.attack()
+            self.pet.get_world().reset_attacking()
 
         elif row == "Cancel":
             self.pet.attacking = False
@@ -471,19 +490,36 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             self.pet.moving = True
             self.pet.get_world().moving = True
 
-
-    def attack(self, target):
+        elif row == "Rest (Restore MP)":
+            self.pet.attacked = True
+            self.pet.moved = True
+            self.pet.mana = self.pet.max_mana
+    def attack(self):
         """
 
         Attacks the target pet.
 
         """
-        target.pet.set_health(target.pet.get_health() - self.pet.strength)
-        if target.pet.get_health() < 0:
-            target.pet.set_health(0)
-        self.pet.attacking = False
+
+        for i in self.pet.get_world().get_robots():
+            if i.attacking == True:
+                attacker = i
+        if attacker.heavy_attacking:
+            self.pet.set_health(self.pet.get_health() - int(attacker.strength * 1.5))
+        else:
+            self.pet.set_health(self.pet.get_health() - attacker.strength)
+        if self.pet.get_health() < 0:
+            self.pet.set_health(0)
         for i in self.pet.get_world().get_robots():
             if i.attacking == True:
                 i.attacked = True
+        print("debug")
+        attacker.attacking = False
+        attacker.heavy_attacking = False
+        attacker.attacked = True
+        attacker.get_world().attacking = False
         self.pet.get_world().reset_attacking()
+
+
+
 
