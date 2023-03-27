@@ -2,9 +2,9 @@ from direction import Direction
 from pet_brain import PetBrain
 
 
-class Dog(PetBrain):
+class Bird(PetBrain):
     """
-    The class Dog represents the "brains" (or AI) of robots that move where their nose is pointing, in straight
+    The class Bird represents the "brains" (or AI) of robots that move where their nose is pointing, in straight
     lines, turning right when they are forced to.
 
     See the documentation of PetWorld
@@ -12,15 +12,17 @@ class Dog(PetBrain):
     def __init__(self, body):
 
         super().__init__(body)
-        self.body.range = 4
-        self.body.att_range = 2
-        self.body.strength = 40
+        self.body.range = 5
+        self.body.att_range = 1
+        self.body.strength = 30
+        self.body.flying = True
+
     def move_body(self):
         """
-        Moves the given "body", i.e., the robot given as a parameter. A dog first looks at the next square in the
+        Moves the given "body", i.e., the robot given as a parameter. A bird first looks at the next square in the
         direction of its nose. If that square is empty, it moves there and ends its turn. If the square was not empty,
         it turns its nose 90 degrees clockwise and tries again, moving if possible, etc. If the robot makes a full 360
-        turnabout without finding a suitable square to move in, it ends its turn without moving. As a dog always
+        turnabout without finding a suitable square to move in, it ends its turn without moving. As a bird always
         looks where it's going, so it can never collide with anything during its own turn.
 
         This method assumes that it is called only if the robot is not broken or stuck.

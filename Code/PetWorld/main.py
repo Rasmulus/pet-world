@@ -12,7 +12,7 @@ from drunkbot import *
 from nosebot import *
 from lovebot import *
 from dog import *
-
+from bird import *
 
 def main():
     """
@@ -33,31 +33,31 @@ def main():
     test_world.add_wall(wall4_coordinates)
 
 
-    dog_location = Coordinates(2, 3)
+    dog_location = Coordinates(14, 14)
     dog_body = Pet('Dog')
     dog_brain = Dog(dog_body)
     dog_body.set_brain(dog_brain)
-    test_world.add_robot(dog_body, dog_location, Direction.EAST)
+    test_world.add_robot(dog_body, dog_location, Direction.NORTH)
 
-    bad_dog_location = Coordinates(5, 3)
+    bad_dog_location = Coordinates(14, 0)
     dog_body = Pet('Bad Dog')
     dog_brain = Dog(dog_body)
     dog_body.set_brain(dog_brain)
     dog_body.change_team()
-    test_world.add_robot(dog_body, bad_dog_location, Direction.EAST)
+    test_world.add_robot(dog_body, bad_dog_location, Direction.SOUTH)
 
-    dog_location = Coordinates(9, 7)
-    dog_body = Pet('Dog')
-    dog_brain = Dog(dog_body)
-    dog_body.set_brain(dog_brain)
-    test_world.add_robot(dog_body, dog_location, Direction.EAST)
+    bird_location = Coordinates(0, 14)
+    bird_body = Pet('Bird')
+    bird_brain = Bird(bird_body)
+    bird_body.set_brain(bird_brain)
+    test_world.add_robot(bird_body, bird_location, Direction.NORTH)
 
-    bad_dog_location = Coordinates(8, 5)
-    dog_body = Pet('Bad Dog')
-    dog_brain = Dog(dog_body)
-    dog_body.set_brain(dog_brain)
-    dog_body.change_team()
-    test_world.add_robot(dog_body, bad_dog_location, Direction.EAST)
+    bad_bird_location = Coordinates(0, 0)
+    bird_body = Pet('Bad Bird')
+    bird_brain = Bird(bird_body)
+    bird_body.set_brain(bird_brain)
+    bird_body.change_team()
+    test_world.add_robot(bird_body, bad_bird_location, Direction.SOUTH)
 
 
 

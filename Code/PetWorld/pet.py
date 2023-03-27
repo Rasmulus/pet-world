@@ -62,6 +62,7 @@ class Pet():
         self.team = "Blue"
         self.moved = False
         self.attacked = False
+        self.flying = False
 
 
     def set_name(self, name):
@@ -356,19 +357,32 @@ class Pet():
         if r == 0:
             return [(x, y)]
 
-        # Generate all possible moves based on directions
-        moves = []
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        for d in directions:
-            new_x, new_y = min(max(0, x + d[0]), self.world.width - 1), min(max(0, y + d[1]), self.world.height - 1)
-            distance = abs(d[0]) + abs(d[1])
-            # Check if new position is not an obstacle
-            if (new_x, new_y) not in obstacles:
-                # Recursively find possible moves from new position
-                possible_moves = self.get_possible_moves(new_x, new_y, r - distance, obstacles)
-                # Check if new position is within range
-                if distance <= r:
-                    moves += possible_moves
+        if self.flying:
+            # Generate all possible moves based on directions and range
+            moves = []
+            for dx in range(-r, r + 1):
+                for dy in range(-r, r + 1):
+                    # Check if new position is within range
+                    if abs(dx) + abs(dy) <= r:
+                        new_x, new_y = x + dx, y + dy
+                        # Add new position to possible moves if inside game bounds
+                        if 0 <= new_x < self.world.width and 0 <= new_y < self.world.height:
+                            moves.append((new_x, new_y))
+
+        else:
+            # Generate all possible moves based on directions
+            moves = []
+            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+            for d in directions:
+                new_x, new_y = min(max(0, x + d[0]), self.world.width - 1), min(max(0, y + d[1]), self.world.height - 1)
+                distance = abs(d[0]) + abs(d[1])
+                # Check if new position is not an obstacle
+                if (new_x, new_y) not in obstacles:
+                    # Recursively find possible moves from new position
+                    possible_moves = self.get_possible_moves(new_x, new_y, r - distance, obstacles)
+                    # Check if new position is within range
+                    if distance <= r:
+                        moves += possible_moves
 
         # Add the current position if it is within range and inside game bounds
         if r >= 0:

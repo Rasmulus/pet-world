@@ -7,12 +7,13 @@
     - Cat
     - Rodent
     - Reptile
-    - Bird
+    - Bird -> Done
 - Implement mana/pp system
 - implement showing and hiding information when necessary -> Done
   - either when hovering over pets  -> Done
   - or when in attack/move etc. states
 
+- Implement flying pets -> Done
 - Implement Heavy and Light Attacks -> Done
 - Fix pets being able to attack teammates -> Done
 - Implement mana/mp system -> Done
