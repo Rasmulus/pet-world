@@ -401,8 +401,63 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 print("debug")
                 print("attacker.get_location()")
                 distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
+                percentage_left = target.get_health() / target.max_health
 
-                if attacker.att_range >= distance:  # Checks if target in range
+                if attacker.breaking:
+                    if distance > 1:
+                        menu = QtWidgets.QMenu()
+                        # make the font size larger
+                        font = menu.font()
+                        font.setPointSize(font.pointSize() + 5)
+                        menu.setFont(font)
+                        # Create the menu items and add them to the menu
+                        rows = ["Target out of Range. Cancel"]
+                        for row in rows:
+                            action = QtWidgets.QWidgetAction(menu)
+                            label = QtWidgets.QLabel(row)
+                            action.setDefaultWidget(label)
+                            menu.addAction(action)
+                            # Connect the action to a method that handles it
+                            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                        # Show the menu at the position of the event
+                        menu.exec(event.screenPos())
+                    elif percentage_left > 0.2:
+                        menu = QtWidgets.QMenu()
+                        # make the font size larger
+                        font = menu.font()
+                        font.setPointSize(font.pointSize() + 5)
+                        menu.setFont(font)
+                        # Create the menu items and add them to the menu
+                        rows = ["Target not weak enough. Cancel"]
+                        for row in rows:
+                            action = QtWidgets.QWidgetAction(menu)
+                            label = QtWidgets.QLabel(row)
+                            action.setDefaultWidget(label)
+                            menu.addAction(action)
+                            # Connect the action to a method that handles it
+                            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                        # Show the menu at the position of the event
+                        menu.exec(event.screenPos())
+
+                    else:
+                        menu = QtWidgets.QMenu()
+                        # make the font size larger
+                        font = menu.font()
+                        font.setPointSize(font.pointSize() + 5)
+                        menu.setFont(font)
+                        # Create the menu items and add them to the menu
+                        rows = ["Free Pet", "Cancel"]
+                        for row in rows:
+                            action = QtWidgets.QWidgetAction(menu)
+                            label = QtWidgets.QLabel(row)
+                            action.setDefaultWidget(label)
+                            menu.addAction(action)
+                            # Connect the action to a method that handles it
+                            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                        # Show the menu at the position of the event
+                        menu.exec(event.screenPos())
+
+                elif attacker.att_range >= distance:  # Checks if target in range
                     menu = QtWidgets.QMenu()
                     # make the font size larger
                     font = menu.font()
@@ -428,19 +483,22 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 menu.setFont(font)
                 # Create the menu items based on pet status and add them to the menu
                 if not self.pet.attacked and not self.pet.moved:
-                    if self.pet.get_mana() >= 10:
-                        rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal"]
+                    if self.pet.mana >= 20:
+                        rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Break Mind Control (20 MP)",
+                                "Rest (Restore MP)", "Heal (10 MP)"]
+                    elif self.pet.get_mana() >= 10:
+                        rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal (10 MP)"]
                     elif self.pet.get_mana() >= 5:
-                        rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal"]
+                        rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal (10 MP)"]
                     else:
-                        rows = ["Move", "Rest (Restore MP)", "Heal"]
+                        rows = ["Move", "Rest (Restore MP)", "Heal (10 MP)"]
                 elif not self.pet.attacked and self.pet.moved:
                     if self.pet.get_mana() >= 10:
-                        rows = ["Heavy Attack (10 MP)", "Light Attack (5 MP)", "Heal"]
+                        rows = ["Heavy Attack (10 MP)", "Light Attack (5 MP)", "Heal (10 MP)"]
                     elif self.pet.get_mana() >= 5:
-                        rows = ["Light Attack (5 MP)", "Heal"]
+                        rows = ["Light Attack (5 MP)", "Heal (10 MP)"]
                     else:
-                        rows = ["Heal"]
+                        rows = ["Heal (10 MP)"]
 
                 elif not self.pet.moved:
                     rows = ["Move"]
@@ -463,26 +521,25 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 self.pet.get_world().moving = False
 
     def handleContextMenuAction(self, row):
-        if row == "Heal" and self.pet.is_broken:
+        if row == "Heal (10 MP)" and self.pet.is_broken:
             self.pet.fix()
             self.pet.attacked = True
+            self.pet.mana -= 10
 
         elif row == "Light Attack (5 MP)":
             self.pet.attacking = True
             self.pet.get_world().attacking = True
-            self.pet.mana -= 5
 
         elif row == "Heavy Attack (10 MP)":
             self.pet.attacking = True
             self.pet.get_world().attacking = True
             self.pet.heavy_attacking = True
-            self.pet.mana -= 10
 
         elif row == "Choose Target":
             self.attack()
             self.pet.get_world().reset_attacking()
 
-        elif row == "Cancel":
+        elif row == "Cancel" or row == "Target out of Range. Cancel" or row == "Target not weak enough. Cancel":
             self.pet.attacking = False
             self.pet.get_world().reset_attacking()
 
@@ -494,6 +551,14 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             self.pet.attacked = True
             self.pet.moved = True
             self.pet.mana = self.pet.max_mana
+
+        elif row == "Break Mind Control (20 MP)":
+            self.pet.attacking = True
+            self.pet.get_world().attacking = True
+            self.pet.breaking = True
+
+        elif row == "Free Pet":
+            self.pet.change_team()
     def attack(self):
         """
 
@@ -506,8 +571,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 attacker = i
         if attacker.heavy_attacking:
             self.pet.set_health(self.pet.get_health() - int(attacker.strength * 1.5))
+            attacker.mana -= 10
         else:
             self.pet.set_health(self.pet.get_health() - attacker.strength)
+            attacker.mana -= 5
         if self.pet.get_health() < 0:
             self.pet.set_health(0)
         for i in self.pet.get_world().get_robots():
@@ -519,6 +586,15 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         attacker.attacked = True
         attacker.get_world().attacking = False
         self.pet.get_world().reset_attacking()
+
+    def break_control(self):
+        self.pet.change_team()
+        self.pet.get_world().reset_attacking()
+        for i in self.pet.world.get_robots():
+            if i.breaking:
+                i.mana -= 20
+                i.moved = True
+                i.attacked = True
 
 
 

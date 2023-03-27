@@ -195,6 +195,8 @@ class PetWorld():
         self.attacking = False
         for i in self.get_robots():
             i.attacking = False
+            i.heavy_attacking = False
+            i.breaking = False
 
     def reset_moving(self):
         self.moving = False

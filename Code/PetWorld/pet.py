@@ -63,6 +63,7 @@ class Pet():
         self.moved = False
         self.attacked = False
         self.flying = False
+        self.breaking = False
 
 
     def set_name(self, name):

@@ -1,5 +1,4 @@
 - implement AI
-- implement breaking mind control (taking over AI pets)
 - implement saving and loading game state
 - implement level graphical editor
 - implement pet classes:
@@ -8,11 +7,11 @@
     - Rodent
     - Reptile
     - Bird -> Done
-- Implement mana/pp system
-- implement showing and hiding information when necessary -> Done
-  - either when hovering over pets  -> Done
-  - or when in attack/move etc. states
+- Implement level and character art
 
+
+- implement showing and hiding information when necessary -> Done
+- implement breaking mind control (taking over AI pets) -> Done
 - Implement flying pets -> Done
 - Implement Heavy and Light Attacks -> Done
 - Fix pets being able to attack teammates -> Done
