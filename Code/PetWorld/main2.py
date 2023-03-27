@@ -41,7 +41,7 @@ def main():
                         parts = current_line.split("=")
                         dimensions = parts[1].rstrip()
                         dimensions = dimensions.split(",")
-                        world = PetWorld(int(dimensions[0]), int(dimensions[1]))
+                        world = PetWorld(int(dimensions[0]), int(dimensions[1]), name)
                         print(f"dimensions: {dimensions}")
                         print(parts)
                     if category == "Walls":

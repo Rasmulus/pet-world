@@ -22,7 +22,7 @@ def main():
 
     You can modify this however you like.
     """
-    test_world = PetWorld(15, 15)
+    test_world = PetWorld(15, 15, "Test World")
     wall1_coordinates = Coordinates(2, 4)
     test_world.add_wall(wall1_coordinates)
     wall2_coordinates = Coordinates(0, 5)

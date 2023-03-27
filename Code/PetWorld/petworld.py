@@ -15,7 +15,7 @@ class PetWorld():
     See the documentation Pet, Square, Coordinates
     """
 
-    def __init__ (self, width, height):
+    def __init__ (self, width, height, name):
         """
         Creates a new robot world with the specified dimensions.
         Initially all the squares of the new world are empty.
@@ -24,6 +24,7 @@ class PetWorld():
 
         Parameter height is the height of the world in squares: int
         """
+        self.name = name
         self.squares = [None] * width
         for x in range(self.get_width()):      # stepper
             self.squares[x] = [None] * height

@@ -9,6 +9,7 @@
     - Bird -> Done
 - Implement level and character art
 
+- implement stage name header -> Done
 - implement loading game from savefile -> Done
 - implement showing and hiding information when necessary -> Done
 - implement breaking mind control (taking over AI pets) -> Done

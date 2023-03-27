@@ -163,6 +163,16 @@ class GUI(QtWidgets.QMainWindow):
         else:
             self.view.setStyleSheet("background-color: red;")
 
+        # Create stage name widget
+        self.stage_name = QtWidgets.QLabel(self.world.name)
+        #self.stage_name.setFixedSize(1000, 1000) # Set the size of the clock widget
+        self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
+        self.stage_name.setStyleSheet(
+            "QLabel { font-size: 32px; font-weight: bold; border: 2px solid black; background-color: beige }")
+
+        self.stage_name.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.scene.addWidget(self.stage_name)
+
     def update_window(self):
         if self.world.active_team == "Blue":
             self.view.setStyleSheet("background-color: blue;")
