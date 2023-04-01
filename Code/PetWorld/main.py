@@ -1,5 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
+from PyQt6 import QtCore
 
 from gui import GUI
 
@@ -22,7 +23,8 @@ def main():
 
     You can modify this however you like.
     """
-    test_world = PetWorld(15, 15, "Test World - launch main2.py instead")
+    time = QtCore.QTime(0, 0, 0)
+    test_world = PetWorld(15, 15, "Test World - launch main2.py instead", time)
     wall1_coordinates = Coordinates(2, 4)
     test_world.add_wall(wall1_coordinates)
     wall2_coordinates = Coordinates(0, 5)

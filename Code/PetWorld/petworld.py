@@ -15,7 +15,7 @@ class PetWorld():
     See the documentation Pet, Square, Coordinates
     """
 
-    def __init__ (self, width, height, name):
+    def __init__ (self, width, height, name, time):
         """
         Creates a new robot world with the specified dimensions.
         Initially all the squares of the new world are empty.
@@ -38,6 +38,7 @@ class PetWorld():
         self.obstacles = []
         self.width = width
         self.height = height
+        self.time = time
 
     def get_width(self):
         """

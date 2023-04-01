@@ -44,24 +44,25 @@ class GUI(QtWidgets.QMainWindow):
         self.item = None
 
         # Create a timer that fires every second
-        self.elapsed_time = QtCore.QTime(0, 0, 0)  # initialize elapsed time to 0
+        self.elapsed_time = self.world.time  # initialize elapsed time to saved time
         self.clock = QtCore.QTimer(self)
         self.clock.timeout.connect(self.showTime)
         self.clock.start(1000)  # update elapsed time every second
 
         # Create a LCD display widget
         self.lcd = QtWidgets.QLCDNumber(self)
-        self.lcd.setSegmentStyle(QtWidgets.QLCDNumber.SegmentStyle.Flat)
-        self.lcd.setFixedSize(200, 80) # Set the size of the clock widget
+        self.lcd.setSegmentStyle(QtWidgets.QLCDNumber.SegmentStyle.Filled)
+        self.lcd.setDigitCount(8)
+        #self.lcd.setSize(300, 80) # Set the size of the clock widget
         self.layout().addWidget(self.lcd)
-        self.lcd.setStyleSheet("background-color: white;")
-
-
+        self.lcd.setStyleSheet("background-color: white; color: black;")
+        self.lcd.setGeometry(2090,10,300,80)
 
 
     def showTime(self):
         # Increment elapsed time by 1 second
         self.elapsed_time = self.elapsed_time.addSecs(1)
+        self.world.time = self.elapsed_time
 
         # Set the format of the time
         timeString = self.elapsed_time.toString('hh:mm:ss')

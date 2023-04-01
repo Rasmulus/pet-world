@@ -1,6 +1,6 @@
 import os
 from PyQt6.QtWidgets import QApplication
-
+from PyQt6 import QtCore
 from gui import GUI
 
 from direction import Direction
@@ -42,7 +42,7 @@ def main():
                         parts = current_line.split("=")
                         dimensions = parts[1].rstrip()
                         dimensions = dimensions.split(",")
-                        world = PetWorld(int(dimensions[0]), int(dimensions[1]), name)
+                        world = PetWorld(int(dimensions[0]), int(dimensions[1]), name, time)
                         print(f"dimensions: {dimensions}")
                         print(parts)
                     if category == "Walls":
@@ -53,6 +53,10 @@ def main():
                         coordinates = eval(coordinates)
                         for i in coordinates:
                             world.add_wall(Coordinates(i[0], i[1]))
+                    if category == "Time":
+                        current_line = file.readline().rstrip()
+                        time = eval(current_line)
+                        time = QtCore.QTime(time[0], time[1], time[2])
                     if category == "Pets":
                         while True:
                             current_line = file.readline().rstrip()
