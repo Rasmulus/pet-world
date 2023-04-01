@@ -64,7 +64,7 @@ class Pet():
         self.attacked = False
         self.flying = False
         self.breaking = False
-
+        self.class_name = "Pet"
 
     def set_name(self, name):
         """

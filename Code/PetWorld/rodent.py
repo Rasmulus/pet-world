@@ -15,6 +15,7 @@ class Rodent(PetBrain):
         self.body.range = 2
         self.body.att_range = 1
         self.body.strength = 20
+        self.body.class_name = "Rodent"
     def move_body(self):
         """
         Moves the given "body", i.e., the robot given as a parameter. A rodent first looks at the next square in the

@@ -16,6 +16,7 @@ class Bird(PetBrain):
         self.body.att_range = 1
         self.body.strength = 30
         self.body.flying = True
+        self.body.class_name = "Bird"
 
     def move_body(self):
         """

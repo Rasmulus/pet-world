@@ -90,3 +90,14 @@ class Direction():
             return 270
         else:
             print("Invalid direction given to get_degrees")
+
+    @staticmethod
+    def get_direction(direction):
+        if direction == (0, -1):
+            return "NORTH"
+        if direction == (1, 0):
+            return "EAST"
+        if direction == (0, 1):
+            return "SOUTH"
+        if direction == (-1, 0):
+            return "WEST"

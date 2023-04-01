@@ -15,6 +15,7 @@ class Dog(PetBrain):
         self.body.range = 4
         self.body.att_range = 2
         self.body.strength = 40
+        self.body.class_name = "Dog"
     def move_body(self):
         """
         Moves the given "body", i.e., the robot given as a parameter. A dog first looks at the next square in the

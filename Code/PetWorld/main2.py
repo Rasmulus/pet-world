@@ -19,11 +19,9 @@ def main():
     Reads a savefile and creates a PetWorld, adds pets and launches the Graphical User Interface.
     """
     name = ""
-    # Get the list of files in the "savedata" folder and sort them alphabetically
-    data_files = sorted(os.listdir("savedata"))
 
-    # Open the first file in the sorted list
-    with open(os.path.join("savedata", data_files[0]), "r") as file:
+    # Open the savegame
+    with open('savedata/savegame.ptwrld', 'r') as file:
         # Read the lines from the file
         #current_line = file.readline().rstrip()
         for current_line in file:
@@ -57,6 +55,11 @@ def main():
                         current_line = file.readline().rstrip()
                         time = eval(current_line)
                         time = QtCore.QTime(time[0], time[1], time[2])
+
+                    if category == "Turn":
+                        current_line = file.readline().rstrip()
+                        world.active_team = current_line
+
                     if category == "Pets":
                         while True:
                             current_line = file.readline().rstrip()

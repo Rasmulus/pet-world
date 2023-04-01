@@ -1,5 +1,4 @@
 - implement AI
-- implement saving and loading game state
 - implement level graphical editor
 - implement pet classes:
     - Dog -> Done
@@ -9,7 +8,8 @@
     - Bird -> Done
 - Implement level and character art
 
-- Implement save game button
+- implement saving and loading game state -> Done
+- Implement save game button -> Done
 - implement stage name header -> Done
 - implement loading game from savefile -> Done
 - implement showing and hiding information when necessary -> Done

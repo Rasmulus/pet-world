@@ -25,7 +25,7 @@ class GUI(QtWidgets.QMainWindow):
         self.init_buttons()
         self.gui_exercise = GuiExercise(self.world, self.scene, self.square_size)
         self.showMaximized()
-        #self.showFullScreen()
+        self.showFullScreen()
 
 
 
@@ -115,16 +115,27 @@ class GUI(QtWidgets.QMainWindow):
         Adds buttons to the window and connects them to their respective functions
         See: QPushButton at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QPushButton.html
         """
-        #self.next_turn_btn = QtWidgets.QPushButton("Next full turn")
-        #self.next_turn_btn.clicked.connect(self.world.next_full_turn)
-        #self.horizontal.addWidget(self.next_turn_btn)
         self.end_turn_btn = QtWidgets.QPushButton("End Turn")
         self.end_turn_btn.clicked.connect(self.world.change_active_team)
         self.horizontal.addWidget(self.end_turn_btn)
 
-        self.save_game_btn = QtWidgets.QPushButton("Save Game")
-        #self.save_game_btn.clicked.connect(self.world.change_active_team)
+        self.save_game_btn = QtWidgets.QPushButton("Save and Quit")
+        self.save_game_btn.clicked.connect(self.show_confirmation_dialog)
         self.horizontal.addWidget(self.save_game_btn)
+
+    def show_confirmation_dialog(self):
+        """
+        Shows a confirmation dialog when the user clicks the "Save and Quit" button
+        """
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setIcon(QtWidgets.QMessageBox.Icon.Warning)
+        msg_box.setText("Are you sure you want to quit? Any moves you have made during this turn will not be saved.")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No)
+        msg_box.setDefaultButton(QtWidgets.QMessageBox.StandardButton.No)
+        ret = msg_box.exec()
+
+        if ret == QtWidgets.QMessageBox.StandardButton.Yes:
+            self.close()
 
     def update_robots(self):
         """

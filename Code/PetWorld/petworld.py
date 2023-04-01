@@ -1,4 +1,6 @@
 from square import Square
+from direction import Direction
+import os
 
 class PetWorld():
     """
@@ -224,3 +226,37 @@ class PetWorld():
         else:
             self.active_team = "Blue"
         self.reset_all()
+        self.save_game()
+
+    def save_game(self):
+        with open('savedata/savegame.ptwrld', 'w') as file:
+            file.write("# Name\n")
+            file.write(f"{self.name}\n")
+            file.write("\n")
+            file.write("# Time\n")
+            time = str(self.time)
+            time = time.split("Time")
+            file.write(f"{time[1]}\n")
+            file.write("\n")
+            file.write("# Size\n")
+            file.write(f"dimensions = {self.width},{self.height}\n")
+            file.write("\n")
+            file.write("# Walls\n")
+            file.write(f"obstacles = {self.obstacles}\n")
+            file.write("\n")
+            file.write("# Turn\n")
+            file.write(f"{self.active_team}\n")
+            file.write("\n")
+            file.write("# Pets\n")
+            for i in self.robots:
+                location = str(i).split("location ")
+                file.write(f"location = Coordinates{location[1]}\n")
+                file.write(f"body = Pet('{i.name}')\n")
+                file.write(f"brain = {i.class_name}(body)\n")
+                file.write(f"body.set_brain(brain)\n")
+                file.write(f"world.add_robot(body, location, Direction.{Direction.get_direction(i.facing)})\n")
+                file.write(f"body.team = '{i.team}'\n")
+                file.write(f"body.health = {i.health}\n")
+                file.write(f"body.mana = {i.mana}\n")
+                file.write("\n")
+            file.close()
