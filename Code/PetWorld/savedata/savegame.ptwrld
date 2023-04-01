@@ -76,4 +76,3 @@ world.add_robot(body, location, Direction.SOUTH)
 body.team = 'Red'
 body.health = 100
 body.mana = 20
-

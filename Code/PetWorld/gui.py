@@ -176,8 +176,10 @@ class GUI(QtWidgets.QMainWindow):
         # Set the background color
         if self.world.active_team == "Blue":
             self.view.setStyleSheet("background-color: blue;")
-        else:
+        elif self.world.active_team == "Red":
             self.view.setStyleSheet("background-color: red;")
+        else:
+            self.view.setStyleSheet("background-color: grey;")
 
         # Create stage name widget
         self.stage_name = QtWidgets.QLabel(self.world.name)
@@ -192,10 +194,42 @@ class GUI(QtWidgets.QMainWindow):
     def update_window(self):
         if self.world.active_team == "Blue":
             self.view.setStyleSheet("background-color: blue;")
-        else:
+        elif self.world.active_team == "Red":
             self.view.setStyleSheet("background-color: red;")
+        else:
+            self.view.setStyleSheet("background-color: grey;")
 
     def mousePressEvent(self, event, *args, **kwargs):
+        if self.world.active_team == "Level Editor":
+            # Get the item that was clicked on
+            pos = self.view.mapToScene(event.pos())
+            self.pos = pos
+            # print(self.pos)
+            pos = self.view.mapFromScene(pos)
+            item = self.view.itemAt(pos)
+            self.item = item
+            # print(self.item.coordinates.get_x())
+            self.pos = pos
+            # print(self.pos)
+            print(item)
+            # print(self.gui_exercise.square_coordinates[self.item])
+            if isinstance(item, QtWidgets.QGraphicsRectItem):  # check if it's a SquareItem
+                menu = QtWidgets.QMenu()
+                font = menu.font()
+                font.setPointSize(font.pointSize() + 5)
+                menu.setFont(font)
+                rows = ["Toggle Obstacle"]
+                for row in rows:
+                    action = QtWidgets.QWidgetAction(menu)
+                    label = QtWidgets.QLabel(row)
+                    action.setDefaultWidget(label)
+                    menu.addAction(action)
+                    action.triggered.connect(
+                        lambda checked, row=row: self.handleContextMenuAction(row))
+                # Show the menu at the position of the event
+                # pos = self.view.mapFromGlobal(self.view.mapToGlobal(event.pos()))
+                menu.exec(pos)
+
         if self.world.moving:
             # Get the item that was clicked on
             pos = self.view.mapToScene(event.pos())
@@ -244,9 +278,15 @@ class GUI(QtWidgets.QMainWindow):
             for square in self.gui_exercise.highlighted_squares:
                 self.gui_exercise.scene.removeItem(square)
             self.possible_drawn = False
-
-
-
-
-        if row == "Cancel":
             self.world.reset_moving()
+
+        if row == "Toggle Obstacle":
+            print(self.gui_exercise.square_coordinates[self.item])
+            print("Debug")
+            coordinates = str(self.gui_exercise.square_coordinates[self.item])
+            print("Debug")
+            coordinates = Coordinates(int(coordinates[1]), int(coordinates[4]))
+            print(coordinates)
+            print("Debug")
+            self.world.add_wall(coordinates)
+            self.gui_exercise.update_pet_world_grid_items()

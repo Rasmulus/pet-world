@@ -23,6 +23,7 @@ class GuiExercise():
         self.added_robots = []
         self.square_coordinates = {}
         self.highlighted_squares = []
+        self.squares = []
 
     def add_pet_world_grid_items(self):
         """
@@ -95,6 +96,23 @@ class GuiExercise():
 
                 self.scene.addItem(rect_item)
                 self.square_coordinates[rect_item] = coordinates
+                self.squares.append(rect_item)
+
+    def update_pet_world_grid_items(self):
+        """
+
+        This method updates the grid items by checking if they are walls or not,
+        and changing their colors accordingly.
+
+        """
+        print(self.square_coordinates)
+        for i in self.square_coordinates:
+            print(self.square_coordinates[i])
+            square = self.pet_world.get_square(self.square_coordinates[i])
+            if square.is_wall:
+                i.setBrush(QtGui.QBrush(QtGui.QColor(20, 20, 20)))
+            else:
+                i.setBrush(QtGui.QBrush(QtGui.QColor(211, 211, 211)))
 
     def add_robot_graphics_items(self):
         """

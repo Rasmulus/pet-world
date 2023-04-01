@@ -33,8 +33,7 @@ def main():
     test_world.add_wall(wall3_coordinates)
     wall4_coordinates = Coordinates(1, 3)
     test_world.add_wall(wall4_coordinates)
-
-
+    test_world.active_team = "Blue"
     dog_location = Coordinates(14, 14)
     dog_body = Pet('Dog')
     dog_brain = Dog(dog_body)

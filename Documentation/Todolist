@@ -7,6 +7,10 @@
     - Reptile
     - Bird -> Done
 - Implement level and character art
+- Implement game end widget
+- Implement save slots and save select
+- Implement level select
+- Implement tests
 
 - implement saving and loading game state -> Done
 - Implement save game button -> Done

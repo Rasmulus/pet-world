@@ -74,3 +74,16 @@ class Square():
             return True
         else:
             return False
+
+    def remove_wall(self):
+        """
+        Removes a wall in this square, if possible.
+        If the square was empty, the method fails to do anything.
+
+        Returns a boolean value indicating if the operation succeeded: boolean
+        """
+        if not self.is_empty():
+            self.is_wall = False
+            return True
+        else:
+            return False

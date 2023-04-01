@@ -14,49 +14,65 @@ obstacles = [(0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (9, 6), (10, 6), (1
 Blue
 
 # Pets
-dog_location = Coordinates(14, 14)
-dog_body = Pet('Dog')
-dog_brain = Dog(dog_body)
-dog_body.set_brain(dog_brain)
-world.add_robot(dog_body, dog_location, Direction.NORTH)
+location = Coordinates(14, 14)
+body = Pet('Dog')
+brain = Dog(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.NORTH)
+body.team = 'Blue'
+body.health = 100
+body.mana = 20
 
-bad_dog_location = Coordinates(14, 0)
-dog_body = Pet('Bad Dog')
-dog_brain = Dog(dog_body)
-dog_body.set_brain(dog_brain)
-dog_body.change_team()
-world.add_robot(dog_body, bad_dog_location, Direction.SOUTH)
+location = Coordinates(14, 0)
+body = Pet('Bad Dog')
+brain = Dog(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.SOUTH)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
 
-bird_location = Coordinates(0, 14)
-bird_body = Pet('Bird')
-bird_brain = Bird(bird_body)
-bird_body.set_brain(bird_brain)
-world.add_robot(bird_body, bird_location, Direction.NORTH)
+location = Coordinates(0, 14)
+body = Pet('Bird')
+brain = Bird(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.NORTH)
+body.team = 'Blue'
+body.health = 100
+body.mana = 20
 
-bad_bird_location = Coordinates(0, 0)
-bird_body = Pet('Bad Bird')
-bird_brain = Bird(bird_body)
-bird_body.set_brain(bird_brain)
-bird_body.change_team()
-world.add_robot(bird_body, bad_bird_location, Direction.SOUTH)
+location = Coordinates(0, 0)
+body = Pet('Bad Bird')
+brain = Bird(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.SOUTH)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
 
-bad_rodent_location = Coordinates(6, 6)
-rodent_body = Pet('Bad Rat')
-rodent_brain = Rodent(rodent_body)
-rodent_body.set_brain(rodent_brain)
-rodent_body.change_team()
-world.add_robot(rodent_body, bad_rodent_location, Direction.SOUTH)
+location = Coordinates(6, 6)
+body = Pet('Bad Rat')
+brain = Rodent(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.SOUTH)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
 
-bad_rodent_location = Coordinates(7, 7)
-rodent_body = Pet('Bad Rat')
-rodent_brain = Rodent(rodent_body)
-rodent_body.set_brain(rodent_brain)
-rodent_body.change_team()
-world.add_robot(rodent_body, bad_rodent_location, Direction.SOUTH)
+location = Coordinates(7, 7)
+body = Pet('Bad Rat')
+brain = Rodent(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.SOUTH)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
 
-bad_rodent_location = Coordinates(8, 6)
-rodent_body = Pet('Bad Rat')
-rodent_brain = Rodent(rodent_body)
-rodent_body.set_brain(rodent_brain)
-rodent_body.change_team()
-world.add_robot(rodent_body, bad_rodent_location, Direction.SOUTH)
+location = Coordinates(8, 6)
+body = Pet('Bad Rat')
+brain = Rodent(body)
+body.set_brain(brain)
+world.add_robot(body, location, Direction.SOUTH)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
