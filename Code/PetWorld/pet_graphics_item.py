@@ -489,16 +489,16 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                     elif self.pet.get_mana() >= 10:
                         rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal (10 MP)"]
                     elif self.pet.get_mana() >= 5:
-                        rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal (10 MP)"]
+                        rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)"]
                     else:
-                        rows = ["Move", "Rest (Restore MP)", "Heal (10 MP)"]
+                        rows = ["Move", "Rest (Restore MP)"]
                 elif not self.pet.attacked and self.pet.moved:
                     if self.pet.get_mana() >= 10:
                         rows = ["Heavy Attack (10 MP)", "Light Attack (5 MP)", "Heal (10 MP)"]
                     elif self.pet.get_mana() >= 5:
-                        rows = ["Light Attack (5 MP)", "Heal (10 MP)"]
+                        rows = ["Light Attack (5 MP)"]
                     else:
-                        rows = ["Heal (10 MP)"]
+                        rows = []
 
                 elif not self.pet.moved:
                     rows = ["Move"]

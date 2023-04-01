@@ -117,9 +117,13 @@ class GUI(QtWidgets.QMainWindow):
         #self.next_turn_btn = QtWidgets.QPushButton("Next full turn")
         #self.next_turn_btn.clicked.connect(self.world.next_full_turn)
         #self.horizontal.addWidget(self.next_turn_btn)
-        self.end_turn_btn = QtWidgets.QPushButton("End turn")
+        self.end_turn_btn = QtWidgets.QPushButton("End Turn")
         self.end_turn_btn.clicked.connect(self.world.change_active_team)
         self.horizontal.addWidget(self.end_turn_btn)
+
+        self.save_game_btn = QtWidgets.QPushButton("Save Game")
+        #self.save_game_btn.clicked.connect(self.world.change_active_team)
+        self.horizontal.addWidget(self.save_game_btn)
 
     def update_robots(self):
         """

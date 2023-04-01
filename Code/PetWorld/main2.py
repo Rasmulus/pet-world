@@ -13,6 +13,7 @@ from nosebot import *
 from lovebot import *
 from dog import *
 from bird import *
+from rodent import *
 def main():
     """
     Reads a savefile and creates a PetWorld, adds pets and launches the Graphical User Interface.

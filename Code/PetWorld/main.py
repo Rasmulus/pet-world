@@ -13,7 +13,7 @@ from nosebot import *
 from lovebot import *
 from dog import *
 from bird import *
-
+from rodent import *
 def main():
     """
     Creates a PetWorld, adds robots and launches the Graphical User Interface.
@@ -22,7 +22,7 @@ def main():
 
     You can modify this however you like.
     """
-    test_world = PetWorld(15, 15, "Test World")
+    test_world = PetWorld(15, 15, "Test World - launch main2.py instead")
     wall1_coordinates = Coordinates(2, 4)
     test_world.add_wall(wall1_coordinates)
     wall2_coordinates = Coordinates(0, 5)
