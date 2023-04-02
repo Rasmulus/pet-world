@@ -281,12 +281,10 @@ class GUI(QtWidgets.QMainWindow):
             self.world.reset_moving()
 
         if row == "Toggle Obstacle":
-            print(self.gui_exercise.square_coordinates[self.item])
-            print("Debug")
             coordinates = str(self.gui_exercise.square_coordinates[self.item])
-            print("Debug")
-            coordinates = Coordinates(int(coordinates[1]), int(coordinates[4]))
-            print(coordinates)
-            print("Debug")
-            self.world.add_wall(coordinates)
+            coordinates = eval(coordinates)
+            print(coordinates, "heya")
+            coordinates = Coordinates(int(coordinates[0]), int(coordinates[1]))
+
+            self.world.toggle_wall(coordinates)
             self.gui_exercise.update_pet_world_grid_items()

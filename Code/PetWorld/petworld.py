@@ -97,6 +97,31 @@ class PetWorld():
         return self.get_square(location).set_wall()
 
 
+    def toggle_wall(self, location):
+        """
+        Adds a wall at the given location in the robot world, if
+        possible. If the square is not empty, the method fails to
+        do anything.
+
+        Parameter location is the location of the wall: Coordinates
+
+        Returns a boolean value indicating if the operation succeeded: boolean
+
+        """
+        print("Debugggger")
+        string_tuple = location.__str__()
+        print(string_tuple, "hey")
+
+        tuple_result = tuple(map(int, string_tuple.strip("()").split(",")))
+        print(tuple_result, "hey")
+        if tuple_result not in self.obstacles:
+            self.obstacles.append(tuple_result)
+            self.get_square(location).set_wall()
+        else:
+            self.obstacles.remove(tuple_result)
+            self.get_square(location).remove_wall()
+
+
     def get_square(self, coordinates):
         """
         Parameter coordinates is a location in the world: Coordinates
