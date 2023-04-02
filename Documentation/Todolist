@@ -1,17 +1,19 @@
 - implement AI
-- implement level graphical editor
-- implement pet classes:
-    - Dog -> Done
-    - Cat
-    - Rodent -> Done
-    - Reptile
-    - Bird -> Done
 - Implement level and character art
 - Implement game end widget
 - Implement save slots and save select
 - Implement level select
 - Implement tests
+- Finish implementing the saving of level editor files
+- Implement choosing dimensions in level editor
 
+- implement level graphical editor -> Done
+- implement pet classes: -> Done
+    - Dog -> Done
+    - Cat -> Done
+    - Rodent -> Done
+    - Reptile -> Done
+    - Bird -> Done
 - implement saving and loading game state -> Done
 - Implement save game button -> Done
 - implement stage name header -> Done

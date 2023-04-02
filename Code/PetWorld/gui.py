@@ -4,7 +4,12 @@ from pet_graphics_item import PetGraphicsItem
 from coordinates import Coordinates
 
 from gui_exercise import GuiExercise
-
+from pet import *
+from dog import *
+from bird import *
+from rodent import *
+from cat import *
+from reptile import *
 
 class GUI(QtWidgets.QMainWindow):
     """
@@ -123,6 +128,9 @@ class GUI(QtWidgets.QMainWindow):
         self.save_game_btn.clicked.connect(self.show_confirmation_dialog)
         self.horizontal.addWidget(self.save_game_btn)
 
+        self.save_as_btn = QtWidgets.QPushButton("Save World As")
+        self.save_as_btn.clicked.connect(self.show_saving_window)
+        self.horizontal.addWidget(self.save_as_btn)
     def show_confirmation_dialog(self):
         """
         Shows a confirmation dialog when the user clicks the "Save and Quit" button
@@ -199,6 +207,41 @@ class GUI(QtWidgets.QMainWindow):
         else:
             self.view.setStyleSheet("background-color: grey;")
 
+
+
+    def show_saving_window(self):
+        self.saving_window = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.saving_window)
+
+        filename_label = QtWidgets.QLabel("Enter the filename that you would like to save the level to:")
+        layout.addWidget(filename_label)
+
+        self.filename_input = QtWidgets.QLineEdit()
+        layout.addWidget(self.filename_input)
+
+        extension_label = QtWidgets.QLabel(".ptwrld")
+        layout.addWidget(extension_label)
+
+        worldname_label = QtWidgets.QLabel("What should your world be called?")
+        layout.addWidget(worldname_label)
+
+        self.worldname_input = QtWidgets.QLineEdit()
+        layout.addWidget(self.worldname_input)
+
+        save_btn = QtWidgets.QPushButton("Save")
+        save_btn.clicked.connect(self.save)
+        layout.addWidget(save_btn)
+
+        cancel_btn = QtWidgets.QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.saving_window.close)
+        layout.addWidget(cancel_btn)
+
+        self.saving_window.show()
+
+    def save(self):
+        filename = self.filename_input.text() + ".ptwrld"
+        worldname = self.worldname_input.text()
+        # Add your saving logic here
     def mousePressEvent(self, event, *args, **kwargs):
         if self.world.active_team == "Level Editor":
             # Get the item that was clicked on
@@ -306,15 +349,55 @@ class GUI(QtWidgets.QMainWindow):
             self.gui_exercise.update_pet_world_grid_items()
 
         elif row == "Dog":
-            pass
+            coordinates = str(self.gui_exercise.square_coordinates[self.item])
+            coordinates = eval(coordinates)
+            location = Coordinates(int(coordinates[0]), int(coordinates[1]))
+            body = Pet('Dog')
+            brain = Dog(body)
+            body.set_brain(brain)
+            self.world.add_robot(body, location, Direction.NORTH)
+            self.gui_exercise.add_robot_graphics_items()
+
         elif row == "Cat":
-            pass
+            coordinates = str(self.gui_exercise.square_coordinates[self.item])
+            coordinates = eval(coordinates)
+            location = Coordinates(int(coordinates[0]), int(coordinates[1]))
+            body = Pet('Cat')
+            brain = Cat(body)
+            body.set_brain(brain)
+            self.world.add_robot(body, location, Direction.NORTH)
+            self.gui_exercise.add_robot_graphics_items()
+
         elif row == "Rodent":
-            pass
+            coordinates = str(self.gui_exercise.square_coordinates[self.item])
+            coordinates = eval(coordinates)
+            location = Coordinates(int(coordinates[0]), int(coordinates[1]))
+            body = Pet('Rodent')
+            brain = Rodent(body)
+            body.set_brain(brain)
+            self.world.add_robot(body, location, Direction.NORTH)
+            self.gui_exercise.add_robot_graphics_items()
+
         elif row == "Reptile":
-            pass
+            coordinates = str(self.gui_exercise.square_coordinates[self.item])
+            coordinates = eval(coordinates)
+            location = Coordinates(int(coordinates[0]), int(coordinates[1]))
+            body = Pet('Reptile')
+            brain = Reptile(body)
+            body.set_brain(brain)
+            self.world.add_robot(body, location, Direction.NORTH)
+            self.gui_exercise.add_robot_graphics_items()
+
         elif row == "Bird":
-            pass
+            coordinates = str(self.gui_exercise.square_coordinates[self.item])
+            coordinates = eval(coordinates)
+            location = Coordinates(int(coordinates[0]), int(coordinates[1]))
+            body = Pet('Bird')
+            brain = Bird(body)
+            body.set_brain(brain)
+            self.world.add_robot(body, location, Direction.NORTH)
+            self.gui_exercise.add_robot_graphics_items()
+
         else:
             pass
 

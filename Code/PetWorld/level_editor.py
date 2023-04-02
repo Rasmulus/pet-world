@@ -14,6 +14,8 @@ from lovebot import *
 from dog import *
 from bird import *
 from rodent import *
+from cat import *
+from reptile import *
 def main():
     """
     Reads a savefile and creates a PetWorld, adds pets and launches the Graphical User Interface.

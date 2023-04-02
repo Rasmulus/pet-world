@@ -335,6 +335,7 @@ class Pet():
             self.destroy()
             current_square = self.get_location_square()
             current_square.remove_robot()
+            self.get_world().robots.remove(self)
 
     def get_mana(self):
         return self.mana
@@ -419,8 +420,10 @@ class Pet():
     def change_team(self):
         if self.team == "Blue":
             self.team = "Red"
+            self.spin((0, 1))
         else:
             self.team = "Blue"
+            self.spin((0, -1))
 
 
     def __str__(self):

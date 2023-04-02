@@ -7,13 +7,11 @@ from direction import Direction
 from petworld import *
 from coordinates import *
 from pet import *
-from spinbot import *
-from drunkbot import *
-from nosebot import *
-from lovebot import *
 from dog import *
 from bird import *
 from rodent import *
+from cat import *
+from reptile import *
 def main():
     """
     Reads a savefile and creates a PetWorld, adds pets and launches the Graphical User Interface.

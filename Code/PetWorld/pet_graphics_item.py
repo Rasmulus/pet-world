@@ -389,8 +389,27 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
 
     def mousePressEvent(self, event, *args, **kwargs):
+            #Check if level editor
+            if self.pet.get_world().active_team == "Level Editor":
+                menu = QtWidgets.QMenu()
+                # make the font size larger
+                font = menu.font()
+                font.setPointSize(font.pointSize() + 5)
+                menu.setFont(font)
+                # Create the menu items and add them to the menu
+                rows = ["Change Team", "Remove Pet"]
+                for row in rows:
+                    action = QtWidgets.QWidgetAction(menu)
+                    label = QtWidgets.QLabel(row)
+                    action.setDefaultWidget(label)
+                    menu.addAction(action)
+                    # Connect the action to a method that handles it
+                    action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                # Show the menu at the position of the event
+                menu.exec(event.screenPos())
+
             #Check if attacking
-            if not self.pet.team == self.pet.get_world().active_team and self.pet.get_world().attacking:
+            elif not self.pet.team == self.pet.get_world().active_team and self.pet.get_world().attacking:
                 target = self.pet
                 attacker = None
                 print("debug")
@@ -521,7 +540,13 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 self.pet.get_world().moving = False
 
     def handleContextMenuAction(self, row):
-        if row == "Heal (10 MP)" and self.pet.is_broken:
+        if row == "Change Team":
+            self.pet.change_team()
+
+        elif row == "Remove Pet":
+            self.pet.set_health(0)
+
+        elif row == "Heal (10 MP)" and self.pet.is_broken:
             self.pet.fix()
             self.pet.attacked = True
             self.pet.mana -= 10
