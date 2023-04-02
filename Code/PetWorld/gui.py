@@ -218,14 +218,29 @@ class GUI(QtWidgets.QMainWindow):
                 font = menu.font()
                 font.setPointSize(font.pointSize() + 5)
                 menu.setFont(font)
-                rows = ["Toggle Obstacle"]
+                rows = ["Toggle Obstacle", "Add Pet"]
                 for row in rows:
                     action = QtWidgets.QWidgetAction(menu)
                     label = QtWidgets.QLabel(row)
                     action.setDefaultWidget(label)
                     menu.addAction(action)
-                    action.triggered.connect(
-                        lambda checked, row=row: self.handleContextMenuAction(row))
+                    if row == "Add Pet":
+                        submenu = QtWidgets.QMenu("Add Pet", menu)
+                        pet_types = ["Dog", "Cat", "Rodent", "Reptile", "Bird"]
+                        for pet_type in pet_types:
+                            pet_action = QtWidgets.QWidgetAction(submenu)
+                            pet_label = QtWidgets.QLabel(pet_type)
+                            pet_action.setDefaultWidget(pet_label)
+                            submenu.addAction(pet_action)
+                            submenu.setFont(font)
+                            pet_action.triggered.connect(
+                                lambda checked, pet_type=pet_type: self.handleContextMenuAction(pet_type))
+
+                        action.setMenu(submenu)
+
+                    else:
+                        action.triggered.connect(
+                            lambda checked, row=row: self.handleContextMenuAction(row))
                 # Show the menu at the position of the event
                 # pos = self.view.mapFromGlobal(self.view.mapToGlobal(event.pos()))
                 menu.exec(pos)
@@ -261,6 +276,7 @@ class GUI(QtWidgets.QMainWindow):
                 menu.exec(pos)
 
     def handleContextMenuAction(self, row):
+        print(f"handleContextMenuAction called with row={row}")
         if row == "Move here":
             for i in self.world.get_robots():
                 if i.get_moving_state():
@@ -274,13 +290,13 @@ class GUI(QtWidgets.QMainWindow):
             self.possible_drawn = False
 
 
-        if row == "Cancel":
+        elif row == "Cancel":
             for square in self.gui_exercise.highlighted_squares:
                 self.gui_exercise.scene.removeItem(square)
             self.possible_drawn = False
             self.world.reset_moving()
 
-        if row == "Toggle Obstacle":
+        elif row == "Toggle Obstacle":
             coordinates = str(self.gui_exercise.square_coordinates[self.item])
             coordinates = eval(coordinates)
             print(coordinates, "heya")
@@ -288,3 +304,17 @@ class GUI(QtWidgets.QMainWindow):
 
             self.world.toggle_wall(coordinates)
             self.gui_exercise.update_pet_world_grid_items()
+
+        elif row == "Dog":
+            pass
+        elif row == "Cat":
+            pass
+        elif row == "Rodent":
+            pass
+        elif row == "Reptile":
+            pass
+        elif row == "Bird":
+            pass
+        else:
+            pass
+
