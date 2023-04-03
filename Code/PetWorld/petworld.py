@@ -383,7 +383,7 @@ class PetWorld():
                                 elif current_line == "":
                                     current_line = file.readline().rstrip()
                                     if current_line == "":
-                                        self.save_game()
+                                        #self.save_game()
                                         break
                                     else:
                                         # Execute the line as code
@@ -401,9 +401,6 @@ class PetWorld():
                             pass
                     else:
                         current_line = file.readline()
-
-                    for i in self.robots:
-                        i.health = i.max_health
 
                     # Do something with the lines
                     # print(current_line)

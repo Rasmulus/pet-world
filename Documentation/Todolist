@@ -1,12 +1,14 @@
 - implement AI
 - Implement level and character art
 - Implement game end widget
-- Implement save slots and save select
 - Implement level select
 - Implement tests
-- Finish implementing the saving of level editor files
 - Implement choosing dimensions in level editor
+- Implement system to differentiate between levels and saves
+    - saves should have the ability to complete multiple levels
 
+- Implement save slots and save select -> Done
+- Finish implementing the saving of level editor files -> Done
 - implement level graphical editor -> Done
 - implement pet classes: -> Done
     - Dog -> Done
