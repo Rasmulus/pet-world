@@ -2,6 +2,7 @@ from PyQt6 import QtWidgets, QtCore, QtGui
 
 from pet_graphics_item import PetGraphicsItem
 from coordinates import Coordinates
+from square import Square
 
 from gui_exercise import GuiExercise
 from pet import *
@@ -134,6 +135,10 @@ class GUI(QtWidgets.QMainWindow):
         self.load_game_btn.clicked.connect(self.choose_save_window)
         self.horizontal.addWidget(self.load_game_btn)
 
+        self.change_size_btn = QtWidgets.QPushButton("Change World Size")
+        self.change_size_btn.clicked.connect(self.change_size_window)
+        self.horizontal.addWidget(self.change_size_btn)
+
         if self.world.active_team == "Level Editor":
             self.horizontal.addWidget(self.save_as_btn)
 
@@ -216,6 +221,81 @@ class GUI(QtWidgets.QMainWindow):
             self.view.setStyleSheet("background-color: red;")
         else:
             self.view.setStyleSheet("background-color: grey;")
+    def change_size_window(self):
+
+        self.change_size_window = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.change_size_window)
+
+        width_label = QtWidgets.QLabel("Enter desired width of the world:")
+        layout.addWidget(width_label)
+
+        width_layout = QtWidgets.QHBoxLayout()
+        self.width_input = QtWidgets.QLineEdit()
+        width_layout.addWidget(self.width_input)
+
+
+
+        layout.addLayout(width_layout)
+
+        height_label = QtWidgets.QLabel("Enter desired height of the world:")
+        layout.addWidget(height_label)
+
+        self.height_input = QtWidgets.QLineEdit()
+        layout.addWidget(self.height_input)
+
+        confirm_btn = QtWidgets.QPushButton("Confirm")
+        confirm_btn.clicked.connect(self.confirm_change)
+        layout.addWidget(confirm_btn)
+
+        cancel_btn = QtWidgets.QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.change_size_window.close)
+        layout.addWidget(cancel_btn)
+
+        self.change_size_window.show()
+
+    def confirm_change(self):
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setText(f"Are you sure you want to change the size of the world? All changes will be lost.")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.Cancel)
+        result = msg_box.exec()
+
+        if result == QtWidgets.QMessageBox.StandardButton.Yes:
+            self.change_dimensions()
+
+    def change_dimensions(self):
+        width = self.width_input.text()
+        height = self.height_input.text()
+
+        # removes all pets from the world
+        for i in self.world.get_robots():
+            i.set_health(0)
+        # removes all obstacles
+        for i in self.gui_exercise.squares:
+            coordinates = str(self.gui_exercise.square_coordinates[i])
+            coordinates = eval(coordinates)
+            if coordinates in self.world.obstacles:
+                coordinates = Coordinates(int(coordinates[0]), int(coordinates[1]))
+                self.toggle_obstacle(coordinates)
+
+        # removes all grid items
+        self.gui_exercise.remove_pet_world_grid_items()
+
+        # adds new grid items
+        self.world.width = int(width)
+        self.world.height = int(height)
+
+        for x in range(self.world.width):  # stepper
+            self.world.squares[x] = [None] * self.world.height
+            for y in range(self.world.height):  # stepper
+                self.world.squares[x][y] = Square()
+
+        self.gui_exercise.add_pet_world_grid_items()
+
+        # updates the stage name widget
+        self.stage_name.hide()
+        self.stage_name.setText(self.world.name)
+        self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
+        self.stage_name.show()
 
     def choose_save_window(self):
         self.choose_save_widget = QtWidgets.QWidget()
@@ -245,7 +325,6 @@ class GUI(QtWidgets.QMainWindow):
         #removes all pets from the world
         for i in self.world.get_robots():
             i.set_health(0)
-        #self.world.robots = []
         #removes all obstacles
         for i in self.gui_exercise.squares:
             coordinates = str(self.gui_exercise.square_coordinates[i])
