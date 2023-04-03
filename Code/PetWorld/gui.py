@@ -10,6 +10,7 @@ from bird import *
 from rodent import *
 from cat import *
 from reptile import *
+import os
 
 class GUI(QtWidgets.QMainWindow):
     """
@@ -129,6 +130,10 @@ class GUI(QtWidgets.QMainWindow):
         self.save_as_btn = QtWidgets.QPushButton("Save World As")
         self.save_as_btn.clicked.connect(self.show_saving_window)
 
+        self.load_game_btn = QtWidgets.QPushButton("Load Game")
+        self.load_game_btn.clicked.connect(self.choose_save_window)
+        self.horizontal.addWidget(self.load_game_btn)
+
         if self.world.active_team == "Level Editor":
             self.horizontal.addWidget(self.save_as_btn)
 
@@ -211,6 +216,33 @@ class GUI(QtWidgets.QMainWindow):
             self.view.setStyleSheet("background-color: red;")
         else:
             self.view.setStyleSheet("background-color: grey;")
+
+    def choose_save_window(self):
+        self.choose_save_widget = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self.choose_save_widget)
+
+        saves = os.listdir("savedata")
+        for save in saves:
+            save_btn = QtWidgets.QPushButton(save)
+            save_btn.clicked.connect(lambda checked, save=save: self.confirm_load(save))
+            layout.addWidget(save_btn)
+
+        cancel_btn = QtWidgets.QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.choose_save_widget.close)
+        layout.addWidget(cancel_btn)
+
+        self.choose_save_widget.show()
+
+    def confirm_load(self, save):
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setText(f"Are you sure you want to load this world: {save}?")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.Cancel)
+        result = msg_box.exec()
+
+        if result == QtWidgets.QMessageBox.StandardButton.Yes:
+            self.load_world(save)
+    def load_world(self, save):
+        pass
 
     def show_saving_window(self):
         self.saving_window = QtWidgets.QWidget()

@@ -293,7 +293,7 @@ class PetWorld():
             file.write(f"{world_name}\n")
             file.write("\n")
             file.write("# Time\n")
-            file.write(f"(0, 0, 0)")
+            file.write(f"(0, 0, 0)\n")
             file.write("\n")
             file.write("# Size\n")
             file.write(f"dimensions = {self.width},{self.height}\n")
@@ -302,7 +302,7 @@ class PetWorld():
             file.write(f"obstacles = {self.obstacles}\n")
             file.write("\n")
             file.write("# Turn\n")
-            file.write(f"Blue")
+            file.write(f"Blue\n")
             file.write("\n")
             file.write("# Pets\n")
             for i in self.robots:
