@@ -287,15 +287,13 @@ class PetWorld():
             file.close()
 
     def save_game_as(self, filename, world_name):
-        path = f'savedata/{filename}.ptwrld'
+        path = f'savedata/{filename}'
         with open(path, 'w') as file:
             file.write("# Name\n")
             file.write(f"{world_name}\n")
             file.write("\n")
             file.write("# Time\n")
-            time = str(self.time)
-            time = time.split("Time")
-            file.write(f"{time[1]}\n")
+            file.write(f"(0, 0, 0)")
             file.write("\n")
             file.write("# Size\n")
             file.write(f"dimensions = {self.width},{self.height}\n")
@@ -304,7 +302,7 @@ class PetWorld():
             file.write(f"obstacles = {self.obstacles}\n")
             file.write("\n")
             file.write("# Turn\n")
-            file.write(f"{self.active_team}\n")
+            file.write(f"Blue")
             file.write("\n")
             file.write("# Pets\n")
             for i in self.robots:

@@ -122,15 +122,20 @@ class GUI(QtWidgets.QMainWindow):
         """
         self.end_turn_btn = QtWidgets.QPushButton("End Turn")
         self.end_turn_btn.clicked.connect(self.world.change_active_team)
-        self.horizontal.addWidget(self.end_turn_btn)
 
         self.save_game_btn = QtWidgets.QPushButton("Save and Quit")
         self.save_game_btn.clicked.connect(self.show_confirmation_dialog)
-        self.horizontal.addWidget(self.save_game_btn)
 
         self.save_as_btn = QtWidgets.QPushButton("Save World As")
         self.save_as_btn.clicked.connect(self.show_saving_window)
-        self.horizontal.addWidget(self.save_as_btn)
+
+        if self.world.active_team == "Level Editor":
+            self.horizontal.addWidget(self.save_as_btn)
+
+        else:
+            self.horizontal.addWidget(self.end_turn_btn)
+            self.horizontal.addWidget(self.save_game_btn)
+
     def show_confirmation_dialog(self):
         """
         Shows a confirmation dialog when the user clicks the "Save and Quit" button
@@ -207,8 +212,6 @@ class GUI(QtWidgets.QMainWindow):
         else:
             self.view.setStyleSheet("background-color: grey;")
 
-
-
     def show_saving_window(self):
         self.saving_window = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self.saving_window)
@@ -216,11 +219,14 @@ class GUI(QtWidgets.QMainWindow):
         filename_label = QtWidgets.QLabel("Enter the filename that you would like to save the level to:")
         layout.addWidget(filename_label)
 
+        filename_layout = QtWidgets.QHBoxLayout()
         self.filename_input = QtWidgets.QLineEdit()
-        layout.addWidget(self.filename_input)
+        filename_layout.addWidget(self.filename_input)
 
         extension_label = QtWidgets.QLabel(".ptwrld")
-        layout.addWidget(extension_label)
+        filename_layout.addWidget(extension_label)
+
+        layout.addLayout(filename_layout)
 
         worldname_label = QtWidgets.QLabel("What should your world be called?")
         layout.addWidget(worldname_label)
@@ -241,7 +247,8 @@ class GUI(QtWidgets.QMainWindow):
     def save(self):
         filename = self.filename_input.text() + ".ptwrld"
         worldname = self.worldname_input.text()
-        # Add your saving logic here
+        self.world.save_game_as(filename, worldname)
+
     def mousePressEvent(self, event, *args, **kwargs):
         if self.world.active_team == "Level Editor":
             # Get the item that was clicked on

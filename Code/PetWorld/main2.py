@@ -19,7 +19,7 @@ def main():
     name = ""
 
     # Open the savegame
-    with open('savedata/savegame.ptwrld', 'r') as file:
+    with open('savedata/level_2.ptwrld', 'r') as file:
         # Read the lines from the file
         #current_line = file.readline().rstrip()
         for current_line in file:
