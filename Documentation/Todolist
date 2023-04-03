@@ -3,10 +3,10 @@
 - Implement game end widget
 - Implement level select
 - Implement tests
-- Implement choosing dimensions in level editor
 - Implement system to differentiate between levels and saves
     - saves should have the ability to complete multiple levels
 
+- Implement choosing dimensions in level editor -> Done
 - Implement save slots and save select -> Done
 - Finish implementing the saving of level editor files -> Done
 - implement level graphical editor -> Done
