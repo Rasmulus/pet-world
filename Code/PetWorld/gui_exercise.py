@@ -27,8 +27,6 @@ class GuiExercise():
 
     def add_pet_world_grid_items(self):
         """
-        Implement me!
-
         The PetWorld already has the logical squares for the game
         and you can get these squares using its get_square method,
         but the squares for the user interface will be created here.
@@ -75,12 +73,9 @@ class GuiExercise():
         and QBrush at https://doc.qt.io/qtforpython/PySide6/QtGui/QBrush.html
         and QColor at https://doc.qt.io/qtforpython/PySide6/QtGui/QColor.html
         """
-        # Iterate over all squares in robot world
-        # for x...:
-            # for y...:
 
-        height = PetWorld.get_height(self.pet_world)
-        width = PetWorld.get_width(self.pet_world)
+        height = self.pet_world.height
+        width = self.pet_world.width
         for x in range(width):
             for y in range(height):
                 coordinates = Coordinates(x, y)
@@ -114,6 +109,15 @@ class GuiExercise():
             else:
                 i.setBrush(QtGui.QBrush(QtGui.QColor(211, 211, 211)))
 
+    def remove_pet_world_grid_items(self):
+        """
+        This method removes all QGraphicsItems that were created in the PetWorld.
+        """
+        for square in self.squares:
+            self.scene.removeItem(square)
+        self.squares = []
+        self.square_coordinates = {}
+
     def add_robot_graphics_items(self):
         """
         Implement me!
@@ -134,7 +138,7 @@ class GuiExercise():
         See: PetGraphicsItem and PetWorld
         """
 
-        robot_list = self.pet_world.get_robots()
+        robot_list = self.pet_world.robots
 
         for i in robot_list:
             if i not in self.added_robots:

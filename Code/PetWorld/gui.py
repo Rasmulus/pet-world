@@ -242,7 +242,38 @@ class GUI(QtWidgets.QMainWindow):
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             self.load_world(save)
     def load_world(self, save):
-        pass
+        #removes all pets from the world
+        for i in self.world.get_robots():
+            i.set_health(0)
+        #self.world.robots = []
+        #removes all obstacles
+        for i in self.gui_exercise.squares:
+            coordinates = str(self.gui_exercise.square_coordinates[i])
+            coordinates = eval(coordinates)
+            if coordinates in self.world.obstacles:
+                coordinates = Coordinates(int(coordinates[0]), int(coordinates[1]))
+                self.toggle_obstacle(coordinates)
+
+        #removes all grid items
+        self.gui_exercise.remove_pet_world_grid_items()
+
+        # loads information from the save
+        self.world.load_game(save)
+
+        #adds new grid items
+        self.gui_exercise.add_pet_world_grid_items()
+
+        #adds new pets
+        self.gui_exercise.add_robot_graphics_items()
+
+        #updates timer to reflect saved time
+        self.elapsed_time = self.world.new_time
+
+        # updates the stage name widget
+        self.stage_name.hide()
+        self.stage_name.setText(self.world.name)
+        self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
+        self.stage_name.show()
 
     def show_saving_window(self):
         self.saving_window = QtWidgets.QWidget()
@@ -280,6 +311,10 @@ class GUI(QtWidgets.QMainWindow):
         filename = self.filename_input.text() + ".ptwrld"
         worldname = self.worldname_input.text()
         self.world.save_game_as(filename, worldname)
+
+    def toggle_obstacle(self, coordinates):
+        self.world.toggle_wall(coordinates)
+        self.gui_exercise.update_pet_world_grid_items()
 
     def mousePressEvent(self, event, *args, **kwargs):
         if self.world.active_team == "Level Editor":
@@ -381,11 +416,9 @@ class GUI(QtWidgets.QMainWindow):
         elif row == "Toggle Obstacle":
             coordinates = str(self.gui_exercise.square_coordinates[self.item])
             coordinates = eval(coordinates)
-            print(coordinates, "heya")
             coordinates = Coordinates(int(coordinates[0]), int(coordinates[1]))
 
-            self.world.toggle_wall(coordinates)
-            self.gui_exercise.update_pet_world_grid_items()
+            self.toggle_obstacle(coordinates)
 
         elif row == "Dog":
             coordinates = str(self.gui_exercise.square_coordinates[self.item])

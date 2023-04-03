@@ -1,6 +1,14 @@
 from square import Square
 from direction import Direction
+from coordinates import Coordinates
 import os
+from PyQt6 import QtCore
+from pet import *
+from dog import *
+from bird import *
+from rodent import *
+from cat import *
+from reptile import *
 
 class PetWorld():
     """
@@ -279,10 +287,10 @@ class PetWorld():
                 file.write(f"body = Pet('{i.name}')\n")
                 file.write(f"brain = {i.class_name}(body)\n")
                 file.write(f"body.set_brain(brain)\n")
-                file.write(f"world.add_robot(body, location, Direction.{Direction.get_direction(i.facing)})\n")
                 file.write(f"body.team = '{i.team}'\n")
                 file.write(f"body.health = {i.health}\n")
                 file.write(f"body.mana = {i.mana}\n")
+                file.write(f"world.add_robot(body, location, Direction.{Direction.get_direction(i.facing)})\n")
                 file.write("\n")
             file.close()
 
@@ -311,9 +319,93 @@ class PetWorld():
                 file.write(f"body = Pet('{i.name}')\n")
                 file.write(f"brain = {i.class_name}(body)\n")
                 file.write(f"body.set_brain(brain)\n")
-                file.write(f"world.add_robot(body, location, Direction.{Direction.get_direction(i.facing)})\n")
                 file.write(f"body.team = '{i.team}'\n")
                 file.write(f"body.health = {i.health}\n")
                 file.write(f"body.mana = {i.mana}\n")
+                file.write(f"world.add_robot(body, location, Direction.{Direction.get_direction(i.facing)})\n")
                 file.write("\n")
             file.close()
+
+    def load_game(self, file):
+        with open(f'savedata/{file}', 'r') as file:
+            # Read the lines from the file
+            # current_line = file.readline().rstrip()
+            for current_line in file:
+                try:
+                    current_line = current_line.rstrip()
+                    if current_line[0] == "#":
+                        print("True")
+                        header_parts = current_line.split(" ")
+                        print(header_parts[1])
+                        category = header_parts[1]
+                        if category == "Name":
+                            name = file.readline().rstrip()
+                            print(f"name: {name}")
+                        if category == "Size":
+                            current_line = file.readline().rstrip()
+                            parts = current_line.split("=")
+                            dimensions = parts[1].rstrip()
+                            dimensions = dimensions.split(",")
+                            self.width = int(dimensions[0])
+                            self.height = int(dimensions[1])
+                            self.name = name
+                            self.new_time = time
+                            for x in range(self.width):  # stepper
+                                self.squares[x] = [None] * self.height
+                                for y in range(self.height):  # stepper
+                                    self.squares[x][y] = Square()
+                            print(f"dimensions: {dimensions}")
+                            print(parts)
+                        if category == "Walls":
+                            print("seinuliini")
+                            current_line = file.readline().rstrip()
+                            parts = current_line.split("=")
+                            coordinates = parts[1].rstrip()
+                            coordinates = eval(coordinates)
+                            for i in coordinates:
+                                self.add_wall(Coordinates(i[0], i[1]))
+                        if category == "Time":
+                            current_line = file.readline().rstrip()
+                            time = eval(current_line)
+                            time = QtCore.QTime(time[0], time[1], time[2])
+
+                        if category == "Turn":
+                            current_line = file.readline().rstrip()
+                            self.active_team = current_line
+
+                        if category == "Pets":
+                            while True:
+                                current_line = file.readline().rstrip()
+                                if current_line.startswith("#"):
+                                    # Reached the next category, break out of the loop
+                                    self.save_game()
+                                    break
+                                elif current_line == "":
+                                    current_line = file.readline().rstrip()
+                                    if current_line == "":
+                                        self.save_game()
+                                        break
+                                    else:
+                                        # Execute the line as code
+                                        print(current_line, "debugging")
+                                        if "world" in current_line:
+                                            current_line = current_line.replace("world", "self")
+                                        exec(current_line)
+                                else:
+                                    # Execute the line as code
+                                    print(current_line, "debugging")
+                                    if "world" in current_line:
+                                        current_line = current_line.replace("world", "self")
+                                    exec(current_line)
+                        else:
+                            pass
+                    else:
+                        current_line = file.readline()
+
+                    for i in self.robots:
+                        i.health = i.max_health
+
+                    # Do something with the lines
+                    # print(current_line)
+                except:
+                    print("problem")
