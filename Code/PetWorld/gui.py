@@ -23,7 +23,10 @@ class GUI(QtWidgets.QMainWindow):
         super().__init__()
         self.setCentralWidget(QtWidgets.QWidget()) # QMainWindown must have a centralWidget to be able to add layouts
         self.horizontal = QtWidgets.QHBoxLayout() # Horizontal main layout
+        self.vertical = QtWidgets.QVBoxLayout() # Vertical button layout
+
         self.centralWidget().setLayout(self.horizontal)
+
         self.world = world
         self.square_size = square_size
         self.possible_squares = None
@@ -125,31 +128,44 @@ class GUI(QtWidgets.QMainWindow):
         """
         self.end_turn_btn = QtWidgets.QPushButton("End Turn")
         self.end_turn_btn.clicked.connect(self.world.change_active_team)
+        self.end_turn_btn.setFont(QtGui.QFont("Arial", 30))
+        self.end_turn_btn.setMinimumHeight(100)
 
         self.save_game_btn = QtWidgets.QPushButton("Save and Quit")
         self.save_game_btn.clicked.connect(self.show_confirmation_dialog)
+        self.save_game_btn.setFont(QtGui.QFont("Arial", 30))
+        self.save_game_btn.setMinimumHeight(100)
 
         self.save_as_btn = QtWidgets.QPushButton("Save World As")
         self.save_as_btn.clicked.connect(self.show_saving_window)
+        self.save_as_btn.setFont(QtGui.QFont("Arial", 30))
+        self.save_as_btn.setMinimumHeight(100)
 
         self.load_game_btn = QtWidgets.QPushButton("Load Game")
         self.load_game_btn.clicked.connect(self.choose_save_window)
-        self.horizontal.addWidget(self.load_game_btn)
+        self.load_game_btn.setFont(QtGui.QFont("Arial", 30))
+        self.vertical.addWidget(self.load_game_btn)
+        self.load_game_btn.setMinimumHeight(100)
 
         self.change_size_btn = QtWidgets.QPushButton("Change World Size")
         self.change_size_btn.clicked.connect(self.change_size_window)
-        self.horizontal.addWidget(self.change_size_btn)
+        self.change_size_btn.setFont(QtGui.QFont("Arial", 30))
+        self.vertical.addWidget(self.change_size_btn)
+        self.change_size_btn.setMinimumHeight(100)
 
         self.debug_btn = QtWidgets.QPushButton("Debug")
         self.debug_btn.clicked.connect(self.end_level)
-        self.horizontal.addWidget(self.debug_btn)
+        self.debug_btn.setFont(QtGui.QFont("Arial", 30))
+        self.vertical.addWidget(self.debug_btn)
+        self.debug_btn.setMinimumHeight(100)
 
         if self.world.active_team == "Level Editor":
-            self.horizontal.addWidget(self.save_as_btn)
+            self.vertical.addWidget(self.save_as_btn)
 
         else:
-            self.horizontal.addWidget(self.end_turn_btn)
-            self.horizontal.addWidget(self.save_game_btn)
+            self.vertical.addWidget(self.end_turn_btn)
+            self.vertical.addWidget(self.save_game_btn)
+        self.horizontal.addLayout(self.vertical)
 
     def end_level(self):
         if not self.end_widget_activated:
@@ -164,11 +180,13 @@ class GUI(QtWidgets.QMainWindow):
             self.end_widget_activated = True
             result = self.level_end_widget.result
             if result == "try_again":
-                self.world.won = None
-                self.load_world(self.world.file_name)
-                self.end_widget_activated = False
+                self.restart_level()
             #self.level_end_widget.start_animation()
 
+    def restart_level(self):
+        self.world.won = None
+        self.load_world(self.world.file_name)
+        self.end_widget_activated = False
 
     def show_confirmation_dialog(self):
         """
@@ -327,14 +345,67 @@ class GUI(QtWidgets.QMainWindow):
     def choose_save_window(self):
         self.choose_save_widget = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self.choose_save_widget)
+        layout.setContentsMargins(20, 20, 20, 20)
+
+        #change UI
+        self.choose_save_widget.setFixedSize(800, 600)
+
+        self.choose_save_widget.setLayout(layout)
+        self.choose_save_widget.setWindowFlags(
+            QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.FramelessWindowHint)
+        # Create the rounded rectangle shape
+        rounded_rect = QtGui.QPainterPath()
+        rounded_rect.addRoundedRect(QtCore.QRectF(0, 0, self.choose_save_widget.width(), self.choose_save_widget.height()), 20, 20)
+
+        # Set the widget mask to the rounded rectangle shape
+        path = QtGui.QPainterPath()
+        rect = self.choose_save_widget.rect()
+        rectf = QtCore.QRectF(rect.x(), rect.y(), rect.width(), rect.height())
+        path.addRoundedRect(rectf, 20, 20)
+
+        mask = QtGui.QRegion(path.toFillPolygon(QtGui.QTransform()).toPolygon())
+        self.choose_save_widget.setMask(mask)
+        # Set the widget stylesheet
+        self.choose_save_widget.setObjectName("chooseSaveWidget")
+        self.choose_save_widget.setStyleSheet("""
+            #chooseSaveWidget {
+                background-color: white;
+                border: 15px solid black;
+                border-radius: 20px;
+            }
+        """)
+
+        # Create the header
+        self.header = QtWidgets.QLabel(f"Load Game", self)
+        self.header.setFont(QtGui.QFont("Arial", 60, QtGui.QFont.Weight.Bold))
+        self.header.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        font = QtGui.QFont()
+        font.setPointSize(60)
+        font.setBold(True)
+        self.header.setFont(font)
+        layout.addWidget(self.header)
+
+        scroll = QtWidgets.QScrollArea()
+        scroll.setWidgetResizable(True)
+        scrollContent = QtWidgets.QWidget(scroll)
+        scrollLayout = QtWidgets.QVBoxLayout(scrollContent)
+        scrollContent.setLayout(scrollLayout)
 
         saves = os.listdir("savedata")
         for save in saves:
             save_btn = QtWidgets.QPushButton(save)
             save_btn.clicked.connect(lambda checked, save=save: self.confirm_load(save))
-            layout.addWidget(save_btn)
+            save_btn.setFont(QtGui.QFont("Arial", 30))
+            save_btn.setMinimumHeight(100)
+            scrollLayout.addWidget(save_btn)
+
+        scroll.setWidget(scrollContent)
+        layout.addWidget(scroll)
 
         cancel_btn = QtWidgets.QPushButton("Cancel")
+        cancel_btn.setFont(QtGui.QFont("Arial", 30))
+        cancel_btn.setMinimumHeight(100)
+
         cancel_btn.clicked.connect(self.choose_save_widget.close)
         layout.addWidget(cancel_btn)
 
@@ -344,6 +415,9 @@ class GUI(QtWidgets.QMainWindow):
         msg_box = QtWidgets.QMessageBox()
         msg_box.setText(f"Are you sure you want to load this world: {save}?")
         msg_box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.Cancel)
+        msg_box.setWindowFlags(
+            QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint)
+        # Create the rounded rectangle shape
         result = msg_box.exec()
 
         if result == QtWidgets.QMessageBox.StandardButton.Yes:

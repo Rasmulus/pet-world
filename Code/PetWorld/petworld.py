@@ -261,7 +261,7 @@ class PetWorld():
         else:
             self.active_team = "Blue"
         self.reset_all()
-        self.save_game()
+        self.save_game(self.file_name)
 
     def save_game(self, filename):
         with open('savedata/savegame.ptwrld', 'w') as file:

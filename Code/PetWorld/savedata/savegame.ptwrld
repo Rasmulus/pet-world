@@ -1,34 +1,82 @@
 # Name
-Level Editor
+Level 1
+
+# Filename
+savegame.ptwrld
 
 # Time
-(0, 0, 27)
+(0, 0, 29)
 
 # Size
 dimensions = 15,15
 
 # Walls
-obstacles = [(15, 6), (15, 7), (15, 6), (15, 7)]
+obstacles = [(15, 6), (15, 7), (15, 6), (15, 7), (15, 6), (15, 7), (0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (9, 6), (10, 6), (11, 6), (12, 6), (13, 6), (14, 6), (15, 6), (0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (9, 7), (10, 7), (11, 7), (12, 7), (13, 7), (14, 7), (15, 7)]
 
 # Turn
 Blue
 
 # Pets
-location = Coordinates(7, 3)
+location = Coordinates(14, 14)
 body = Pet('Dog')
 brain = Dog(body)
 body.set_brain(brain)
 body.team = 'Blue'
 body.health = 100
-body.mana = 10
+body.mana = 20
 world.add_robot(body, location, Direction.NORTH)
 
-location = Coordinates(8, 3)
-body = Pet('Rodent')
+location = Coordinates(14, 0)
+body = Pet('Bad Dog')
+brain = Dog(body)
+body.set_brain(brain)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.SOUTH)
+
+location = Coordinates(2, 11)
+body = Pet('Bird')
+brain = Bird(body)
+body.set_brain(brain)
+body.team = 'Blue'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.NORTH)
+
+location = Coordinates(0, 0)
+body = Pet('Bad Bird')
+brain = Bird(body)
+body.set_brain(brain)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.SOUTH)
+
+location = Coordinates(6, 6)
+body = Pet('Bad Rat')
 brain = Rodent(body)
 body.set_brain(brain)
 body.team = 'Red'
-body.health = 40
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.SOUTH)
+
+location = Coordinates(7, 7)
+body = Pet('Bad Rat')
+brain = Rodent(body)
+body.set_brain(brain)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.SOUTH)
+
+location = Coordinates(8, 6)
+body = Pet('Bad Rat')
+brain = Rodent(body)
+body.set_brain(brain)
+body.team = 'Red'
+body.health = 100
 body.mana = 20
 world.add_robot(body, location, Direction.SOUTH)
 
