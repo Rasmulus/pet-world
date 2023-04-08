@@ -137,7 +137,8 @@ class LevelEndWidget(QtWidgets.QDialog):
 
 
     def next_level(self):
-        pass
+        self.result = "next_level"
+        self.close()
         #self.accept()
         # Do something to proceed to the next level
 
@@ -149,6 +150,7 @@ class LevelEndWidget(QtWidgets.QDialog):
         # Do something to restart the current level
 
     def return_to_main_menu(self):
-        pass
+        self.result = "main_menu"
+        self.close()
         #self.reject()
         # Do something to return to the main menu

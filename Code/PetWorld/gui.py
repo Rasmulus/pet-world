@@ -48,7 +48,7 @@ class GUI(QtWidgets.QMainWindow):
         # Set a timer to call the update function periodically
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.update_robots)
-        self.timer.start(10) # Milliseconds
+        self.timer.start(100) # Milliseconds
 
 
         #do other things
@@ -69,7 +69,7 @@ class GUI(QtWidgets.QMainWindow):
         #self.lcd.setSize(300, 80) # Set the size of the clock widget
         self.layout().addWidget(self.lcd)
         self.lcd.setStyleSheet("background-color: white; color: black;")
-        self.lcd.setGeometry(2090,10,300,80)
+        self.lcd.setGeometry(1900,10,300,80)
 
 
     def showTime(self):
@@ -129,7 +129,7 @@ class GUI(QtWidgets.QMainWindow):
         See: QPushButton at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QPushButton.html
         """
         self.end_turn_btn = QtWidgets.QPushButton("End Turn")
-        self.end_turn_btn.clicked.connect(self.world.change_active_team)
+        self.end_turn_btn.clicked.connect(self.on_end_turn)
         self.end_turn_btn.setFont(QtGui.QFont("Arial", 30))
         self.end_turn_btn.setMinimumHeight(100)
 
@@ -169,6 +169,10 @@ class GUI(QtWidgets.QMainWindow):
             self.vertical.addWidget(self.save_game_btn)
         self.horizontal.addLayout(self.vertical)
 
+    def on_end_turn(self):
+        self.world.change_active_team()
+        self.save_screenshot("savegame")
+
     def end_level(self):
         if not self.end_widget_activated:
             #self.load_world(self.world.file_name)
@@ -183,12 +187,45 @@ class GUI(QtWidgets.QMainWindow):
             result = self.level_end_widget.result
             if result == "try_again":
                 self.restart_level()
+
+            elif result == "next_level":
+                self.next_level()
+
+            elif result == "main_menu":
+                self.main_menu()
+
             #self.level_end_widget.start_animation()
 
     def restart_level(self):
         self.world.won = None
+        if self.world.file_name == "savegame.ptwrld":
+            self.world.file_name = self.world.name
+            self.world.file_name = self.world.file_name.replace("Level ", "level_")
+            self.world.file_name += ".ptwrld"
         self.load_world(self.world.file_name)
         self.end_widget_activated = False
+
+    def next_level(self):
+        self.world.won = None
+        if self.world.file_name == "savegame.ptwrld":
+            self.world.file_name = self.world.name
+            self.world.file_name = self.world.file_name.replace("Level ", "level_")
+            self.world.file_name += ".ptwrld"
+
+        if "level" in self.world.file_name:
+            parts = self.world.file_name.split("_")
+            number = int(parts[1][0])
+            number += 1
+            self.world.file_name = f"level_{str(number)}.ptwrld"
+        try:
+            self.load_world(self.world.file_name)
+            self.end_widget_activated = False
+        except:
+            self.end_widget_activated = False
+
+
+    def main_menu(self):
+        pass
 
     def show_confirmation_dialog(self):
         """
@@ -507,8 +544,9 @@ class GUI(QtWidgets.QMainWindow):
 
         self.saving_window.show()
 
-    def save_screenshot(self, world_file, bounding_box):
-        screenshot_file = os.path.join("savedata/", os.path.splitext(world_file)[0] + ".jpg")
+    def save_screenshot(self, filename):
+        screenshot_file = os.path.join("savedata/", os.path.splitext(filename)[0] + ".jpg")
+        bounding_box = (self.world.width * 50.5, self.world.height * 24.5, self.world.width * 100, self.world.height * 74.5)
         screenshot = ImageGrab.grab(bbox=bounding_box)
         screenshot.save(screenshot_file)
         print(f"Screenshot saved as {screenshot_file}")
@@ -517,8 +555,7 @@ class GUI(QtWidgets.QMainWindow):
         filename = self.filename_input.text() + ".ptwrld"
         worldname = self.worldname_input.text()
         self.world.save_game_as(filename, worldname)
-        bounding_box = (self.world.width * 50.5, self.world.height * 24.5, self.world.width * 100, self.world.height * 74.5)
-        self.save_screenshot(filename, bounding_box)
+        self.save_screenshot(filename)
 
     def toggle_obstacle(self, coordinates):
         self.world.toggle_wall(coordinates)
