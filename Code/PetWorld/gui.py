@@ -12,6 +12,8 @@ from rodent import *
 from cat import *
 from reptile import *
 import os
+import time
+from PIL import ImageGrab
 
 class GUI(QtWidgets.QMainWindow):
     """
@@ -391,9 +393,26 @@ class GUI(QtWidgets.QMainWindow):
         scrollLayout = QtWidgets.QVBoxLayout(scrollContent)
         scrollContent.setLayout(scrollLayout)
 
-        saves = os.listdir("savedata")
+        saves = [f for f in os.listdir("savedata") if f.endswith('.ptwrld')]
         for save in saves:
-            save_btn = QtWidgets.QPushButton(save)
+            # Remove the file extension from the button label
+            button_label = os.path.splitext(save)[0]
+
+            # Check if there is a corresponding image file with a ".jpg" extension
+            image_file = os.path.join("savedata", button_label + ".jpg")
+            if os.path.exists(image_file):
+                icon = QtGui.QIcon(image_file)
+                pixmap = icon.pixmap(QtCore.QSize(100, 100))  # change the size of the icon
+                button_label = button_label.replace(button_label, f"    {button_label}")
+                button_label = button_label.replace("level_", "Level ")
+                save_btn = QtWidgets.QPushButton(button_label)
+                save_btn.setIconSize(QtCore.QSize(100, 100))  # change the size of the icon on the button
+                save_btn.setIcon(QtGui.QIcon(pixmap))
+            else:
+                button_label = button_label.replace(button_label, f"    {button_label}")
+                button_label = button_label.replace("level_", "Level ")
+                save_btn = QtWidgets.QPushButton(button_label)
+
             save_btn.clicked.connect(lambda checked, save=save: self.confirm_load(save))
             save_btn.setFont(QtGui.QFont("Arial", 30))
             save_btn.setMinimumHeight(100)
@@ -488,10 +507,18 @@ class GUI(QtWidgets.QMainWindow):
 
         self.saving_window.show()
 
+    def save_screenshot(self, world_file, bounding_box):
+        screenshot_file = os.path.join("savedata/", os.path.splitext(world_file)[0] + ".jpg")
+        screenshot = ImageGrab.grab(bbox=bounding_box)
+        screenshot.save(screenshot_file)
+        print(f"Screenshot saved as {screenshot_file}")
+
     def save(self):
         filename = self.filename_input.text() + ".ptwrld"
         worldname = self.worldname_input.text()
         self.world.save_game_as(filename, worldname)
+        bounding_box = (self.world.width * 50.5, self.world.height * 24.5, self.world.width * 100, self.world.height * 74.5)
+        self.save_screenshot(filename, bounding_box)
 
     def toggle_obstacle(self, coordinates):
         self.world.toggle_wall(coordinates)

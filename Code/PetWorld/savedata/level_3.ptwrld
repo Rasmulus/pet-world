@@ -1,0 +1,37 @@
+# Name
+Level 3
+
+# Filename
+level_3.ptwrld
+
+# Time
+(0, 0, 0)
+
+# Size
+dimensions = 15,15
+
+# Walls
+obstacles = [(15, 6), (15, 7), (4, 2), (8, 4), (5, 8), (8, 11), (9, 9)]
+
+# Turn
+Blue
+
+# Pets
+location = Coordinates(6, 5)
+body = Pet('Bird')
+brain = Bird(body)
+body.set_brain(brain)
+body.team = 'Blue'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.NORTH)
+
+location = Coordinates(9, 7)
+body = Pet('Bird')
+brain = Bird(body)
+body.set_brain(brain)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.SOUTH)
+

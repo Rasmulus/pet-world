@@ -1,13 +1,19 @@
 # Name
 Level Editor
 
+# Filename
+level_editor.ptwrld
+
 # Time
 (0, 0, 0)
 
 # Size
 dimensions = 15,15
 
+# Walls
+obstacles = []
+
 # Turn
-Level Editor
+Blue
 
 # Pets
