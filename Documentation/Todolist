@@ -1,11 +1,11 @@
 - implement AI
 - Implement level and character art
-- Implement game end widget
 - Implement level select
 - Implement tests
 - Implement system to differentiate between levels and saves
     - saves should have the ability to complete multiple levels
 
+- Implement game end widget -> Done
 - Implement choosing dimensions in level editor -> Done
 - Implement save slots and save select -> Done
 - Finish implementing the saving of level editor files -> Done
