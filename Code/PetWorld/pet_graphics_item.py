@@ -563,6 +563,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         elif row == "Choose Target":
             self.attack()
             self.pet.get_world().reset_attacking()
+            self.check_if_won()
 
         elif row == "Cancel" or row == "Target out of Range. Cancel" or row == "Target not weak enough. Cancel":
             self.pet.attacking = False
@@ -584,6 +585,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         elif row == "Free Pet":
             self.pet.change_team()
+            self.check_if_won()
     def attack(self):
         """
 
@@ -620,6 +622,27 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 i.mana -= 20
                 i.moved = True
                 i.attacked = True
+
+    def check_if_won(self):
+        blue_found = False
+        red_found = False
+        for i in self.pet.world.get_robots():
+            if i.team == "Blue":
+                blue_found = True
+            else:
+                red_found = True
+        if blue_found == False:
+            self.pet.world.won = "Red"
+            return True
+
+        elif red_found == False:
+            self.pet.world.won = "Blue"
+            return True
+        else:
+            return False
+
+
+
 
 
 

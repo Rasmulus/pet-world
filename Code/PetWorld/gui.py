@@ -3,7 +3,7 @@ from PyQt6 import QtWidgets, QtCore, QtGui
 from pet_graphics_item import PetGraphicsItem
 from coordinates import Coordinates
 from square import Square
-
+from level_end_widget import LevelEndWidget
 from gui_exercise import GuiExercise
 from pet import *
 from dog import *
@@ -49,6 +49,7 @@ class GUI(QtWidgets.QMainWindow):
         #do other things
         self.pos = None
         self.item = None
+        self.end_widget_activated = False
 
         # Create a timer that fires every second
         self.elapsed_time = self.world.time  # initialize elapsed time to saved time
@@ -139,12 +140,25 @@ class GUI(QtWidgets.QMainWindow):
         self.change_size_btn.clicked.connect(self.change_size_window)
         self.horizontal.addWidget(self.change_size_btn)
 
+        self.debug_btn = QtWidgets.QPushButton("Debug")
+        self.debug_btn.clicked.connect(self.end_level)
+        self.horizontal.addWidget(self.debug_btn)
+
         if self.world.active_team == "Level Editor":
             self.horizontal.addWidget(self.save_as_btn)
 
         else:
             self.horizontal.addWidget(self.end_turn_btn)
             self.horizontal.addWidget(self.save_game_btn)
+
+    def end_level(self):
+        if not self.end_widget_activated:
+            timeString = self.elapsed_time.toString('hh:mm:ss')
+            self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
+            #self.level_end_widget.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+            self.level_end_widget.exec()
+            self.level_end_widget.start_animation()
+            self.end_widget_activated = True
 
     def show_confirmation_dialog(self):
         """
@@ -221,6 +235,9 @@ class GUI(QtWidgets.QMainWindow):
             self.view.setStyleSheet("background-color: red;")
         else:
             self.view.setStyleSheet("background-color: grey;")
+
+        if self.world.won is not None:
+            self.end_level()
     def change_size_window(self):
 
         self.change_size_window = QtWidgets.QWidget()
@@ -321,6 +338,7 @@ class GUI(QtWidgets.QMainWindow):
 
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             self.load_world(save)
+            self.choose_save_widget.close()
     def load_world(self, save):
         #removes all pets from the world
         for i in self.world.get_robots():
