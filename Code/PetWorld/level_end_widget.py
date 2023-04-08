@@ -4,6 +4,7 @@ from PyQt6.QtCore import QPropertyAnimation
 
 class LevelEndWidget(QtWidgets.QDialog):
     def __init__(self, parent, won, elapsed_time, new_record):
+        self.result = None
         super().__init__(parent)
         self.setWindowTitle("Level Complete")
         self.setFixedSize(800, 600)
@@ -49,6 +50,16 @@ class LevelEndWidget(QtWidgets.QDialog):
         self.new_record_stamp.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.new_record_stamp.setHidden(not new_record)
 
+        animation = QPropertyAnimation(self.new_record_stamp, b"pos")
+        # Set the duration of the animation
+        animation.setDuration(10000)
+        # Set the start and end values for the animation
+        start_pos = QtCore.QPoint(self.width(), self.new_record_stamp.y())
+        end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
+        animation.setStartValue(start_pos)
+        animation.setEndValue(end_pos)
+        # Start the animation
+
         self.next_level_button = QtWidgets.QPushButton("Next Level", self)
         self.next_level_button.setFont(QtGui.QFont("Arial", 30))
         self.next_level_button.clicked.connect(self.next_level)
@@ -85,15 +96,20 @@ class LevelEndWidget(QtWidgets.QDialog):
         #button_widget_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
         layout.addWidget(button_widget)  # Add the button widget to the main layout
+        animation.start()
 
     def start_animation(self):
         # Start the new record stamp animation
         if self.new_record_stamp.isVisible():
-            animation = QPropertyAnimation(self.new_record_stamp, b"opacity")
-            animation.setDuration(2000)
-            animation.setStartValue(0.0)
-            animation.setEndValue(1.0)
-            animation.setLoopCount(2)
+            animation = QPropertyAnimation(self.new_record_stamp, b"pos")
+            # Set the duration of the animation
+            animation.setDuration(1000)
+            # Set the start and end values for the animation
+            start_pos = QtCore.QPoint(self.width(), self.new_record_stamp.y())
+            end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
+            animation.setStartValue(start_pos)
+            animation.setEndValue(end_pos)
+            # Start the animation
             animation.start()
 
     def exec(self):
@@ -114,7 +130,8 @@ class LevelEndWidget(QtWidgets.QDialog):
                 self.width(),
                 self.height(),
             )
-        #self.start_animation()
+        self.start_animation()
+        #return "try_again"
 
         return super().exec()
 
@@ -125,7 +142,9 @@ class LevelEndWidget(QtWidgets.QDialog):
         # Do something to proceed to the next level
 
     def try_again(self):
-        pass
+        self.result = "try_again"
+        self.close()
+
         #self.accept()
         # Do something to restart the current level
 

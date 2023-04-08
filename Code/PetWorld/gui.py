@@ -153,12 +153,22 @@ class GUI(QtWidgets.QMainWindow):
 
     def end_level(self):
         if not self.end_widget_activated:
+            #self.load_world(self.world.file_name)
+
             timeString = self.elapsed_time.toString('hh:mm:ss')
             self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
             #self.level_end_widget.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+
+            #self.level_end_widget.exec()
             self.level_end_widget.exec()
-            self.level_end_widget.start_animation()
             self.end_widget_activated = True
+            result = self.level_end_widget.result
+            if result == "try_again":
+                self.world.won = None
+                self.load_world(self.world.file_name)
+                self.end_widget_activated = False
+            #self.level_end_widget.start_animation()
+
 
     def show_confirmation_dialog(self):
         """

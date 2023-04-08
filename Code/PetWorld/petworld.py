@@ -35,6 +35,7 @@ class PetWorld():
         Parameter height is the height of the world in squares: int
         """
         self.name = name
+        self.file_name = None
         self.squares = [None] * width
         for x in range(self.get_width()):      # stepper
             self.squares[x] = [None] * height
@@ -262,10 +263,13 @@ class PetWorld():
         self.reset_all()
         self.save_game()
 
-    def save_game(self):
+    def save_game(self, filename):
         with open('savedata/savegame.ptwrld', 'w') as file:
             file.write("# Name\n")
             file.write(f"{self.name}\n")
+            file.write("\n")
+            file.write("# Filename\n")
+            file.write(f"{filename}\n")
             file.write("\n")
             file.write("# Time\n")
             time = str(self.time)
@@ -301,6 +305,9 @@ class PetWorld():
             file.write("# Name\n")
             file.write(f"{world_name}\n")
             file.write("\n")
+            file.write("# Filename\n")
+            file.write(f"{filename}\n")
+            file.write("\n")
             file.write("# Time\n")
             file.write(f"(0, 0, 0)\n")
             file.write("\n")
@@ -328,6 +335,7 @@ class PetWorld():
             file.close()
 
     def load_game(self, file):
+        self.file_name = file
         with open(f'savedata/{file}', 'r') as file:
             # Read the lines from the file
             # current_line = file.readline().rstrip()
