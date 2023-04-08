@@ -311,10 +311,12 @@ class GUI(QtWidgets.QMainWindow):
         layout = QtWidgets.QVBoxLayout(self.change_size_window)
 
         width_label = QtWidgets.QLabel("Enter desired width of the world:")
+        width_label.setFont(QtGui.QFont("Arial", 30))
         layout.addWidget(width_label)
 
         width_layout = QtWidgets.QHBoxLayout()
         self.width_input = QtWidgets.QLineEdit()
+        self.width_input.setFont(QtGui.QFont("Arial", 30))
         width_layout.addWidget(self.width_input)
 
 
@@ -322,19 +324,49 @@ class GUI(QtWidgets.QMainWindow):
         layout.addLayout(width_layout)
 
         height_label = QtWidgets.QLabel("Enter desired height of the world:")
+        height_label.setFont(QtGui.QFont("Arial", 30))
         layout.addWidget(height_label)
 
         self.height_input = QtWidgets.QLineEdit()
+        self.height_input.setFont(QtGui.QFont("Arial", 30))
         layout.addWidget(self.height_input)
 
         confirm_btn = QtWidgets.QPushButton("Confirm")
         confirm_btn.clicked.connect(self.confirm_change)
+        confirm_btn.setFont(QtGui.QFont("Arial", 30))
         layout.addWidget(confirm_btn)
 
         cancel_btn = QtWidgets.QPushButton("Cancel")
         cancel_btn.clicked.connect(self.change_size_window.close)
+        cancel_btn.setFont(QtGui.QFont("Arial", 30))
         layout.addWidget(cancel_btn)
 
+        self.change_size_window.setGeometry(1525, 500, 650, 500)
+
+        self.change_size_window.setWindowFlags(
+            QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.FramelessWindowHint)
+        # Create the rounded rectangle shape
+        rounded_rect = QtGui.QPainterPath()
+        rounded_rect.addRoundedRect(
+            QtCore.QRectF(0, 0, self.change_size_window.width(), self.change_size_window.height()), 20, 20)
+
+        # Set the widget mask to the rounded rectangle shape
+        path = QtGui.QPainterPath()
+        rect = self.change_size_window.rect()
+        rectf = QtCore.QRectF(rect.x(), rect.y(), rect.width(), rect.height())
+        path.addRoundedRect(rectf, 20, 20)
+
+        mask = QtGui.QRegion(path.toFillPolygon(QtGui.QTransform()).toPolygon())
+        self.change_size_window.setMask(mask)
+        # Set the widget stylesheet
+        self.change_size_window.setObjectName("chooseSaveWidget")
+        self.change_size_window.setStyleSheet("""
+                    #chooseSaveWidget {
+                        background-color: white;
+                        border: 5px solid black;
+                        border-radius: 20px;
+                    }
+                """)
         self.change_size_window.show()
 
     def confirm_change(self):
@@ -556,7 +588,7 @@ class GUI(QtWidgets.QMainWindow):
         #cancel_btn.setMinimumHeight(100)
         layout.addWidget(cancel_btn)
 
-        self.saving_window.setGeometry(1525,500,650,500)
+        self.saving_window.setGeometry(1525, 500, 650, 500)
 
         self.saving_window.setWindowFlags(
             QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.FramelessWindowHint)
