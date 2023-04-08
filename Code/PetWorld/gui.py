@@ -516,31 +516,72 @@ class GUI(QtWidgets.QMainWindow):
         self.saving_window = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self.saving_window)
 
-        filename_label = QtWidgets.QLabel("Enter the filename that you would like to save the level to:")
+        filename_label = QtWidgets.QLabel("Enter the filename that you would\nlike to save the level to:")
+        filename_label.setFont(QtGui.QFont("Arial", 30))
+        #filename_label.setMaximumHeight(50)
         layout.addWidget(filename_label)
 
         filename_layout = QtWidgets.QHBoxLayout()
         self.filename_input = QtWidgets.QLineEdit()
+        self.filename_input.setFont(QtGui.QFont("Arial", 30))
+        #self.filename_input.setMinimumHeight(100)
         filename_layout.addWidget(self.filename_input)
 
         extension_label = QtWidgets.QLabel(".ptwrld")
+        extension_label.setFont(QtGui.QFont("Arial", 30))
+        #extension_label.setMinimumHeight(100)
         filename_layout.addWidget(extension_label)
 
         layout.addLayout(filename_layout)
 
         worldname_label = QtWidgets.QLabel("What should your world be called?")
+        worldname_label.setFont(QtGui.QFont("Arial", 30))
+
         layout.addWidget(worldname_label)
 
         self.worldname_input = QtWidgets.QLineEdit()
+        self.worldname_input.setFont(QtGui.QFont("Arial", 30))
+        #self.worldname_input.setMinimumHeight(100)
         layout.addWidget(self.worldname_input)
 
         save_btn = QtWidgets.QPushButton("Save")
         save_btn.clicked.connect(self.save)
+        save_btn.setFont(QtGui.QFont("Arial", 30))
+        #save_btn.setMinimumHeight(100)
         layout.addWidget(save_btn)
 
         cancel_btn = QtWidgets.QPushButton("Cancel")
         cancel_btn.clicked.connect(self.saving_window.close)
+        cancel_btn.setFont(QtGui.QFont("Arial", 30))
+        #cancel_btn.setMinimumHeight(100)
         layout.addWidget(cancel_btn)
+
+        self.saving_window.setGeometry(1525,500,650,500)
+
+        self.saving_window.setWindowFlags(
+            QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.FramelessWindowHint)
+        # Create the rounded rectangle shape
+        rounded_rect = QtGui.QPainterPath()
+        rounded_rect.addRoundedRect(
+            QtCore.QRectF(0, 0, self.saving_window.width(), self.saving_window.height()), 20, 20)
+
+        # Set the widget mask to the rounded rectangle shape
+        path = QtGui.QPainterPath()
+        rect = self.saving_window.rect()
+        rectf = QtCore.QRectF(rect.x(), rect.y(), rect.width(), rect.height())
+        path.addRoundedRect(rectf, 20, 20)
+
+        mask = QtGui.QRegion(path.toFillPolygon(QtGui.QTransform()).toPolygon())
+        self.saving_window.setMask(mask)
+        # Set the widget stylesheet
+        self.saving_window.setObjectName("chooseSaveWidget")
+        self.saving_window.setStyleSheet("""
+                    #chooseSaveWidget {
+                        background-color: white;
+                        border: 5px solid black;
+                        border-radius: 20px;
+                    }
+                """)
 
         self.saving_window.show()
 
