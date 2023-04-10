@@ -7,10 +7,6 @@ from direction import Direction
 from petworld import *
 from coordinates import *
 from pet import *
-from spinbot import *
-from drunkbot import *
-from nosebot import *
-from lovebot import *
 from dog import *
 from bird import *
 from rodent import *

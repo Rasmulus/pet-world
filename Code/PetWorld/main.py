@@ -1,71 +1,90 @@
-import sys
+import os
 from PyQt6.QtWidgets import QApplication
 from PyQt6 import QtCore
-
 from gui import GUI
 
 from direction import Direction
 from petworld import *
 from coordinates import *
 from pet import *
-from spinbot import *
-from drunkbot import *
-from nosebot import *
-from lovebot import *
 from dog import *
 from bird import *
 from rodent import *
+from cat import *
+from reptile import *
 def main():
     """
-    Creates a PetWorld, adds robots and launches the Graphical User Interface.
-
-    Use this for testing your code.
-
-    You can modify this however you like.
+    Reads a savefile and creates a PetWorld, adds pets and launches the Graphical User Interface.
     """
-    time = QtCore.QTime(0, 0, 0)
-    test_world = PetWorld(15, 15, "Test World - launch main2.py instead", time)
-    wall1_coordinates = Coordinates(2, 4)
-    test_world.add_wall(wall1_coordinates)
-    wall2_coordinates = Coordinates(0, 5)
-    test_world.add_wall(wall2_coordinates)
-    wall3_coordinates = Coordinates(2, 2)
-    test_world.add_wall(wall3_coordinates)
-    wall4_coordinates = Coordinates(1, 3)
-    test_world.add_wall(wall4_coordinates)
-    test_world.active_team = "Level Editor"
-    dog_location = Coordinates(14, 14)
-    dog_body = Pet('Dog')
-    dog_brain = Dog(dog_body)
-    dog_body.set_brain(dog_brain)
-    test_world.add_robot(dog_body, dog_location, Direction.NORTH)
+    name = ""
+    filename = "level_1.ptwrld"
+    # Open the savegame
+    with open(f'savedata/{filename}', 'r') as file:
+        # Read the lines from the file
+        #current_line = file.readline().rstrip()
+        for current_line in file:
+            try:
+                current_line = current_line.rstrip()
+                if current_line[0] == "#":
+                    print("True")
+                    header_parts = current_line.split(" ")
+                    print(header_parts[1])
+                    category = header_parts[1]
+                    if category == "Name":
+                        name = file.readline().rstrip()
+                        print(f"name: {name}")
+                    if category == "Size":
+                        current_line = file.readline().rstrip()
+                        parts = current_line.split("=")
+                        dimensions = parts[1].rstrip()
+                        dimensions = dimensions.split(",")
+                        world = PetWorld(int(dimensions[0]), int(dimensions[1]), name, time)
+                        world.file_name = filename
+                        print(f"dimensions: {dimensions}")
+                        print(parts)
+                    if category == "Walls":
+                        print("seinuliini")
+                        current_line = file.readline().rstrip()
+                        parts = current_line.split("=")
+                        coordinates = parts[1].rstrip()
+                        coordinates = eval(coordinates)
+                        for i in coordinates:
+                            world.add_wall(Coordinates(i[0], i[1]))
+                    if category == "Time":
+                        current_line = file.readline().rstrip()
+                        time = eval(current_line)
+                        time = QtCore.QTime(time[0], time[1], time[2])
 
-    bad_dog_location = Coordinates(14, 0)
-    dog_body = Pet('Bad Dog')
-    dog_brain = Dog(dog_body)
-    dog_body.set_brain(dog_brain)
-    dog_body.change_team()
-    test_world.add_robot(dog_body, bad_dog_location, Direction.SOUTH)
+                    if category == "Turn":
+                        current_line = file.readline().rstrip()
+                        world.active_team = current_line
 
-    bird_location = Coordinates(0, 14)
-    bird_body = Pet('Bird')
-    bird_brain = Bird(bird_body)
-    bird_body.set_brain(bird_brain)
-    test_world.add_robot(bird_body, bird_location, Direction.NORTH)
+                    if category == "Pets":
+                        while True:
+                            current_line = file.readline().rstrip()
+                            if current_line.startswith("#"):
+                                # Reached the next category, break out of the loop
+                                break
+                            else:
+                                # Execute the line as code
+                                print(current_line)
+                                exec(current_line)
+                    else:
+                        pass
+                else:
+                    current_line = file.readline()
 
-    bad_bird_location = Coordinates(0, 0)
-    bird_body = Pet('Bad Bird')
-    bird_brain = Bird(bird_body)
-    bird_body.set_brain(bird_brain)
-    bird_body.change_team()
-    test_world.add_robot(bird_body, bad_bird_location, Direction.SOUTH)
+                # Do something with the lines
+                #print(current_line)
+            except:
+                pass
 
 
 
-    # Every Qt application must have one instance of QApplication.
+
     global app # Use global to prevent crashing on exit
     app = QApplication(sys.argv)
-    gui = GUI(test_world, 50)
+    gui = GUI(world, 50)
 
     # Start the Qt event loop. (i.e. make it possible to interact with the gui)
     sys.exit(app.exec())

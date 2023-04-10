@@ -69,7 +69,7 @@ class GUI(QtWidgets.QMainWindow):
         #self.lcd.setSize(300, 80) # Set the size of the clock widget
         self.layout().addWidget(self.lcd)
         self.lcd.setStyleSheet("background-color: white; color: black;")
-        self.lcd.setGeometry(1900,10,300,80)
+        self.lcd.setGeometry(self.vertical.geometry().x(), 10, 300, 80)
 
 
     def showTime(self):
@@ -132,16 +132,20 @@ class GUI(QtWidgets.QMainWindow):
         self.end_turn_btn.clicked.connect(self.on_end_turn)
         self.end_turn_btn.setFont(QtGui.QFont("Arial", 30))
         self.end_turn_btn.setMinimumHeight(100)
+        self.vertical.addWidget(self.end_turn_btn)
+
 
         self.save_game_btn = QtWidgets.QPushButton("Save and Quit")
         self.save_game_btn.clicked.connect(self.show_confirmation_dialog)
         self.save_game_btn.setFont(QtGui.QFont("Arial", 30))
         self.save_game_btn.setMinimumHeight(100)
+        self.vertical.addWidget(self.save_game_btn)
 
         self.save_as_btn = QtWidgets.QPushButton("Save World As")
         self.save_as_btn.clicked.connect(self.show_saving_window)
         self.save_as_btn.setFont(QtGui.QFont("Arial", 30))
         self.save_as_btn.setMinimumHeight(100)
+        self.vertical.addWidget(self.save_as_btn)
 
         self.load_game_btn = QtWidgets.QPushButton("Load Game")
         self.load_game_btn.clicked.connect(self.choose_save_window)
@@ -161,12 +165,6 @@ class GUI(QtWidgets.QMainWindow):
         self.vertical.addWidget(self.debug_btn)
         self.debug_btn.setMinimumHeight(100)
 
-        if self.world.active_team == "Level Editor":
-            self.vertical.addWidget(self.save_as_btn)
-
-        else:
-            self.vertical.addWidget(self.end_turn_btn)
-            self.vertical.addWidget(self.save_game_btn)
         self.horizontal.addLayout(self.vertical)
 
     def on_end_turn(self):
@@ -225,7 +223,7 @@ class GUI(QtWidgets.QMainWindow):
 
 
     def main_menu(self):
-        pass
+        self.end_widget_activated = False
 
     def show_confirmation_dialog(self):
         """
@@ -298,13 +296,27 @@ class GUI(QtWidgets.QMainWindow):
     def update_window(self):
         if self.world.active_team == "Blue":
             self.view.setStyleSheet("background-color: blue;")
+            self.change_size_btn.hide()
+            self.save_as_btn.hide()
+            self.end_turn_btn.show()
+
+
         elif self.world.active_team == "Red":
             self.view.setStyleSheet("background-color: red;")
+            self.change_size_btn.hide()
+            self.save_as_btn.hide()
+            self.end_turn_btn.show()
+
+
         else:
             self.view.setStyleSheet("background-color: grey;")
+            self.change_size_btn.show()
+            self.save_as_btn.show()
+            self.end_turn_btn.hide()
 
         if self.world.won is not None:
             self.end_level()
+
     def change_size_window(self):
 
         self.change_size_window = QtWidgets.QWidget()
@@ -578,6 +590,7 @@ class GUI(QtWidgets.QMainWindow):
 
         save_btn = QtWidgets.QPushButton("Save")
         save_btn.clicked.connect(self.save)
+        save_btn.clicked.connect(self.saving_window.close)
         save_btn.setFont(QtGui.QFont("Arial", 30))
         #save_btn.setMinimumHeight(100)
         layout.addWidget(save_btn)
@@ -619,10 +632,16 @@ class GUI(QtWidgets.QMainWindow):
 
     def save_screenshot(self, filename):
         screenshot_file = os.path.join("savedata/", os.path.splitext(filename)[0] + ".jpg")
-        bounding_box = (self.world.width * 50.5, self.world.height * 24.5, self.world.width * 100, self.world.height * 74.5)
-        screenshot = ImageGrab.grab(bbox=bounding_box)
-        screenshot.save(screenshot_file)
-        print(f"Screenshot saved as {screenshot_file}")
+        screen_resolution = QtWidgets.QApplication.primaryScreen().geometry()
+        scene_rect = self.scene.sceneRect()
+        pixmap = QtGui.QPixmap(scene_rect.size().toSize())
+        pixmap.fill(QtCore.Qt.GlobalColor.white)
+        painter = QtGui.QPainter(pixmap)
+        self.scene.render(painter)
+        painter.end()
+        pixmap = pixmap.scaled(screen_resolution.width(), screen_resolution.height(),
+                               QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+        pixmap.save(screenshot_file, "JPG")
 
     def save(self):
         filename = self.filename_input.text() + ".ptwrld"

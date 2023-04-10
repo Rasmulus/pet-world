@@ -1,10 +1,12 @@
 - implement AI
 - Implement level and character art
-- Implement level select
 - Implement tests
 - Implement system to differentiate between levels and saves
-    - saves should have the ability to complete multiple levels
+    - saves should have the ability to complete multiple levels and have completion times
+- Check if the player set a new record when a level is beaten
+- Implement Game over screen that is separate from winning screen
 
+- Implement level select -> Done
 - Implement game end widget -> Done
 - Implement choosing dimensions in level editor -> Done
 - Implement save slots and save select -> Done
