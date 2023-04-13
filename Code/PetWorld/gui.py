@@ -632,15 +632,13 @@ class GUI(QtWidgets.QMainWindow):
 
     def save_screenshot(self, filename):
         screenshot_file = os.path.join("savedata/", os.path.splitext(filename)[0] + ".jpg")
-        screen_resolution = QtWidgets.QApplication.primaryScreen().geometry()
         scene_rect = self.scene.sceneRect()
         pixmap = QtGui.QPixmap(scene_rect.size().toSize())
         pixmap.fill(QtCore.Qt.GlobalColor.white)
         painter = QtGui.QPainter(pixmap)
+        self.scene.setSceneRect(0, 0, self.world.width * self.square_size, self.world.height * self.square_size)
         self.scene.render(painter)
         painter.end()
-        pixmap = pixmap.scaled(screen_resolution.width(), screen_resolution.height(),
-                               QtCore.Qt.AspectRatioMode.KeepAspectRatio)
         pixmap.save(screenshot_file, "JPG")
 
     def save(self):

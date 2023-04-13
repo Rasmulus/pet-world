@@ -17,7 +17,7 @@ def main():
     Reads a savefile and creates a PetWorld, adds pets and launches the Graphical User Interface.
     """
     name = ""
-    filename = "level_1.ptwrld"
+    filename = "level_3.ptwrld"
     # Open the savegame
     with open(f'savedata/{filename}', 'r') as file:
         # Read the lines from the file
