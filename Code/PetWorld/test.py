@@ -1,79 +1,41 @@
 import unittest
+from PyQt6.QtWidgets import QApplication
+from PyQt6 import QtCore
 
 from petworld import PetWorld
 from pet import Pet
 from coordinates import Coordinates
 from direction import Direction
-from spinbot import Spinbot
-from drunkbot import Drunkbot
-from lovebot import Lovebot
-from nosebot import Nosebot
+from dog import *
+from bird import *
+from rodent import *
+from cat import *
+from reptile import *
 
 
-class Test(unittest.TestCase):
-    """
-    Some tests for the PetWorld-project.
-    """
 
-    def setUp(self):
-        self.test_world = PetWorld(5, 5)
-        wall_coordinates = Coordinates(2, 4)
-        self.test_world.add_wall(wall_coordinates)
+class TestLoadGame(unittest.TestCase):
 
-        first_location = Coordinates(4, 3)
-        first_body = Pet('Bart')
-        first_brain = Spinbot(first_body)
-        first_body.set_brain(first_brain)
-        self.test_world.add_robot(first_body, first_location, Direction.EAST)
+    def test_load_game_obstacles(self):
+        game_file = "level_2.ptwrld"
+        world = PetWorld(15, 15, "Name", QtCore.QTime(0, 0, 0))
+        world.load_game(game_file)
+        self.assertEqual(world.obstacles,
+                         [(0, 6), (1, 6), (2, 6), (4, 6), (5, 6), (9, 6), (10, 6),
+                           (12, 6), (13, 6), (14, 6), (15, 6), (0, 7), (1, 7), (2, 7),
+                           (4, 7), (5, 7), (9, 7), (10, 7), (12, 7), (13, 7), (14, 7),
+                           (15, 7), (7, 6), (7, 7), (6, 9), (8, 9), (7, 8), (7, 9),
+                           (4, 5), (4, 3), (5, 3), (6, 3), (8, 3), (10, 3), (9, 3),
+                           (10, 4), (12, 5), (12, 4), (12, 3), (2, 5), (2, 4), (2, 3),
+                           (3, 9), (4, 9), (1, 9), (10, 9), (11, 9), (10, 5), (4, 4),
+                           (4, 10), (4, 11), (5, 11), (6, 11), (7, 12), (8, 11), (7, 11),
+                           (9, 11), (10, 11), (10, 10), (13, 9), (7, 1), (6, 1), (8, 1)])
 
-
-    def test_nosebot(self):
-        """
-        Tests the nosebot movements.
-        """
-        fifth_location = Coordinates(4, 4)
-        fifth_body = Pet('Speedy Gonzales')
-        fifth_brain = Nosebot(fifth_body)
-        fifth_body.set_brain(fifth_brain)
-        self.test_world.add_robot(fifth_body, fifth_location, Direction.WEST)
-
-
-        self.test_world.next_full_turn()
-        self.test_world.next_full_turn()
-
-        self.assertEqual('(3, 3)', str(self.test_world.get_robots()[1].get_location()),
-                "the nosebot should be in (3, 3) after two moves")
-
-
-    def test_drunkbot(self):
-        """
-        Tests the drunkbot movements.
-        """
-        fifth_location = Coordinates(4, 4)
-        fifth_body = Pet('Speedy Gonzales')
-        fifth_brain = Nosebot(fifth_body)
-        fifth_body.set_brain(fifth_brain)
-        self.test_world.add_robot(fifth_body, fifth_location, Direction.WEST)
-
-        second_location = Coordinates(2, 2)
-        second_body = Pet('Homer')
-        second_brain = Drunkbot(second_body, 4522)
-        second_body.set_brain(second_brain)
-        self.test_world.add_robot(second_body, second_location, Direction.SOUTH)
-
-
-        self.test_world.next_full_turn()
-        self.test_world.next_full_turn()
-
-        self.assertEqual('(3, 3)', str(self.test_world.get_robots()[1].get_location()),
-                "the nosebot should be in (3, 3) after two moves")
-
-        self.assertEqual('(2, 3)', str(self.test_world.get_robots()[2].get_location()),
-                "the drunkbot should be in (2, 3) after two moves")
-
-        self.assertTrue(self.test_world.get_robot(1).is_broken(),
-                        'the drunkbot collided with the nosebot, the nosebot should be broken')
-
+    def test_load_game_team(self):
+        game_file = "level_2.ptwrld"
+        world = PetWorld(15, 15, "Name", QtCore.QTime(0, 3, 12))
+        world.load_game(game_file)
+        self.assertEqual(world.active_team, "Blue")
 
 if __name__ == "__main__":
     unittest.main()
