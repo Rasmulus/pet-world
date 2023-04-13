@@ -1,6 +1,6 @@
 # Y2_2023_84433: Srategiapeli "PetWorld"
 
-## Checkpoint1
+## Checkpoint2
 
 ## Tämänhetkiset ominaisuudet
 
@@ -25,6 +25,11 @@ Toistaiseksi olen toteuttanut seuraavat ominaisuudet peliin:
 - Kentän, jossa hahmot voivat liikkua
 - Vuoro-, liike- ja status-logiikan, joka pitää huolen siitä, että peliä voidaan pelata vain sääntöjen mukaisesti
 - Napin, jota painamalla vuoro vaihtuu. Tällöin myös pelin taustakuva vaihtuu reflektoimaan tiimin väriä, joka on paraikaa vuorossa.
+- Kenttäeditorin, jolla voi luoda erikokoisia kenttiä, joihin voi lisätä esteitä ja lemmikkejä
+- Pelien lataaminen ja tallentaminen
+  - pelit tallentuu ihmisluettaviin .ptwrld -tiedostoihin, joita voi halutessa muokata tekstieditorissa, tai kenttäeditorissa
+  - peli tallentaa myös näytönkaappauksia tasoista tallentaessa, jotta pelaajan on helpompi nähdä minkä tason aikoo ladata
+- Eri tasoja
 
  ## Käyttöohje
 
@@ -37,10 +42,10 @@ Kun ei enään pysty tekemään muuta, voi lopettaa vuoronsa painamalla "End tur
 
  ## Aikataulu
 
-Olen käyttänyt aikaa projektiin tähän mennessä noin 38.75 tuntia, eli olen pysynyt suunnitelmassa odotetun mukaan.
+Olen käyttänyt aikaa projektiin tähän mennessä noin 65 tuntia, eli olen pysynyt suunnitelmassa odotetun mukaan.
 Ei ole ilmennyt vielä muutoksia aikatauluun.
 
  ## Muuta
 
 Ei ole ilmennyt sen kummempia ongelmia tässä vaiheessa.
-En ole joutunut tekemään vielä muutoksia suunnitelmaani.
+Olen luopunut tässä vaiheessa peliohjaintueen implementoinnista.
