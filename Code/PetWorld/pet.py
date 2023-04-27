@@ -274,6 +274,7 @@ class Pet():
     def move_to(self, target):
         current_square = self.get_location_square()
         target_square = self.get_world().get_square(target)
+        #print(target.type())
         #print(target.get_x())
 
         #print("debug")

@@ -165,7 +165,19 @@ class GUI(QtWidgets.QMainWindow):
         self.vertical.addWidget(self.debug_btn)
         self.debug_btn.setMinimumHeight(100)
 
+        self.move_ai_btn = QtWidgets.QPushButton("Move AI")
+        self.move_ai_btn.clicked.connect(self.move_ai)
+        self.move_ai_btn.setFont(QtGui.QFont("Arial", 30))
+        self.vertical.addWidget(self.move_ai_btn)
+        self.move_ai_btn.setMinimumHeight(100)
+
+
         self.horizontal.addLayout(self.vertical)
+
+    def move_ai(self):
+        print("I got here")
+        self.world.ai.iterate_through_pets()
+
 
     def on_end_turn(self):
         self.world.change_active_team()

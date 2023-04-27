@@ -9,6 +9,7 @@ from bird import *
 from rodent import *
 from cat import *
 from reptile import *
+from ai import Ai
 
 class PetWorld():
     """
@@ -51,6 +52,7 @@ class PetWorld():
         self.height = height
         self.time = time
         self.won = None
+        self.ai = Ai(self)
 
     def get_width(self):
         """
