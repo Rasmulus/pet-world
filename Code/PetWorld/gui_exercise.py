@@ -86,7 +86,7 @@ class GuiExercise():
                 if square.is_wall:
                     brush = QtGui.QBrush(QtGui.QColor(20, 20, 20))
                 else:
-                    brush = QtGui.QBrush(QtGui.QColor(211, 211, 211))
+                    brush = QtGui.QBrush(QtGui.QColor(211, 211, 211, 25))
                 rect_item.setBrush(brush)
 
                 self.scene.addItem(rect_item)
@@ -107,7 +107,7 @@ class GuiExercise():
             if square.is_wall:
                 i.setBrush(QtGui.QBrush(QtGui.QColor(20, 20, 20)))
             else:
-                i.setBrush(QtGui.QBrush(QtGui.QColor(211, 211, 211)))
+                i.setBrush(QtGui.QBrush(QtGui.QColor(211, 211, 211, 25)))
 
     def remove_pet_world_grid_items(self):
         """

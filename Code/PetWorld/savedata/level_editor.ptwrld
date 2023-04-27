@@ -8,7 +8,7 @@ level_editor.ptwrld
 (0, 0, 0)
 
 # Size
-dimensions = 15,15
+dimensions = 20,20
 
 # Walls
 obstacles = []

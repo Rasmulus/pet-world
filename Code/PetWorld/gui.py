@@ -269,11 +269,30 @@ class GUI(QtWidgets.QMainWindow):
         self.scene = QtWidgets.QGraphicsScene()
         self.scene.setSceneRect(0, 0, 700, 700)
 
+        # Add background to level
+        filename = "level_n_bg.jpg"
+        found = False
+        for i in self.world.name:
+            if i.isnumeric():
+                filename = filename.replace("n", i)
+                found = True
+        if found is False:
+            filename = "bg.png"
+
+        pixmap = QtGui.QPixmap(f"savedata/{filename}").scaled(
+            self.world.width * self.square_size,
+            self.world.height * self.square_size
+        )
+        self.pixmap_item = QtWidgets.QGraphicsPixmapItem(pixmap)
+        self.scene.addItem(self.pixmap_item)
+        self.pixmap_item.setPos(0, 0)
+
         # Add a view for showing the scene
         self.view = QtWidgets.QGraphicsView(self.scene, self)
         self.view.adjustSize()
         self.view.show()
         self.horizontal.addWidget(self.view)
+        self.scene.setSceneRect(-500, -500, 2000, 2000)
 
         # Set the background color
         if self.world.active_team == "Blue":
@@ -292,6 +311,22 @@ class GUI(QtWidgets.QMainWindow):
 
         self.stage_name.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.scene.addWidget(self.stage_name)
+        self.view.scale(0.75, 0.75)
+        #self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        #self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.view.setDragMode(QtWidgets.QGraphicsView.dragMode(self.view).ScrollHandDrag)
+    def wheelEvent(self, event):
+        zoomInFactor = 1.25
+        zoomOutFactor = 1 / zoomInFactor
+
+        # Zoom
+        if event.angleDelta().y() > 0:
+            zoomFactor = zoomInFactor
+        else:
+            zoomFactor = zoomOutFactor
+        self.view.scale(zoomFactor, zoomFactor)
+        event.accept()
+
 
     def update_window(self):
         if self.world.active_team == "Blue":
@@ -425,6 +460,26 @@ class GUI(QtWidgets.QMainWindow):
         self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
         self.stage_name.show()
 
+        # updates background
+        filename = "level_n_bg.jpg"
+        found = False
+        for i in self.world.name:
+            if i.isnumeric():
+                filename = filename.replace("n", i)
+                found = True
+        if found is False:
+            filename = "bg.png"
+
+
+        self.pixmap_item.hide()
+        pixmap = QtGui.QPixmap(f"savedata/{filename}").scaled(
+        self.world.width * self.square_size,
+        self.world.height * self.square_size
+        )
+        self.pixmap_item.setPixmap(pixmap)
+        self.pixmap_item.show()
+
+
     def choose_save_window(self):
         self.choose_save_widget = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self.choose_save_widget)
@@ -556,6 +611,25 @@ class GUI(QtWidgets.QMainWindow):
         self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
         self.stage_name.show()
 
+        # updates background
+        filename = "level_n_bg.jpg"
+        found = False
+        for i in self.world.name:
+            if i.isnumeric():
+                filename = filename.replace("n", i)
+                found = True
+        if found is False:
+            filename = "bg.png"
+
+
+        self.pixmap_item.hide()
+        pixmap = QtGui.QPixmap(f"savedata/{filename}").scaled(
+        self.world.width * self.square_size,
+        self.world.height * self.square_size
+        )
+        self.pixmap_item.setPixmap(pixmap)
+        self.pixmap_item.show()
+
     def show_saving_window(self):
         self.saving_window = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self.saving_window)
@@ -652,6 +726,11 @@ class GUI(QtWidgets.QMainWindow):
         self.gui_exercise.update_pet_world_grid_items()
 
     def mousePressEvent(self, event, *args, **kwargs):
+
+        # engage dragging
+        self.dragging = True
+        self.lastMousePos = event.pos()
+
         if self.world.active_team == "Level Editor":
             # Get the item that was clicked on
             pos = self.view.mapToScene(event.pos())
