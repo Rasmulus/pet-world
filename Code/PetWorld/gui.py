@@ -400,7 +400,15 @@ class GUI(QtWidgets.QMainWindow):
         cancel_btn.setFont(QtGui.QFont("Arial", 30))
         layout.addWidget(cancel_btn)
 
-        self.change_size_window.setGeometry(1525, 500, 650, 500)
+        screen = QtWidgets.QApplication.primaryScreen()
+        screen_resolution = screen.geometry()
+        width, height = screen_resolution.width(), screen_resolution.height()
+        self.change_size_window.resize(int(width * 0.5), int(height * 0.5))
+
+        frame_geometry = self.change_size_window.frameGeometry()
+        screen_center = QtWidgets.QApplication.primaryScreen().geometry().center()
+        frame_geometry.moveCenter(screen_center)
+        self.change_size_window.move(frame_geometry.topLeft())
 
         self.change_size_window.setWindowFlags(
             QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.FramelessWindowHint)
@@ -432,6 +440,8 @@ class GUI(QtWidgets.QMainWindow):
         msg_box = QtWidgets.QMessageBox()
         msg_box.setText(f"Are you sure you want to change the size of the world? All changes will be lost.")
         msg_box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.Cancel)
+        msg_box.setWindowModality(QtCore.Qt.WindowModality.ApplicationModal)
+        msg_box.setWindowFlags(msg_box.windowFlags() | QtCore.Qt.WindowType.WindowStaysOnTopHint)
         result = msg_box.exec()
 
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
@@ -458,6 +468,8 @@ class GUI(QtWidgets.QMainWindow):
         # adds new grid items
         self.world.width = int(width)
         self.world.height = int(height)
+
+        self.world.squares = [None] * self.world.width
 
         for x in range(self.world.width):  # stepper
             self.world.squares[x] = [None] * self.world.height
@@ -642,6 +654,8 @@ class GUI(QtWidgets.QMainWindow):
         self.pixmap_item.setPixmap(pixmap)
         self.pixmap_item.show()
 
+
+
     def show_saving_window(self):
         self.saving_window = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self.saving_window)
@@ -687,7 +701,15 @@ class GUI(QtWidgets.QMainWindow):
         #cancel_btn.setMinimumHeight(100)
         layout.addWidget(cancel_btn)
 
-        self.saving_window.setGeometry(1525, 500, 650, 500)
+        screen = QtWidgets.QApplication.primaryScreen()
+        screen_resolution = screen.geometry()
+        width, height = screen_resolution.width(), screen_resolution.height()
+        self.saving_window.resize(int(width * 0.5), int(height))
+
+        frame_geometry = self.saving_window.frameGeometry()
+        screen_center = QtWidgets.QApplication.primaryScreen().geometry().center()
+        frame_geometry.moveCenter(screen_center)
+        self.saving_window.move(frame_geometry.topLeft())
 
         self.saving_window.setWindowFlags(
             QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint | QtCore.Qt.WindowType.FramelessWindowHint)

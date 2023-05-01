@@ -76,6 +76,7 @@ class GuiExercise():
 
         height = self.pet_world.height
         width = self.pet_world.width
+
         for x in range(width):
             for y in range(height):
                 coordinates = Coordinates(x, y)

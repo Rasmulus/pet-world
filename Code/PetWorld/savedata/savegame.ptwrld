@@ -1,95 +1,23 @@
 # Name
-Level 4
+Level 0
 
 # Filename
-level_4.ptwrld
+level_0.ptwrld
 
 # Time
-(0, 0, 18)
+(0, 0, 23)
 
 # Size
 dimensions = 15,15
 
 # Walls
-obstacles = [(15, 6), (15, 7), (15, 6), (15, 7), (15, 6), (15, 7), (15, 6), (15, 7), (15, 6), (15, 7), (1, 4), (2, 4), (3, 4), (4, 4), (6, 4), (7, 4), (8, 4), (4, 1), (4, 2), (4, 3), (4, 6), (4, 7), (4, 8), (10, 10), (10, 8), (10, 7), (8, 10), (7, 10), (10, 11), (10, 12), (10, 13), (11, 10), (12, 10), (13, 10), (10, 6), (6, 10), (10, 2), (10, 1), (10, 3), (10, 4), (11, 4), (12, 4), (13, 4), (4, 10), (3, 10), (2, 10), (1, 10), (4, 11), (4, 12), (4, 13), (6, 6), (6, 7), (7, 6), (7, 8), (8, 8), (8, 7), (12, 12), (13, 13), (14, 14), (2, 2), (1, 1), (0, 0), (0, 14), (1, 13), (2, 12), (12, 2), (13, 1), (14, 0), (6, 1), (7, 2), (8, 1), (2, 7), (1, 8), (1, 6), (12, 7), (13, 6), (13, 8), (6, 13), (7, 12), (8, 13)]
+obstacles = [(0, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6), (9, 6), (10, 6), (11, 6), (12, 6), (13, 6), (14, 6), (15, 6), (0, 7), (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (9, 7), (10, 7), (11, 7), (12, 7), (13, 7), (14, 7), (15, 7)]
 
 # Turn
-Blue
+Red
 
 # Pets
-location = Coordinates(6, 8)
-body = Pet('Rodent')
-brain = Rodent(body)
-body.set_brain(brain)
-body.team = 'Blue'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.NORTH)
-
-location = Coordinates(8, 3)
-body = Pet('Rodent')
-brain = Rodent(body)
-body.set_brain(brain)
-body.team = 'Red'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.SOUTH)
-
-location = Coordinates(7, 5)
-body = Pet('Cat')
-brain = Cat(body)
-body.set_brain(brain)
-body.team = 'Red'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.SOUTH)
-
-location = Coordinates(7, 13)
-body = Pet('Cat')
-brain = Cat(body)
-body.set_brain(brain)
-body.team = 'Blue'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.NORTH)
-
-location = Coordinates(9, 9)
-body = Pet('Rodent')
-brain = Rodent(body)
-body.set_brain(brain)
-body.team = 'Blue'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.NORTH)
-
-location = Coordinates(2, 8)
-body = Pet('Rodent')
-brain = Rodent(body)
-body.set_brain(brain)
-body.team = 'Red'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.SOUTH)
-
-location = Coordinates(5, 9)
-body = Pet('Rodent')
-brain = Rodent(body)
-body.set_brain(brain)
-body.team = 'Blue'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.NORTH)
-
-location = Coordinates(9, 10)
-body = Pet('Rodent')
-brain = Rodent(body)
-body.set_brain(brain)
-body.team = 'Red'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.SOUTH)
-
-location = Coordinates(13, 7)
+location = Coordinates(12, 12)
 body = Pet('Dog')
 brain = Dog(body)
 body.set_brain(brain)
@@ -98,8 +26,8 @@ body.health = 100
 body.mana = 20
 world.add_robot(body, location, Direction.NORTH)
 
-location = Coordinates(9, 10)
-body = Pet('Dog')
+location = Coordinates(14, 0)
+body = Pet('Bad Dog')
 brain = Dog(body)
 body.set_brain(brain)
 body.team = 'Red'
@@ -107,44 +35,26 @@ body.health = 100
 body.mana = 20
 world.add_robot(body, location, Direction.SOUTH)
 
-location = Coordinates(3, 11)
-body = Pet('Cat')
-brain = Cat(body)
+location = Coordinates(1, 10)
+body = Pet('Bird')
+brain = Bird(body)
 body.set_brain(brain)
 body.team = 'Blue'
 body.health = 100
 body.mana = 20
 world.add_robot(body, location, Direction.NORTH)
 
-location = Coordinates(11, 11)
-body = Pet('Cat')
-brain = Cat(body)
-body.set_brain(brain)
-body.team = 'Blue'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.NORTH)
-
-location = Coordinates(5, 9)
-body = Pet('Cat')
-brain = Cat(body)
+location = Coordinates(0, 0)
+body = Pet('Bad Bird')
+brain = Bird(body)
 body.set_brain(brain)
 body.team = 'Red'
 body.health = 100
 body.mana = 20
 world.add_robot(body, location, Direction.SOUTH)
 
-location = Coordinates(0, 1)
-body = Pet('Cat')
-brain = Cat(body)
-body.set_brain(brain)
-body.team = 'Red'
-body.health = 100
-body.mana = 20
-world.add_robot(body, location, Direction.SOUTH)
-
-location = Coordinates(11, 9)
-body = Pet('Rodent')
+location = Coordinates(6, 6)
+body = Pet('Bad Rat')
 brain = Rodent(body)
 body.set_brain(brain)
 body.team = 'Red'
@@ -152,12 +62,21 @@ body.health = 100
 body.mana = 20
 world.add_robot(body, location, Direction.SOUTH)
 
-location = Coordinates(3, 7)
-body = Pet('Rodent')
+location = Coordinates(7, 7)
+body = Pet('Bad Rat')
 brain = Rodent(body)
 body.set_brain(brain)
-body.team = 'Blue'
+body.team = 'Red'
 body.health = 100
 body.mana = 20
-world.add_robot(body, location, Direction.NORTH)
+world.add_robot(body, location, Direction.SOUTH)
+
+location = Coordinates(8, 6)
+body = Pet('Bad Rat')
+brain = Rodent(body)
+body.set_brain(brain)
+body.team = 'Red'
+body.health = 100
+body.mana = 20
+world.add_robot(body, location, Direction.SOUTH)
 

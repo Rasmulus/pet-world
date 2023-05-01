@@ -361,6 +361,8 @@ class PetWorld():
                             self.height = int(dimensions[1])
                             self.name = name
                             self.new_time = time
+
+                            self.squares = [None] * self.width
                             for x in range(self.width):  # stepper
                                 self.squares[x] = [None] * self.height
                                 for y in range(self.height):  # stepper

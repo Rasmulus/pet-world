@@ -38,3 +38,32 @@ class Ai():
         for i in self.world.robots:
             if i.team == "Blue":
                 self.targets.append(i.location)
+
+
+    def attack(self, pet, attacker):
+        """
+
+        Attacks the target pet.
+
+        """
+
+        for i in pet.get_world().get_robots():
+            if i.attacking == True:
+                attacker = i
+        if attacker.heavy_attacking:
+            pet.set_health(pet.get_health() - int(attacker.strength * 1.5))
+            attacker.mana -= 10
+        else:
+            pet.set_health(pet.get_health() - attacker.strength)
+            attacker.mana -= 5
+        if pet.get_health() < 0:
+            pet.set_health(0)
+        for i in pet.get_world().get_robots():
+            if i.attacking == True:
+                i.attacked = True
+        print("debug")
+        attacker.attacking = False
+        attacker.heavy_attacking = False
+        attacker.attacked = True
+        attacker.get_world().attacking = False
+        pet.get_world().reset_attacking()
