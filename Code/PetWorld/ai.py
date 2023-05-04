@@ -10,6 +10,7 @@ class Ai():
     def __init__(self, world):
         self.world = world
         self.targets = []
+        self.targets_dict = {}
 
     def iterate_through_pets(self):
         print("I got here")
@@ -27,17 +28,43 @@ class Ai():
                 if i.get_x() == j.get_x() and i.get_y() == j.get_y():
                     target = j
                     found = True
-        if found:
-            pet.move_to(target.get_neighbor((random.randint(-1, 1), random.randint(-1, 1))))
-            found = False
+        if found and pet.health >= int(pet.max_health * 0.5) and pet.mana >= 5:
+            all_pets = self.world.robots
+            all_locations = []
+            for i in self.world.robots:
+                all_locations.append(i.location)
+                if str(self.targets_dict[i]) == str(target):
+                    #attack(i, pet)
+                    #target_pet = i
+                    #all_locations.append(i.location)
+
+                    self.attack(i, pet)
+                    #self.attack(target_pet,pet)
+                    pet.move_to(target.get_neighbor((random.randint(-1, 1), random.randint(-1, 1))))
+                    found = False
+                    break
+
+        elif pet.mana >= 10 and pet.health < pet.max_health:
+            index = random.randint(0, len(moves) - 1)
+            pet.move_to(Coordinates(moves[index][0], moves[index][1]))
+            pet.health = pet.max_health
+            pet.mana -= 10
+
+        elif pet.mana < 10:
+            pet.mana = pet.max_mana
+
         else:
             index = random.randint(0, len(moves) - 1)
             pet.move_to(Coordinates(moves[index][0], moves[index][1]))
 
     def find_targets(self):
+        self.targets = []
+        self.targets_dict = {}
         for i in self.world.robots:
             if i.team == "Blue":
-                self.targets.append(i.location)
+                if i.location not in self.targets:
+                    self.targets.append(i.location)
+                self.targets_dict[i] = i.location
 
 
     def attack(self, pet, attacker):
@@ -46,14 +73,15 @@ class Ai():
         Attacks the target pet.
 
         """
+        if attacker.mana >= 10 and pet.health >= int(pet.max_health * 0.4):
+            attacker.heavy_attacking = True
+        elif attacker.mana >= 5:
+            attacker.attacking = True
 
-        for i in pet.get_world().get_robots():
-            if i.attacking == True:
-                attacker = i
         if attacker.heavy_attacking:
             pet.set_health(pet.get_health() - int(attacker.strength * 1.5))
             attacker.mana -= 10
-        else:
+        elif attacker.attacking:
             pet.set_health(pet.get_health() - attacker.strength)
             attacker.mana -= 5
         if pet.get_health() < 0:
