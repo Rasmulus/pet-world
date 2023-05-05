@@ -53,6 +53,7 @@ class PetWorld():
         self.time = time
         self.won = None
         self.ai = Ai(self)
+        self.record = None
 
     def get_width(self):
         """

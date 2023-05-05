@@ -175,20 +175,30 @@ class GUI(QtWidgets.QMainWindow):
         self.horizontal.addLayout(self.vertical)
 
     def move_ai(self):
-        print("I got here")
         self.world.ai.iterate_through_pets()
+        self.world.change_active_team()
 
 
     def on_end_turn(self):
         self.world.change_active_team()
         self.save_screenshot("savegame")
+        self.move_ai()
 
     def end_level(self):
         if not self.end_widget_activated:
             #self.load_world(self.world.file_name)
 
             timeString = self.elapsed_time.toString('hh:mm:ss')
-            self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
+            if self.world.record is not None:
+                if timestring < self.world.record:
+                    self.world.record = timeString
+                    self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
+                else:
+                    self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, False)
+            else:
+                self.world.record = timeString
+                self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
+
             #self.level_end_widget.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
 
             #self.level_end_widget.exec()
@@ -205,6 +215,14 @@ class GUI(QtWidgets.QMainWindow):
                 self.main_menu()
 
             #self.level_end_widget.start_animation()
+
+    def save_record(self):
+        if self.world.file_name == "savegame.ptwrld":
+            self.world.file_name = self.world.name
+            self.world.file_name = self.world.file_name.replace("Level ", "level_")
+            self.world.file_name += ".ptwrld"
+
+        #jatka tästä
 
     def restart_level(self):
         self.world.won = None
