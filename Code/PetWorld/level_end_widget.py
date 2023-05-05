@@ -3,7 +3,7 @@ from PyQt6.QtCore import QPropertyAnimation
 
 
 class LevelEndWidget(QtWidgets.QDialog):
-    def __init__(self, parent, won, elapsed_time, new_record):
+    def __init__(self, parent, won, elapsed_time, new_record, record):
         self.result = None
         super().__init__(parent)
         self.setWindowTitle("Level Complete")
@@ -39,26 +39,28 @@ class LevelEndWidget(QtWidgets.QDialog):
         font.setBold(True)
         self.won_label.setFont(font)
 
-        self.time_label = QtWidgets.QLabel(f"Time: {elapsed_time}", self)
+        self.time_label = QtWidgets.QLabel(f"Time: {elapsed_time}\n Record: {record}", self)
         self.time_label.setFont(QtGui.QFont("Arial", 40))
-        self.time_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignRight)
+        self.time_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignCenter)
 
         # Create the new record animated stamp
-        self.new_record_stamp = QtWidgets.QLabel(self)
-        self.new_record_stamp.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.new_record_stamp.setPixmap(QtGui.QPixmap("new_record.png"))
-        self.new_record_stamp.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.new_record_stamp.setHidden(not new_record)
+        if new_record:
+            self.new_record_stamp = QtWidgets.QLabel(self)
+            self.new_record_stamp.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+            self.new_record_stamp.setPixmap(QtGui.QPixmap("new_record.png"))
+            self.new_record_stamp.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+            self.new_record_stamp.setHidden(not new_record)
 
-        animation = QPropertyAnimation(self.new_record_stamp, b"pos")
-        # Set the duration of the animation
-        animation.setDuration(10000)
-        # Set the start and end values for the animation
-        start_pos = QtCore.QPoint(self.width(), self.new_record_stamp.y())
-        end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
-        animation.setStartValue(start_pos)
-        animation.setEndValue(end_pos)
-        # Start the animation
+            animation = QPropertyAnimation(self.new_record_stamp, b"pos")
+            # Set the duration of the animation
+            animation.setDuration(10000)
+            # Set the start and end values for the animation
+            start_pos = QtCore.QPoint(self.width(), self.new_record_stamp.y())
+            end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
+            animation.setStartValue(start_pos)
+            animation.setEndValue(end_pos)
+            # Start the animation
+            #animation.start()
 
         self.next_level_button = QtWidgets.QPushButton("Next Level", self)
         self.next_level_button.setFont(QtGui.QFont("Arial", 30))
@@ -79,7 +81,8 @@ class LevelEndWidget(QtWidgets.QDialog):
         # Add a new horizontal layout for the time label and new record stamp
         time_layout = QtWidgets.QHBoxLayout()
         time_layout.addWidget(self.time_label)
-        time_layout.addWidget(self.new_record_stamp)
+        if new_record:
+            time_layout.addWidget(self.new_record_stamp)
         time_layout.setSpacing(0)
 
         layout.addLayout(time_layout) # Add the new horizontal layout
@@ -96,7 +99,6 @@ class LevelEndWidget(QtWidgets.QDialog):
         #button_widget_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
         layout.addWidget(button_widget)  # Add the button widget to the main layout
-        animation.start()
 
     def start_animation(self):
         # Start the new record stamp animation
@@ -130,7 +132,7 @@ class LevelEndWidget(QtWidgets.QDialog):
                 self.width(),
                 self.height(),
             )
-        self.start_animation()
+        #self.start_animation()
         #return "try_again"
 
         return super().exec()

@@ -323,6 +323,12 @@ class PetWorld():
             file.write("# Turn\n")
             file.write(f"Blue\n")
             file.write("\n")
+            file.write("# Record\n")
+            if self.record is not None:
+                file.write(f"{self.record}\n")
+            else:
+                file.write("\n")
+            file.write("\n")
             file.write("# Pets\n")
             for i in self.robots:
                 location = str(i).split("location ")
@@ -338,6 +344,7 @@ class PetWorld():
             file.close()
 
     def load_game(self, file):
+        self.record = None
         self.file_name = file
         with open(f'savedata/{file}', 'r') as file:
             # Read the lines from the file

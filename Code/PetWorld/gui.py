@@ -185,19 +185,40 @@ class GUI(QtWidgets.QMainWindow):
         self.move_ai()
 
     def end_level(self):
+
+        if self.world.file_name == "savegame.ptwrld":
+            self.world.file_name = self.world.name
+            self.world.file_name = self.world.file_name.replace("Level ", "level_")
+            self.world.file_name += ".ptwrld"
+
         if not self.end_widget_activated:
             #self.load_world(self.world.file_name)
 
             timeString = self.elapsed_time.toString('hh:mm:ss')
+
+            with open(f'savedata/{self.world.file_name}', 'r+') as f:
+                for line in f:
+                    if line.startswith('# Record'):
+                        try:
+                            next_line = next(f)
+                            if next_line.strip():
+                                self.world.record = next_line.strip()
+                            else:
+                                self.world.record = None
+                        except StopIteration:
+                            self.world.record = None
+
             if self.world.record is not None:
-                if timestring < self.world.record:
+                if timeString < self.world.record:
                     self.world.record = timeString
-                    self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
+                    self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True, self.world.record)
+                    self.save_record()
                 else:
-                    self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, False)
+                    self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, False, self.world.record)
             else:
                 self.world.record = timeString
-                self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True)
+                self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True, self.world.record)
+                self.save_record()
 
             #self.level_end_widget.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
 
@@ -217,12 +238,20 @@ class GUI(QtWidgets.QMainWindow):
             #self.level_end_widget.start_animation()
 
     def save_record(self):
-        if self.world.file_name == "savegame.ptwrld":
-            self.world.file_name = self.world.name
-            self.world.file_name = self.world.file_name.replace("Level ", "level_")
-            self.world.file_name += ".ptwrld"
-
-        #jatka tästä
+        with open(f'savedata/{self.world.file_name}', 'r') as f:
+            lines = f.readlines()
+        with open(f'savedata/{self.world.file_name}', 'w') as f:
+            skip_next_line = False
+            for line in lines:
+                if skip_next_line:
+                    skip_next_line = False
+                    continue
+                if line.startswith('# Record'):
+                    f.write('# Record\n')
+                    f.write(str(self.world.record) + '\n')
+                    skip_next_line = True
+                else:
+                    f.write(line)
 
     def restart_level(self):
         self.world.won = None
