@@ -83,7 +83,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # calculate the offset for the name tag proxy widget
         offset_x = center_x - self.health_bar_proxy.size().width() / 2
-        offset_y = -self.health_bar_proxy.size().height() - 80
+        offset_y = -self.health_bar_proxy.size().height() - 110
 
         #raise to front
         self.name_tag.raise_()
@@ -239,7 +239,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # calculate the offset for the health bar proxy widget
         offset_x = center_x - 100
-        offset_y = - 50 - self.health_bar_proxy.size().height()
+        offset_y = - 80 - self.health_bar_proxy.size().height()
 
         # calculate the rotated offset using a transformation matrix
         transformation = QtGui.QTransform()
@@ -286,7 +286,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # calculate the offset for the health bar proxy widget
         offset_x = center_x - self.health_bar_proxy.size().width() / 2
-        offset_y = -self.health_bar_proxy.size().height() - 20
+        offset_y = -self.health_bar_proxy.size().height() - 50
 
         # calculate the rotated offset using a transformation matrix
         transformation = QtGui.QTransform()
@@ -485,7 +485,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                             action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
                         # Show the menu at the position of the event
                         menu.exec(event.screenPos())
-                    elif percentage_left > 0.5:
+                    elif percentage_left > 0.2:
                         menu = QtWidgets.QMenu()
                         # make the font size larger
                         font = menu.font()

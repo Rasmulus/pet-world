@@ -283,6 +283,7 @@ class GUI(QtWidgets.QMainWindow):
 
 
     def main_menu(self):
+        self.world.won = None
         self.end_widget_activated = False
 
     def show_confirmation_dialog(self):
