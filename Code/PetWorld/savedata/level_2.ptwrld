@@ -16,6 +16,8 @@ obstacles = [(0, 6), (1, 6), (2, 6), (4, 6), (5, 6), (9, 6), (10, 6), (12, 6), (
 # Turn
 Blue
 
+# Record
+
 # Pets
 location = Coordinates(3, 10)
 body = Pet('Dog')

@@ -33,16 +33,19 @@ class Ai():
             all_locations = []
             for i in self.world.robots:
                 all_locations.append(i.location)
-                if str(self.targets_dict[i]) == str(target):
-                    #attack(i, pet)
-                    #target_pet = i
-                    #all_locations.append(i.location)
+                try:
+                    if str(self.targets_dict[i]) == str(target):
+                        #attack(i, pet)
+                        #target_pet = i
+                        #all_locations.append(i.location)
 
-                    self.attack(i, pet)
-                    #self.attack(target_pet,pet)
-                    pet.move_to(target.get_neighbor((random.randint(-1, 1), random.randint(-1, 1))))
-                    found = False
-                    break
+                        self.attack(i, pet)
+                        #self.attack(target_pet,pet)
+                        pet.move_to(target.get_neighbor((random.randint(-1, 1), random.randint(-1, 1))))
+                        found = False
+                        break
+                except KeyError:
+                    pass
 
         elif pet.mana >= 10 and pet.health < pet.max_health:
             index = random.randint(0, len(moves) - 1)

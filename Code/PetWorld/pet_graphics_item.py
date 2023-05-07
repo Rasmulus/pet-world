@@ -30,6 +30,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.mana_bar_proxy = self.makeManaBar()
         self.name_tag_proxy = self.makeNameTag()
         self.char_sheet_proxy = self.makeCharSheet()
+        self.image_label = self.loadCharacterImage()
         self.updateAll()
         self.health_bar_proxy.setVisible(False)
         self.mana_bar_proxy.setVisible(False)
@@ -147,6 +148,49 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # set the position of the proxy widget relative to the center point
         self.char_sheet_proxy.setPos(center_x + offset.x(), center_y + offset.y())
+
+    def loadCharacterImage(self):
+
+        # create a label widget to display the image
+        self.image_label = QtWidgets.QLabel()
+        pixmap = QtGui.QPixmap("assets/cat.png")
+        pixmap = pixmap.scaled(100, 100, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+        self.image_label.setPixmap(pixmap)
+        self.image_label.setAutoFillBackground(False)
+        self.image_label.setStyleSheet("background-color: rgba(0, 0, 0, 0);")
+        self.image_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+
+        # create a proxy widget for the image label
+        self.image_label_proxy = QtWidgets.QGraphicsProxyWidget(self)
+        self.image_label_proxy.setAutoFillBackground(False)
+        self.image_label_proxy.setWidget(self.image_label)
+
+    def updateCharacterImage(self):
+        # calculate the center point of the triangle
+        center_x = self.square_size / 2
+        center_y = self.square_size / 2
+
+        # raise to front
+        #self.image_label.raise_()
+
+        # calculate the offset for the character image proxy widget
+        offset_x = center_x - 75
+        offset_y = center_y - 90
+
+        # get the rotation of this item and set the rotation of the proxy widget
+        rotation = self.rotation()
+        self.image_label_proxy.setRotation(
+            -rotation)  # set the rotation of the proxy widget to the negative of this item's rotation
+        # calculate the rotated offset using a transformation matrix
+        transformation = QtGui.QTransform()
+        transformation.rotate(-rotation)
+        offset = transformation.map(QtCore.QPointF(offset_x, offset_y))
+
+        # set the position of the image label proxy widget relative to the center point
+        self.image_label_proxy.setPos(center_x + offset.x(), center_y + offset.y())
+        #self.image_label.setAutoFillBackground(False)
+        self.image_label_proxy.setAutoFillBackground(False)
+
 
     def makeHealthBar(self):
         self.health_bar = QtWidgets.QProgressBar()
@@ -289,6 +333,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateNameTag()
         self.updateCharSheet()
         self.updateManaBar()
+        self.updateCharacterImage()
         if self.pet.is_broken():
             self.hide_pet()
         #self.health_bar_proxy.setWidget(self.health_bar)
