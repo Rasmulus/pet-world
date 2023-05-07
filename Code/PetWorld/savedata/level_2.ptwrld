@@ -18,6 +18,10 @@ Blue
 
 # Record
 
+
+# Background
+assets/background_2.jpg
+
 # Pets
 location = Coordinates(3, 10)
 body = Pet('Dog')

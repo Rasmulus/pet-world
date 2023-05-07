@@ -238,20 +238,21 @@ class GUI(QtWidgets.QMainWindow):
             #self.level_end_widget.start_animation()
 
     def save_record(self):
-        with open(f'savedata/{self.world.file_name}', 'r') as f:
-            lines = f.readlines()
-        with open(f'savedata/{self.world.file_name}', 'w') as f:
-            skip_next_line = False
-            for line in lines:
-                if skip_next_line:
-                    skip_next_line = False
-                    continue
-                if line.startswith('# Record'):
-                    f.write('# Record\n')
-                    f.write(str(self.world.record) + '\n')
-                    skip_next_line = True
-                else:
-                    f.write(line)
+        if self.world.won == "Blue":
+            with open(f'savedata/{self.world.file_name}', 'r') as f:
+                lines = f.readlines()
+            with open(f'savedata/{self.world.file_name}', 'w') as f:
+                skip_next_line = False
+                for line in lines:
+                    if skip_next_line:
+                        skip_next_line = False
+                        continue
+                    if line.startswith('# Record'):
+                        f.write('# Record\n')
+                        f.write(str(self.world.record) + '\n')
+                        skip_next_line = True
+                    else:
+                        f.write(line)
 
     def restart_level(self):
         self.world.won = None
@@ -351,11 +352,12 @@ class GUI(QtWidgets.QMainWindow):
         self.view.adjustSize()
         self.view.show()
         self.horizontal.addWidget(self.view)
-        self.scene.setSceneRect(-500, -500, 2000, 2000)
+        self.scene.setSceneRect(-500, -500, 0, 0)
 
         # Set the background color
         if self.world.active_team == "Blue":
-            self.view.setStyleSheet("background-color: blue;")
+            self.view.setStyleSheet("background-image: url(assets/background.jpg);")
+            #self.view.setStyleSheet("background-color: blue;")
         elif self.world.active_team == "Red":
             self.view.setStyleSheet("background-color: red;")
         else:
@@ -389,7 +391,8 @@ class GUI(QtWidgets.QMainWindow):
 
     def update_window(self):
         if self.world.active_team == "Blue":
-            self.view.setStyleSheet("background-color: blue;")
+            #self.view.setStyleSheet("background-color: blue;")
+            self.view.setStyleSheet(f"background-image: url({self.world.background});")
             self.change_size_btn.hide()
             self.save_as_btn.hide()
             self.end_turn_btn.show()
@@ -751,7 +754,7 @@ class GUI(QtWidgets.QMainWindow):
         screen = QtWidgets.QApplication.primaryScreen()
         screen_resolution = screen.geometry()
         width, height = screen_resolution.width(), screen_resolution.height()
-        self.saving_window.resize(int(width * 0.5), int(height))
+        self.saving_window.resize(int(width * 0.5), int(height * 0.5))
 
         frame_geometry = self.saving_window.frameGeometry()
         screen_center = QtWidgets.QApplication.primaryScreen().geometry().center()

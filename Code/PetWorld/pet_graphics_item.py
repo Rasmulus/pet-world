@@ -153,7 +153,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
         # create a label widget to display the image
         self.image_label = QtWidgets.QLabel()
-        pixmap = QtGui.QPixmap("assets/cat.png")
+        pixmap = QtGui.QPixmap(f"assets/{str(self.pet.class_name).lower()}.png")
         pixmap = pixmap.scaled(100, 100, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
         self.image_label.setPixmap(pixmap)
         self.image_label.setAutoFillBackground(False)
@@ -485,7 +485,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                             action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
                         # Show the menu at the position of the event
                         menu.exec(event.screenPos())
-                    elif percentage_left > 0.2:
+                    elif percentage_left > 0.5:
                         menu = QtWidgets.QMenu()
                         # make the font size larger
                         font = menu.font()

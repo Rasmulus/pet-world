@@ -54,6 +54,7 @@ class PetWorld():
         self.won = None
         self.ai = Ai(self)
         self.record = None
+        self.background = "assets/background.jpg"
 
     def get_width(self):
         """
@@ -329,6 +330,9 @@ class PetWorld():
             else:
                 file.write("\n")
             file.write("\n")
+            file.write("# Background\n")
+            file.write(f"{self.background}\n")
+            file.write("\n")
             file.write("# Pets\n")
             for i in self.robots:
                 location = str(i).split("location ")
@@ -393,6 +397,10 @@ class PetWorld():
                         if category == "Turn":
                             current_line = file.readline().rstrip()
                             self.active_team = current_line
+
+                        if category == "Background":
+                            current_line = file.readline().rstrip()
+                            self.background = current_line
 
                         if category == "Pets":
                             while True:

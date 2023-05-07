@@ -1,12 +1,15 @@
-- Implement character art
-    - Cat -> Done
-
 - Implement tests
 - Implement system to differentiate between levels and saves
     - saves should have the ability to complete multiple levels and have completion times
-- Implement Game over screen that is separate from winning screen
 - Level select should only allow loading levels that are already beaten or the one currently being played
 
+- Implement Game over screen that is separate from winning screen -> Done
+- Implement character art -> Done
+    - Dog -> Done
+    - Cat -> Done
+    - Rodent -> Done
+    - Reptile -> Done
+    - Bird -> Done
 - Check if the player set a new record when a level is beaten -> Done
 - implement AI -> Done
 - Implement zooming and moving/navigating screen -> Done

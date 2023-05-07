@@ -31,46 +31,49 @@ class LevelEndWidget(QtWidgets.QDialog):
             }
         """)
         # Create the UI elements
-        self.won_label = QtWidgets.QLabel(f"{won} won!", self)
+        if won == "Blue":
+            self.won_label = QtWidgets.QLabel(f"{won} won!", self)
+        else:
+            self.won_label = QtWidgets.QLabel(f"Game over :(\n Try Again?", self)
         self.won_label.setFont(QtGui.QFont("Arial", 80, QtGui.QFont.Weight.Bold))
         self.won_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         font = QtGui.QFont()
         font.setPointSize(80)
         font.setBold(True)
         self.won_label.setFont(font)
+        if won == "Blue":
+            self.time_label = QtWidgets.QLabel(f"Time: {elapsed_time}\n Record: {record}", self)
+            self.time_label.setFont(QtGui.QFont("Arial", 40))
+            self.time_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignCenter)
 
-        self.time_label = QtWidgets.QLabel(f"Time: {elapsed_time}\n Record: {record}", self)
-        self.time_label.setFont(QtGui.QFont("Arial", 40))
-        self.time_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignCenter)
+            # Create the new record animated stamp
+            if new_record:
+                self.new_record_stamp = QtWidgets.QLabel(self)
+                self.new_record_stamp.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+                self.new_record_stamp.setPixmap(QtGui.QPixmap("new_record.png"))
+                self.new_record_stamp.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                self.new_record_stamp.setHidden(not new_record)
 
-        # Create the new record animated stamp
-        if new_record:
-            self.new_record_stamp = QtWidgets.QLabel(self)
-            self.new_record_stamp.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
-            self.new_record_stamp.setPixmap(QtGui.QPixmap("new_record.png"))
-            self.new_record_stamp.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-            self.new_record_stamp.setHidden(not new_record)
+                animation = QPropertyAnimation(self.new_record_stamp, b"pos")
+                # Set the duration of the animation
+                animation.setDuration(10000)
+                # Set the start and end values for the animation
+                start_pos = QtCore.QPoint(self.width(), self.new_record_stamp.y())
+                end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
+                animation.setStartValue(start_pos)
+                animation.setEndValue(end_pos)
+                # Start the animation
+                #animation.start()
 
-            animation = QPropertyAnimation(self.new_record_stamp, b"pos")
-            # Set the duration of the animation
-            animation.setDuration(10000)
-            # Set the start and end values for the animation
-            start_pos = QtCore.QPoint(self.width(), self.new_record_stamp.y())
-            end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
-            animation.setStartValue(start_pos)
-            animation.setEndValue(end_pos)
-            # Start the animation
-            #animation.start()
-
-        self.next_level_button = QtWidgets.QPushButton("Next Level", self)
-        self.next_level_button.setFont(QtGui.QFont("Arial", 30))
-        self.next_level_button.clicked.connect(self.next_level)
+            self.next_level_button = QtWidgets.QPushButton("Next Level", self)
+            self.next_level_button.setFont(QtGui.QFont("Arial", 30))
+            self.next_level_button.clicked.connect(self.next_level)
 
         self.try_again_button = QtWidgets.QPushButton("Try Again", self)
         self.try_again_button.setFont(QtGui.QFont("Arial", 30))
         self.try_again_button.clicked.connect(self.try_again)
 
-        self.main_menu_button = QtWidgets.QPushButton("Return to Main Menu", self)
+        self.main_menu_button = QtWidgets.QPushButton("Return to Board", self)
         self.main_menu_button.setFont(QtGui.QFont("Arial", 30))
         self.main_menu_button.clicked.connect(self.return_to_main_menu)
 
@@ -78,14 +81,15 @@ class LevelEndWidget(QtWidgets.QDialog):
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(self.won_label)
 
-        # Add a new horizontal layout for the time label and new record stamp
-        time_layout = QtWidgets.QHBoxLayout()
-        time_layout.addWidget(self.time_label)
-        if new_record:
-            time_layout.addWidget(self.new_record_stamp)
-        time_layout.setSpacing(0)
+        if won == "Blue":
+            # Add a new horizontal layout for the time label and new record stamp
+            time_layout = QtWidgets.QHBoxLayout()
+            time_layout.addWidget(self.time_label)
+            if new_record:
+                time_layout.addWidget(self.new_record_stamp)
+            time_layout.setSpacing(0)
 
-        layout.addLayout(time_layout) # Add the new horizontal layout
+            layout.addLayout(time_layout) # Add the new horizontal layout
 
         # Add some vertical space between the time layout and the buttons
         layout.addSpacing(50)
@@ -93,7 +97,8 @@ class LevelEndWidget(QtWidgets.QDialog):
         # Add a new widget to hold the buttons
         button_widget = QtWidgets.QWidget(self)
         button_widget_layout = QtWidgets.QHBoxLayout(button_widget)
-        button_widget_layout.addWidget(self.next_level_button)
+        if won == "Blue":
+            button_widget_layout.addWidget(self.next_level_button)
         button_widget_layout.addWidget(self.try_again_button)
         button_widget_layout.addWidget(self.main_menu_button)
         #button_widget_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
