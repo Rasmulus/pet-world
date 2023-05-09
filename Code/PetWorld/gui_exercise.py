@@ -101,9 +101,7 @@ class GuiExercise():
         and changing their colors accordingly.
 
         """
-        print(self.square_coordinates)
         for i in self.square_coordinates:
-            print(self.square_coordinates[i])
             square = self.pet_world.get_square(self.square_coordinates[i])
             if square.is_wall:
                 i.setBrush(QtGui.QBrush(QtGui.QColor(20, 20, 20)))
@@ -155,9 +153,7 @@ class GuiExercise():
 
         # Iterate over all possible moves
         for move in possible_moves:
-            print("debug")
             x, y = move[0], move[1]
-            print("debug")
             rect_item = QtWidgets.QGraphicsRectItem(x * self.square_size, y * self.square_size, self.square_size,
                                                     self.square_size)
 

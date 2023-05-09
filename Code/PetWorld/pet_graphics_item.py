@@ -369,9 +369,6 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         A method for rotating can be found from QGraphicsItem at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QGraphicsItem.html
 
         """
-        print(self.pet.get_facing())
-        print(self.pet.get_location())
-        print(self.pet.get_location_square())
 
         facing = self.pet.get_facing()
         up = (0, 1)
@@ -457,13 +454,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             elif not self.pet.team == self.pet.get_world().active_team and self.pet.get_world().attacking:
                 target = self.pet
                 attacker = None
-                print("debug")
                 for i in self.pet.get_world().get_robots():
-                    print("debug")
                     if i.attacking:
                         attacker = i
-                print("debug")
-                print("attacker.get_location()")
                 distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
                 percentage_left = target.get_health() / target.max_health
 
@@ -652,7 +645,6 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         for i in self.pet.get_world().get_robots():
             if i.attacking == True:
                 i.attacked = True
-        print("debug")
         attacker.attacking = False
         attacker.heavy_attacking = False
         attacker.attacked = True

@@ -274,14 +274,8 @@ class Pet():
     def move_to(self, target):
         current_square = self.get_location_square()
         target_square = self.get_world().get_square(target)
-        #print(target.type())
-        #print(target.get_x())
 
-        #print("debug")
-        #print(self.get_location().get_x())
-        print(target, "test")
         tuple_result = tuple(map(int, str(target).strip("()").split(",")))
-        print("test")
         if tuple_result in self.get_possible_moves():
             current_square.remove_robot()
             self.location = target

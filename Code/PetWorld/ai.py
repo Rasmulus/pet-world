@@ -13,7 +13,6 @@ class Ai():
         self.targets_dict = {}
 
     def iterate_through_pets(self):
-        print("I got here")
         for i in self.world.robots:
             if i.team == "Red":
                 self.move(i)
@@ -94,7 +93,6 @@ class Ai():
         for i in pet.get_world().get_robots():
             if i.attacking == True:
                 i.attacked = True
-        print("debug")
         attacker.attacking = False
         attacker.heavy_attacking = False
         attacker.attacked = True

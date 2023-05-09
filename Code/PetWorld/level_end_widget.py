@@ -101,7 +101,6 @@ class LevelEndWidget(QtWidgets.QDialog):
             button_widget_layout.addWidget(self.next_level_button)
         button_widget_layout.addWidget(self.try_again_button)
         button_widget_layout.addWidget(self.main_menu_button)
-        #button_widget_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
         layout.addWidget(button_widget)  # Add the button widget to the main layout
 
@@ -137,8 +136,6 @@ class LevelEndWidget(QtWidgets.QDialog):
                 self.width(),
                 self.height(),
             )
-        #self.start_animation()
-        #return "try_again"
 
         return super().exec()
 
@@ -146,18 +143,11 @@ class LevelEndWidget(QtWidgets.QDialog):
     def next_level(self):
         self.result = "next_level"
         self.close()
-        #self.accept()
-        # Do something to proceed to the next level
 
     def try_again(self):
         self.result = "try_again"
         self.close()
 
-        #self.accept()
-        # Do something to restart the current level
-
     def return_to_main_menu(self):
         self.result = "main_menu"
         self.close()
-        #self.reject()
-        # Do something to return to the main menu

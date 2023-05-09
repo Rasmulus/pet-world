@@ -164,12 +164,14 @@ class GUI(QtWidgets.QMainWindow):
         self.debug_btn.setFont(QtGui.QFont("Arial", 30))
         self.vertical.addWidget(self.debug_btn)
         self.debug_btn.setMinimumHeight(100)
+        self.debug_btn.hide()
 
         self.move_ai_btn = QtWidgets.QPushButton("Move AI")
         self.move_ai_btn.clicked.connect(self.move_ai)
         self.move_ai_btn.setFont(QtGui.QFont("Arial", 30))
         self.vertical.addWidget(self.move_ai_btn)
         self.move_ai_btn.setMinimumHeight(100)
+        self.move_ai_btn.hide()
 
 
         self.horizontal.addLayout(self.vertical)
@@ -312,7 +314,6 @@ class GUI(QtWidgets.QMainWindow):
         if self.world.moving and self.possible_squares is None and self.possible_drawn is False:
             self.possible_drawn = True
             for i in self.world.get_robots():
-                #print("debug")
                 if i.get_moving_state():
                     possible_moves = i.get_possible_moves()
                     self.possible_squares = self.gui_exercise.draw_possible_squares(possible_moves)
@@ -588,6 +589,11 @@ class GUI(QtWidgets.QMainWindow):
             }
         """)
 
+        frame_geometry = self.choose_save_widget.frameGeometry()
+        screen_center = QtWidgets.QApplication.primaryScreen().geometry().center()
+        frame_geometry.moveCenter(screen_center)
+        self.choose_save_widget.move(frame_geometry.topLeft())
+
         # Create the header
         self.header = QtWidgets.QLabel(f"Load Game", self)
         self.header.setFont(QtGui.QFont("Arial", 60, QtGui.QFont.Weight.Bold))
@@ -755,7 +761,7 @@ class GUI(QtWidgets.QMainWindow):
         screen = QtWidgets.QApplication.primaryScreen()
         screen_resolution = screen.geometry()
         width, height = screen_resolution.width(), screen_resolution.height()
-        self.saving_window.resize(int(width * 0.5), int(height * 0.5))
+        self.saving_window.resize(int(width * 0.5), int(height * 0.6))
 
         frame_geometry = self.saving_window.frameGeometry()
         screen_center = QtWidgets.QApplication.primaryScreen().geometry().center()
@@ -820,15 +826,10 @@ class GUI(QtWidgets.QMainWindow):
             # Get the item that was clicked on
             pos = self.view.mapToScene(event.pos())
             self.pos = pos
-            # print(self.pos)
             pos = self.view.mapFromScene(pos)
             item = self.view.itemAt(pos)
             self.item = item
-            # print(self.item.coordinates.get_x())
             self.pos = pos
-            # print(self.pos)
-            print(item)
-            # print(self.gui_exercise.square_coordinates[self.item])
             if isinstance(item, QtWidgets.QGraphicsRectItem):  # check if it's a SquareItem
                 menu = QtWidgets.QMenu()
                 font = menu.font()
@@ -865,15 +866,10 @@ class GUI(QtWidgets.QMainWindow):
             # Get the item that was clicked on
             pos = self.view.mapToScene(event.pos())
             self.pos = pos
-            #print(self.pos)
             pos = self.view.mapFromScene(pos)
             item = self.view.itemAt(pos)
             self.item = item
-            #print(self.item.coordinates.get_x())
             self.pos = pos
-            #print(self.pos)
-            print(item)
-            #print(self.gui_exercise.square_coordinates[self.item])
             if isinstance(item, QtWidgets.QGraphicsRectItem):  # check if it's a SquareItem
                 menu = QtWidgets.QMenu()
                 font = menu.font()
@@ -892,13 +888,9 @@ class GUI(QtWidgets.QMainWindow):
                 menu.exec(pos)
 
     def handleContextMenuAction(self, row):
-        print(f"handleContextMenuAction called with row={row}")
         if row == "Move here":
             for i in self.world.get_robots():
                 if i.get_moving_state():
-                    print(i.get_possible_moves())
-                    print(self.gui_exercise.square_coordinates[self.item])
-                    #print(self.world.squares)
                     i.move_to(self.gui_exercise.square_coordinates[self.item])
                     self.world.reset_moving()
             for square in self.gui_exercise.highlighted_squares:

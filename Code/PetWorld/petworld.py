@@ -122,12 +122,9 @@ class PetWorld():
         Returns a boolean value indicating if the operation succeeded: boolean
 
         """
-        print("Debugggger")
         string_tuple = location.__str__()
-        print(string_tuple, "hey")
 
         tuple_result = tuple(map(int, string_tuple.strip("()").split(",")))
-        print(tuple_result, "hey")
         if tuple_result not in self.obstacles:
             self.obstacles.append(tuple_result)
             self.get_square(location).set_wall()
@@ -357,13 +354,10 @@ class PetWorld():
                 try:
                     current_line = current_line.rstrip()
                     if current_line[0] == "#":
-                        print("True")
                         header_parts = current_line.split(" ")
-                        print(header_parts[1])
                         category = header_parts[1]
                         if category == "Name":
                             name = file.readline().rstrip()
-                            print(f"name: {name}")
                         if category == "Size":
                             current_line = file.readline().rstrip()
                             parts = current_line.split("=")
@@ -379,10 +373,7 @@ class PetWorld():
                                 self.squares[x] = [None] * self.height
                                 for y in range(self.height):  # stepper
                                     self.squares[x][y] = Square()
-                            print(f"dimensions: {dimensions}")
-                            print(parts)
                         if category == "Walls":
-                            print("seinuliini")
                             current_line = file.readline().rstrip()
                             parts = current_line.split("=")
                             coordinates = parts[1].rstrip()
@@ -416,13 +407,11 @@ class PetWorld():
                                         break
                                     else:
                                         # Execute the line as code
-                                        print(current_line, "debugging")
                                         if "world" in current_line:
                                             current_line = current_line.replace("world", "self")
                                         exec(current_line)
                                 else:
                                     # Execute the line as code
-                                    print(current_line, "debugging")
                                     if "world" in current_line:
                                         current_line = current_line.replace("world", "self")
                                     exec(current_line)
@@ -431,7 +420,5 @@ class PetWorld():
                     else:
                         current_line = file.readline()
 
-                    # Do something with the lines
-                    # print(current_line)
                 except:
-                    print("problem")
+                    pass

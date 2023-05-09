@@ -26,23 +26,17 @@ def main():
             try:
                 current_line = current_line.rstrip()
                 if current_line[0] == "#":
-                    print("True")
                     header_parts = current_line.split(" ")
-                    print(header_parts[1])
                     category = header_parts[1]
                     if category == "Name":
                         name = file.readline().rstrip()
-                        print(f"name: {name}")
                     if category == "Size":
                         current_line = file.readline().rstrip()
                         parts = current_line.split("=")
                         dimensions = parts[1].rstrip()
                         dimensions = dimensions.split(",")
                         world = PetWorld(int(dimensions[0]), int(dimensions[1]), name, time)
-                        print(f"dimensions: {dimensions}")
-                        print(parts)
                     if category == "Walls":
-                        print("seinuliini")
                         current_line = file.readline().rstrip()
                         parts = current_line.split("=")
                         coordinates = parts[1].rstrip()
@@ -66,15 +60,12 @@ def main():
                                 break
                             else:
                                 # Execute the line as code
-                                print(current_line)
                                 exec(current_line)
                     else:
                         pass
                 else:
                     current_line = file.readline()
 
-                # Do something with the lines
-                #print(current_line)
             except:
                 pass
 
