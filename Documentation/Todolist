@@ -1,8 +1,7 @@
 - Implement tests
-- Implement system to differentiate between levels and saves
-    - saves should have the ability to complete multiple levels and have completion times
 - Level select should only allow loading levels that are already beaten or the one currently being played
 
+- Add graphics to obstacles -> Done
 - Implement Game over screen that is separate from winning screen -> Done
 - Implement character art -> Done
     - Dog -> Done

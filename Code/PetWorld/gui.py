@@ -66,7 +66,6 @@ class GUI(QtWidgets.QMainWindow):
         self.lcd = QtWidgets.QLCDNumber(self)
         self.lcd.setSegmentStyle(QtWidgets.QLCDNumber.SegmentStyle.Filled)
         self.lcd.setDigitCount(8)
-        #self.lcd.setSize(300, 80) # Set the size of the clock widget
         self.layout().addWidget(self.lcd)
         self.lcd.setStyleSheet("background-color: white; color: black;")
         self.lcd.setGeometry(self.vertical.geometry().x(), 10, 300, 80)
@@ -194,7 +193,6 @@ class GUI(QtWidgets.QMainWindow):
             self.world.file_name += ".ptwrld"
 
         if not self.end_widget_activated:
-            #self.load_world(self.world.file_name)
 
             timeString = self.elapsed_time.toString('hh:mm:ss')
 
@@ -222,9 +220,6 @@ class GUI(QtWidgets.QMainWindow):
                 self.level_end_widget = LevelEndWidget(self, self.world.won, timeString, True, self.world.record)
                 self.save_record()
 
-            #self.level_end_widget.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
-
-            #self.level_end_widget.exec()
             self.level_end_widget.exec()
             self.end_widget_activated = True
             result = self.level_end_widget.result
@@ -236,8 +231,6 @@ class GUI(QtWidgets.QMainWindow):
 
             elif result == "main_menu":
                 self.main_menu()
-
-            #self.level_end_widget.start_animation()
 
     def save_record(self):
         if self.world.won == "Blue":
@@ -280,6 +273,7 @@ class GUI(QtWidgets.QMainWindow):
         try:
             self.load_world(self.world.file_name)
             self.end_widget_activated = False
+
         except:
             self.end_widget_activated = False
 
@@ -327,11 +321,11 @@ class GUI(QtWidgets.QMainWindow):
         self.show()
 
 
-        # Add a scene for drawing 2d objects
+        # add a scene for drawing 2d objects
         self.scene = QtWidgets.QGraphicsScene()
         self.scene.setSceneRect(0, 0, 700, 700)
 
-        # Add background to level
+        # add background to level
         filename = "level_n_bg.jpg"
         found = False
         for i in self.world.name:
@@ -349,17 +343,16 @@ class GUI(QtWidgets.QMainWindow):
         self.scene.addItem(self.pixmap_item)
         self.pixmap_item.setPos(0, 0)
 
-        # Add a view for showing the scene
+        # add a view for showing the scene
         self.view = QtWidgets.QGraphicsView(self.scene, self)
         self.view.adjustSize()
         self.view.show()
         self.horizontal.addWidget(self.view)
         self.scene.setSceneRect(-500, -500, 0, 0)
 
-        # Set the background color
+        # set the background color
         if self.world.active_team == "Blue":
             self.view.setStyleSheet("background-image: url(assets/background.jpg);")
-            #self.view.setStyleSheet("background-color: blue;")
         elif self.world.active_team == "Red":
             self.view.setStyleSheet("background-color: red;")
         else:
@@ -367,7 +360,6 @@ class GUI(QtWidgets.QMainWindow):
 
         # Create stage name widget
         self.stage_name = QtWidgets.QLabel(self.world.name)
-        #self.stage_name.setFixedSize(1000, 1000) # Set the size of the clock widget
         self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
         self.stage_name.setStyleSheet(
             "QLabel { font-size: 32px; font-weight: bold; border: 2px solid black; background-color: beige }")
@@ -375,10 +367,11 @@ class GUI(QtWidgets.QMainWindow):
         self.stage_name.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.scene.addWidget(self.stage_name)
         self.view.scale(0.75, 0.75)
-        #self.view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        #self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.view.setDragMode(QtWidgets.QGraphicsView.dragMode(self.view).ScrollHandDrag)
     def wheelEvent(self, event):
+        """
+        Adds the ability to zoom using the mouse scroll wheel.
+        """
         zoomInFactor = 1.25
         zoomOutFactor = 1 / zoomInFactor
 
@@ -392,8 +385,10 @@ class GUI(QtWidgets.QMainWindow):
 
 
     def update_window(self):
+        """
+        Updates the window background as well as the buttons that are shown.
+        """
         if self.world.active_team == "Blue":
-            #self.view.setStyleSheet("background-color: blue;")
             self.view.setStyleSheet(f"background-image: url({self.world.background});")
             self.change_size_btn.hide()
             self.save_as_btn.hide()
@@ -561,7 +556,7 @@ class GUI(QtWidgets.QMainWindow):
         layout = QtWidgets.QVBoxLayout(self.choose_save_widget)
         layout.setContentsMargins(20, 20, 20, 20)
 
-        #change UI
+        # change UI
         self.choose_save_widget.setFixedSize(800, 600)
 
         self.choose_save_widget.setLayout(layout)
@@ -579,7 +574,7 @@ class GUI(QtWidgets.QMainWindow):
 
         mask = QtGui.QRegion(path.toFillPolygon(QtGui.QTransform()).toPolygon())
         self.choose_save_widget.setMask(mask)
-        # Set the widget stylesheet
+        # set the widget stylesheet
         self.choose_save_widget.setObjectName("chooseSaveWidget")
         self.choose_save_widget.setStyleSheet("""
             #chooseSaveWidget {
@@ -594,7 +589,7 @@ class GUI(QtWidgets.QMainWindow):
         frame_geometry.moveCenter(screen_center)
         self.choose_save_widget.move(frame_geometry.topLeft())
 
-        # Create the header
+        # create the header
         self.header = QtWidgets.QLabel(f"Load Game", self)
         self.header.setFont(QtGui.QFont("Arial", 60, QtGui.QFont.Weight.Bold))
         self.header.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -612,10 +607,10 @@ class GUI(QtWidgets.QMainWindow):
 
         saves = [f for f in os.listdir("savedata") if f.endswith('.ptwrld')]
         for save in saves:
-            # Remove the file extension from the button label
+            # remove the file extension from the button label
             button_label = os.path.splitext(save)[0]
 
-            # Check if there is a corresponding image file with a ".jpg" extension
+            # check if there is a corresponding image file with a ".jpg" extension
             image_file = os.path.join("savedata", button_label + ".jpg")
             if os.path.exists(image_file):
                 icon = QtGui.QIcon(image_file)
@@ -653,17 +648,17 @@ class GUI(QtWidgets.QMainWindow):
         msg_box.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.Cancel)
         msg_box.setWindowFlags(
             QtCore.Qt.WindowType.Window | QtCore.Qt.WindowType.CustomizeWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint)
-        # Create the rounded rectangle shape
+        # create the rounded rectangle shape
         result = msg_box.exec()
 
         if result == QtWidgets.QMessageBox.StandardButton.Yes:
             self.load_world(save)
             self.choose_save_widget.close()
     def load_world(self, save):
-        #removes all pets from the world
+        # remove all pets from the world
         for i in self.world.get_robots():
             i.set_health(0)
-        #removes all obstacles
+        # remove all obstacles
         for i in self.gui_exercise.squares:
             coordinates = str(self.gui_exercise.square_coordinates[i])
             coordinates = eval(coordinates)
@@ -671,28 +666,28 @@ class GUI(QtWidgets.QMainWindow):
                 coordinates = Coordinates(int(coordinates[0]), int(coordinates[1]))
                 self.toggle_obstacle(coordinates)
 
-        #removes all grid items
+        # remove all grid items
         self.gui_exercise.remove_pet_world_grid_items()
 
-        # loads information from the save
+        # load information from the save
         self.world.load_game(save)
 
-        #adds new grid items
+        # add new grid items
         self.gui_exercise.add_pet_world_grid_items()
 
-        #adds new pets
+        # add new pets
         self.gui_exercise.add_robot_graphics_items()
 
-        #updates timer to reflect saved time
+        # update timer to reflect saved time
         self.elapsed_time = self.world.new_time
 
-        # updates the stage name widget
+        # update the stage name widget
         self.stage_name.hide()
         self.stage_name.setText(self.world.name)
         self.stage_name.setGeometry(0, -50, self.world.width * 50, 50)
         self.stage_name.show()
 
-        # updates background
+        # update background
         filename = "level_n_bg.jpg"
         found = False
         for i in self.world.name:
@@ -719,18 +714,15 @@ class GUI(QtWidgets.QMainWindow):
 
         filename_label = QtWidgets.QLabel("Enter the filename that you would\nlike to save the level to:")
         filename_label.setFont(QtGui.QFont("Arial", 30))
-        #filename_label.setMaximumHeight(50)
         layout.addWidget(filename_label)
 
         filename_layout = QtWidgets.QHBoxLayout()
         self.filename_input = QtWidgets.QLineEdit()
         self.filename_input.setFont(QtGui.QFont("Arial", 30))
-        #self.filename_input.setMinimumHeight(100)
         filename_layout.addWidget(self.filename_input)
 
         extension_label = QtWidgets.QLabel(".ptwrld")
         extension_label.setFont(QtGui.QFont("Arial", 30))
-        #extension_label.setMinimumHeight(100)
         filename_layout.addWidget(extension_label)
 
         layout.addLayout(filename_layout)
@@ -742,20 +734,17 @@ class GUI(QtWidgets.QMainWindow):
 
         self.worldname_input = QtWidgets.QLineEdit()
         self.worldname_input.setFont(QtGui.QFont("Arial", 30))
-        #self.worldname_input.setMinimumHeight(100)
         layout.addWidget(self.worldname_input)
 
         save_btn = QtWidgets.QPushButton("Save")
         save_btn.clicked.connect(self.save)
         save_btn.clicked.connect(self.saving_window.close)
         save_btn.setFont(QtGui.QFont("Arial", 30))
-        #save_btn.setMinimumHeight(100)
         layout.addWidget(save_btn)
 
         cancel_btn = QtWidgets.QPushButton("Cancel")
         cancel_btn.clicked.connect(self.saving_window.close)
         cancel_btn.setFont(QtGui.QFont("Arial", 30))
-        #cancel_btn.setMinimumHeight(100)
         layout.addWidget(cancel_btn)
 
         screen = QtWidgets.QApplication.primaryScreen()

@@ -1,7 +1,7 @@
 from coordinates import Coordinates
 from pet_graphics_item import PetGraphicsItem
 from petworld import PetWorld
-from PyQt6 import QtWidgets, QtGui
+from PyQt6 import QtWidgets, QtGui, QtCore
 
 
 class GuiExercise():
@@ -24,6 +24,7 @@ class GuiExercise():
         self.square_coordinates = {}
         self.highlighted_squares = []
         self.squares = []
+        self.pixmaps = []
 
     def add_pet_world_grid_items(self):
         """
@@ -85,7 +86,18 @@ class GuiExercise():
                 rect_item = QtWidgets.QGraphicsRectItem(x * self.square_size, y * self.square_size, self.square_size, self.square_size)
 
                 if square.is_wall:
-                    brush = QtGui.QBrush(QtGui.QColor(20, 20, 20))
+                    brush = QtGui.QBrush(QtGui.QColor(211, 211, 211, 25))
+                    pixmap = QtGui.QPixmap(f"{self.pet_world.obstacle}")
+                    pixmap = pixmap.scaled(75, 75, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                    pixmap_item = QtWidgets.QGraphicsPixmapItem(pixmap)
+                    #pixmap_item.setPos(square.pos())
+                    rect_item.setBrush(brush)
+                    pixmap_item.setPos(rect_item.pos())
+                    self.scene.addItem(pixmap_item)
+                    pixmap_item.setPos(x * 50 - 10, y * 50 - 15)
+                    # bring pixmap_item to front
+                    rect_item.setZValue(1)
+                    self.pixmaps.append(pixmap_item)
                 else:
                     brush = QtGui.QBrush(QtGui.QColor(211, 211, 211, 25))
                 rect_item.setBrush(brush)
@@ -101,10 +113,22 @@ class GuiExercise():
         and changing their colors accordingly.
 
         """
+        for i in self.pixmaps:
+            self.scene.removeItem(i)
+            self.pixmaps.remove(i)
         for i in self.square_coordinates:
             square = self.pet_world.get_square(self.square_coordinates[i])
             if square.is_wall:
-                i.setBrush(QtGui.QBrush(QtGui.QColor(20, 20, 20)))
+                i.setBrush(QtGui.QBrush(QtGui.QColor(211, 211, 211, 25)))
+                pixmap = QtGui.QPixmap(f"{self.pet_world.obstacle}")
+                pixmap = pixmap.scaled(75, 75, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+                pixmap_item = QtWidgets.QGraphicsPixmapItem(pixmap)
+                # pixmap_item.setPos(square.pos())
+                self.scene.addItem(pixmap_item)
+                pixmap_item.setPos(int(self.square_coordinates[i].x) * 50 - 10, int(self.square_coordinates[i].y) * 50 - 15)
+                # bring square to front
+                i.setZValue(1)
+                self.pixmaps.append(pixmap_item)
             else:
                 i.setBrush(QtGui.QBrush(QtGui.QColor(211, 211, 211, 25)))
 

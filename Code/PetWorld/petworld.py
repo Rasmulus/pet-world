@@ -55,6 +55,7 @@ class PetWorld():
         self.ai = Ai(self)
         self.record = None
         self.background = "assets/background.jpg"
+        self.obstacle = "assets/bush.png"
 
     def get_width(self):
         """
@@ -330,6 +331,9 @@ class PetWorld():
             file.write("# Background\n")
             file.write(f"{self.background}\n")
             file.write("\n")
+            file.write("# Obstacle\n")
+            file.write(f"{self.obstacle}\n")
+            file.write("\n")
             file.write("# Pets\n")
             for i in self.robots:
                 location = str(i).split("location ")
@@ -392,6 +396,10 @@ class PetWorld():
                         if category == "Background":
                             current_line = file.readline().rstrip()
                             self.background = current_line
+
+                        if category == "Obstacle":
+                            current_line = file.readline().rstrip()
+                            self.obstacle = current_line
 
                         if category == "Pets":
                             while True:

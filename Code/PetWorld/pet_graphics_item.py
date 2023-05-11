@@ -7,11 +7,6 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
     The class PetGraphicsItem extends QGraphicsPolygonItem to link it together to the physical
     representation of a Pet. The QGraphicsPolygonItem handles the drawing, while the
     Pet knows its own location and status.
-
-    NOTE: unfortunately the PyQt6 uses different naming conventions than the rest
-    of this project. We are also overriding the mousePressEvent()-method, whose
-    name cannot be changed. Therefore, this class has a different style of naming the
-    method names. (for example: updatePosition() vs update_position())
     """
 
     def __init__(self, pet, square_size):
@@ -36,18 +31,34 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.mana_bar_proxy.setVisible(False)
         self.name_tag_proxy.setVisible(False)
         self.char_sheet_proxy.setVisible(False)
+        self.setZValue(5)
+
 
     def hide_pet(self):
+        """
+        Hides the pet.
+        """
         self.hide()
 
     def hoverEnterEvent(self, event):
+        """
+        Sets various UI elements of the pet as visible upon hovering over it.
+        """
         self.updateAll()
+        self.setZValue(5)
         self.char_sheet_proxy.setVisible(True)
+        self.char_sheet_proxy.setZValue(10)
         self.health_bar_proxy.setVisible(True)
+        self.health_bar_proxy.setZValue(10)
         self.mana_bar_proxy.setVisible(True)
+        self.mana_bar_proxy.setZValue(10)
         self.name_tag_proxy.setVisible(True)
+        self.name_tag_proxy.setZValue(10)
 
     def hoverLeaveEvent(self, event):
+        """
+        Sets various UI elements of the pet as hidden upon moving the mouse away from it.
+        """
         self.char_sheet_proxy.setVisible(False)
         self.health_bar_proxy.setVisible(False)
         self.mana_bar_proxy.setVisible(False)
@@ -55,6 +66,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
 
     def makeNameTag(self):
+        """
+        Draws a name tag that shows the pet's name.
+        """
         self.name_tag = QtWidgets.QLabel()
         self.name_tag.setText(f"{self.pet.get_name()}")
         self.name_tag.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
@@ -85,7 +99,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         offset_x = center_x - self.health_bar_proxy.size().width() / 2
         offset_y = -self.health_bar_proxy.size().height() - 110
 
-        #raise to front
+        # raise to front
         self.name_tag.raise_()
 
         # set the position of the proxy widget
@@ -101,6 +115,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
 
     def makeCharSheet(self):
+        """
+        Draws a character sheet that shows critical information about the pet and it's status.
+        """
+        # create the character sheet
         self.char_sheet = QtWidgets.QLabel()
         self.char_sheet.setStyleSheet(
             "QLabel { font-size: 16px; font-weight: bold; border: 2px solid black; background-color: ghostwhite }")
@@ -150,7 +168,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.char_sheet_proxy.setPos(center_x + offset.x(), center_y + offset.y())
 
     def loadCharacterImage(self):
-
+        """
+        Draws the character image of the pet over its triangle.
+        """
         # create a label widget to display the image
         self.image_label = QtWidgets.QLabel()
         pixmap = QtGui.QPixmap(f"assets/{str(self.pet.class_name).lower()}.png")
@@ -166,12 +186,12 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.image_label_proxy.setWidget(self.image_label)
 
     def updateCharacterImage(self):
+        """
+        Updates the character image to follow the location of the parent pet.
+        """
         # calculate the center point of the triangle
         center_x = self.square_size / 2
         center_y = self.square_size / 2
-
-        # raise to front
-        #self.image_label.raise_()
 
         # calculate the offset for the character image proxy widget
         offset_x = center_x - 75
@@ -193,6 +213,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
 
     def makeHealthBar(self):
+        """
+        Draws a health bar that shows the current and maximum health of yhe parent pet.
+        """
+        # create the health bar
         self.health_bar = QtWidgets.QProgressBar()
         self.health_bar.setMaximum(self.pet.max_health)
         self.health_bar.setMinimum(0)
@@ -201,11 +225,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.health_bar.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.health_bar.setStyleSheet(
             "QProgressBar::chunk { background-color: lawngreen } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
+
         # create a proxy widget for the progress bar
         self.health_bar_proxy = QtWidgets.QGraphicsProxyWidget(self)
         self.health_bar_proxy.setWidget(self.health_bar)
-
-        #self.health_bar_proxy.setRotation(-self.rotation())
 
         return self.health_bar_proxy
 
@@ -213,9 +236,12 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         """
         Updates the health bar to match the health of the parent pet.
         """
+        # set the current health to reflect the parent pet's health value
         self.health_bar.setValue(self.pet.get_health())
         self.health_bar.setFormat(f"{self.pet.get_health()}/{self.pet.max_health} HP")
         percentage_left = self.pet.get_health() / self.pet.max_health
+
+        # set the health bar color to reflect the amount of health left
         if percentage_left > 0.5:
             self.health_bar.setStyleSheet(
                 "QProgressBar::chunk { background-color: lawngreen } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
@@ -250,6 +276,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.health_bar_proxy.setPos(center_x + offset.x(), center_y + offset.y())
 
     def makeManaBar(self):
+        """
+        Draws a mana bar that shows the current and maximum mana of yhe parent pet.
+        """
+        # create the mana bar
         self.mana_bar = QtWidgets.QProgressBar()
         self.mana_bar.setMaximum(self.pet.max_mana)
         self.mana_bar.setMinimum(0)
@@ -259,17 +289,16 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.mana_bar.setStyleSheet(
             "QProgressBar::chunk { background-color: lightskyblue } QProgressBar { font-size: 16px; font-weight: bold; border: 2px solid black; }")
 
-        # create a proxy widget for the progress bar
+        # create a proxy widget for the mana bar
         self.mana_bar_proxy = QtWidgets.QGraphicsProxyWidget(self)
         self.mana_bar_proxy.setWidget(self.mana_bar)
-
-        #self.health_bar_proxy.setRotation(-self.rotation())
 
         return self.mana_bar_proxy
     def updateManaBar(self):
         """
         Updates the mana bar to reflect the current mana of the parent pet.
         """
+        # set the current mana to reflect the parent pet's mana value
         self.mana_bar.setValue(self.pet.get_mana())
         self.mana_bar.setFormat(f"{self.pet.get_mana()}/{self.pet.max_mana} MP")
 
@@ -277,6 +306,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         rotation = self.rotation()
         self.mana_bar_proxy.setRotation(
             -rotation)  # set the rotation of the proxy widget to the negative of this item's rotation
+
         # calculate the center point of the triangle
         center_x = self.square_size / 2
         center_y = self.square_size / 2
@@ -299,10 +329,6 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
     def constructTriangleVertices(self):
         """
         This method sets the shape of this item into a triangle.
-
-        The QGraphicsPolygonItem can be in the shape of any polygon.
-        We use triangles to represent pets, as it makes it easy to
-        show the current facing of the pet.
         """
         # Create a new QPolygon object
         triangle = QtGui.QPolygonF()
@@ -324,7 +350,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
     def updateAll(self):
         """
         Updates the visual representation to correctly resemble the current
-        location, direction and status of the parent pet.
+        location, direction and status of the parent pet and it's widgets.
         """
         self.updatePosition()
         self.updateRotation()
@@ -336,23 +362,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.updateCharacterImage()
         if self.pet.is_broken():
             self.hide_pet()
-        #self.health_bar_proxy.setWidget(self.health_bar)
 
     def updatePosition(self):
         """
-        Implement me!
-
         Update the coordinates of this item to match the attached pet.
-        Remember to take in to account the size of the squares.
-
-        A pet in the first (0, 0) square should be drawn at (0, 0).
-
-        See: For setting the position of this GraphicsItem, see
-        QGraphicsPolygonItem at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QGraphicsPolygonItem.html
-        and its parent class QGraphicsItem at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QGraphicsItem.html
-
-        For getting the location of the parent pet, look at the Pet-class
-        in pet.py.
         """
 
         location = self.pet.get_location()
@@ -363,11 +376,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def updateRotation(self):
         """
-        Implement me!
-
         Rotates this item to match the rotation of parent pet.
-        A method for rotating can be found from QGraphicsItem at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QGraphicsItem.html
-
         """
 
         facing = self.pet.get_facing()
@@ -389,26 +398,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
 
     def updateColor(self):
         """
-        Implement me!
-
-        Draw broken pets in red, stuck pets in yellow and working pets in green.
-
-        The rgb values of the colors must be the following:
-        - red: (255, 0, 0)
-        - yellow: (255, 255, 0)
-        - green: (0, 255, 0)
-
-        See: setBrush() at https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractGraphicsShapeItem.html
-        and QBrush at https://doc.qt.io/qtforpython/PySide6/QtGui/QBrush.html
-        and QColor at https://doc.qt.io/qtforpython/PySide6/QtGui/QColor.html
-
-        Look at pet.py for checking the status of the pet.
+        Draw AI pets in red and player pets in blue.
         """
-        state = ""
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 255))
         self.setBrush(brush)
-
-
 
         if self.pet.team == "Red":
             brush = QtGui.QBrush(QtGui.QColor(255, 0, 0))
@@ -417,167 +410,163 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         elif not self.pet.team == "Blue":
             brush = QtGui.QBrush(QtGui.QColor(0, 0, 255))
 
-
-        if self.pet.is_stuck():
-            brush = QtGui.QBrush(QtGui.QColor(255, 255, 0))
-            state = "stuck"
-
         self.setBrush(brush)
 
-    #def updateHealthBar(self):
-        #self.health_bar_proxy.setWidget(self.health_bar)
-
-
-
-
     def mousePressEvent(self, event, *args, **kwargs):
-            #Check if level editor
-            if self.pet.get_world().active_team == "Level Editor":
-                menu = QtWidgets.QMenu()
-                # make the font size larger
-                font = menu.font()
-                font.setPointSize(font.pointSize() + 5)
-                menu.setFont(font)
-                # Create the menu items and add them to the menu
-                rows = ["Change Team", "Remove Pet"]
-                for row in rows:
-                    action = QtWidgets.QWidgetAction(menu)
-                    label = QtWidgets.QLabel(row)
-                    action.setDefaultWidget(label)
-                    menu.addAction(action)
-                    # Connect the action to a method that handles it
-                    action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-                # Show the menu at the position of the event
-                menu.exec(event.screenPos())
+        """
+        Handles various actions depending on the state of the world, such as drawing context menus.
+        """
 
-            #Check if attacking
-            elif not self.pet.team == self.pet.get_world().active_team and self.pet.get_world().attacking:
-                target = self.pet
-                attacker = None
-                for i in self.pet.get_world().get_robots():
-                    if i.attacking:
-                        attacker = i
-                distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
-                percentage_left = target.get_health() / target.max_health
+        # check if level editor
+        if self.pet.get_world().active_team == "Level Editor":
+            menu = QtWidgets.QMenu()
+            # make the font size larger
+            font = menu.font()
+            font.setPointSize(font.pointSize() + 5)
+            menu.setFont(font)
+            # create the menu items and add them to the menu
+            rows = ["Change Team", "Remove Pet"]
+            for row in rows:
+                action = QtWidgets.QWidgetAction(menu)
+                label = QtWidgets.QLabel(row)
+                action.setDefaultWidget(label)
+                menu.addAction(action)
+                # connect the action to a method that handles it
+                action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+            # show the menu at the position of the event
+            menu.exec(event.screenPos())
 
-                if attacker.breaking:
-                    if distance > 1:
-                        menu = QtWidgets.QMenu()
-                        # make the font size larger
-                        font = menu.font()
-                        font.setPointSize(font.pointSize() + 5)
-                        menu.setFont(font)
-                        # Create the menu items and add them to the menu
-                        rows = ["Target out of Range. Cancel"]
-                        for row in rows:
-                            action = QtWidgets.QWidgetAction(menu)
-                            label = QtWidgets.QLabel(row)
-                            action.setDefaultWidget(label)
-                            menu.addAction(action)
-                            # Connect the action to a method that handles it
-                            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-                        # Show the menu at the position of the event
-                        menu.exec(event.screenPos())
-                    elif percentage_left > 0.2:
-                        menu = QtWidgets.QMenu()
-                        # make the font size larger
-                        font = menu.font()
-                        font.setPointSize(font.pointSize() + 5)
-                        menu.setFont(font)
-                        # Create the menu items and add them to the menu
-                        rows = ["Target not weak enough. Cancel"]
-                        for row in rows:
-                            action = QtWidgets.QWidgetAction(menu)
-                            label = QtWidgets.QLabel(row)
-                            action.setDefaultWidget(label)
-                            menu.addAction(action)
-                            # Connect the action to a method that handles it
-                            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-                        # Show the menu at the position of the event
-                        menu.exec(event.screenPos())
+        # check if attacking
+        elif not self.pet.team == self.pet.get_world().active_team and self.pet.get_world().attacking:
+            target = self.pet
+            attacker = None
+            for i in self.pet.get_world().get_robots():
+                if i.attacking:
+                    attacker = i
+            distance = self.pet.distance_count(attacker.get_location())    # Calculate distance between the pets
+            percentage_left = target.get_health() / target.max_health
 
-                    else:
-                        menu = QtWidgets.QMenu()
-                        # make the font size larger
-                        font = menu.font()
-                        font.setPointSize(font.pointSize() + 5)
-                        menu.setFont(font)
-                        # Create the menu items and add them to the menu
-                        rows = ["Free Pet", "Cancel"]
-                        for row in rows:
-                            action = QtWidgets.QWidgetAction(menu)
-                            label = QtWidgets.QLabel(row)
-                            action.setDefaultWidget(label)
-                            menu.addAction(action)
-                            # Connect the action to a method that handles it
-                            action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-                        # Show the menu at the position of the event
-                        menu.exec(event.screenPos())
-
-                elif attacker.att_range >= distance:  # Checks if target in range
+            if attacker.breaking:
+                if distance > 1:
                     menu = QtWidgets.QMenu()
                     # make the font size larger
                     font = menu.font()
                     font.setPointSize(font.pointSize() + 5)
                     menu.setFont(font)
-                    # Create the menu items and add them to the menu
-                    rows = ["Choose Target", "Cancel"]
+                    # create the menu items and add them to the menu
+                    rows = ["Target out of Range. Cancel"]
                     for row in rows:
                         action = QtWidgets.QWidgetAction(menu)
                         label = QtWidgets.QLabel(row)
                         action.setDefaultWidget(label)
                         menu.addAction(action)
-                        # Connect the action to a method that handles it
+                        # connect the action to a method that handles it
                         action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-                    # Show the menu at the position of the event
+                    # show the menu at the position of the event
+                    menu.exec(event.screenPos())
+                elif percentage_left > 0.2:
+                    menu = QtWidgets.QMenu()
+                    # make the font size larger
+                    font = menu.font()
+                    font.setPointSize(font.pointSize() + 5)
+                    menu.setFont(font)
+                    # create the menu items and add them to the menu
+                    rows = ["Target not weak enough. Cancel"]
+                    for row in rows:
+                        action = QtWidgets.QWidgetAction(menu)
+                        label = QtWidgets.QLabel(row)
+                        action.setDefaultWidget(label)
+                        menu.addAction(action)
+                        # connect the action to a method that handles it
+                        action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                    # show the menu at the position of the event
                     menu.exec(event.screenPos())
 
-            elif not self.pet.get_attack_state() and self.pet.team == self.pet.get_world().active_team:
+                else:
+                    menu = QtWidgets.QMenu()
+                    # make the font size larger
+                    font = menu.font()
+                    font.setPointSize(font.pointSize() + 5)
+                    menu.setFont(font)
+                    # create the menu items and add them to the menu
+                    rows = ["Free Pet", "Cancel"]
+                    for row in rows:
+                        action = QtWidgets.QWidgetAction(menu)
+                        label = QtWidgets.QLabel(row)
+                        action.setDefaultWidget(label)
+                        menu.addAction(action)
+                        # connect the action to a method that handles it
+                        action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+                    # show the menu at the position of the event
+                    menu.exec(event.screenPos())
+
+            elif attacker.att_range >= distance:  # Checks if target in range
                 menu = QtWidgets.QMenu()
                 # make the font size larger
                 font = menu.font()
                 font.setPointSize(font.pointSize() + 5)
                 menu.setFont(font)
-                # Create the menu items based on pet status and add them to the menu
-                if not self.pet.attacked and not self.pet.moved:
-                    if self.pet.mana >= 20:
-                        rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Break Mind Control (20 MP)",
-                                "Rest (Restore MP)", "Heal (10 MP)"]
-                    elif self.pet.get_mana() >= 10:
-                        rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal (10 MP)"]
-                    elif self.pet.get_mana() >= 5:
-                        rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)"]
-                    else:
-                        rows = ["Move", "Rest (Restore MP)"]
-                elif not self.pet.attacked and self.pet.moved:
-                    if self.pet.get_mana() >= 10:
-                        rows = ["Heavy Attack (10 MP)", "Light Attack (5 MP)", "Heal (10 MP)"]
-                    elif self.pet.get_mana() >= 5:
-                        rows = ["Light Attack (5 MP)"]
-                    else:
-                        rows = []
-
-                elif not self.pet.moved:
-                    rows = ["Move"]
-                else:
-                    rows = []
-
+                # create the menu items and add them to the menu
+                rows = ["Choose Target", "Cancel"]
                 for row in rows:
                     action = QtWidgets.QWidgetAction(menu)
                     label = QtWidgets.QLabel(row)
                     action.setDefaultWidget(label)
                     menu.addAction(action)
-                    # Connect the action to a method that handles it
+                    # connect the action to a method that handles it
                     action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
-                # Show the menu at the position of the event
+                # show the menu at the position of the event
                 menu.exec(event.screenPos())
+
+        elif not self.pet.get_attack_state() and self.pet.team == self.pet.get_world().active_team:
+            menu = QtWidgets.QMenu()
+            # make the font size larger
+            font = menu.font()
+            font.setPointSize(font.pointSize() + 5)
+            menu.setFont(font)
+            # create the menu items based on pet status and add them to the menu
+            if not self.pet.attacked and not self.pet.moved:
+                if self.pet.mana >= 20:
+                    rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Break Mind Control (20 MP)",
+                            "Rest (Restore MP)", "Heal (10 MP)"]
+                elif self.pet.get_mana() >= 10:
+                    rows = ["Move", "Heavy Attack (10 MP)", "Light Attack (5 MP)", "Rest (Restore MP)", "Heal (10 MP)"]
+                elif self.pet.get_mana() >= 5:
+                    rows = ["Move", "Light Attack (5 MP)", "Rest (Restore MP)"]
+                else:
+                    rows = ["Move", "Rest (Restore MP)"]
+            elif not self.pet.attacked and self.pet.moved:
+                if self.pet.get_mana() >= 10:
+                    rows = ["Heavy Attack (10 MP)", "Light Attack (5 MP)", "Heal (10 MP)"]
+                elif self.pet.get_mana() >= 5:
+                    rows = ["Light Attack (5 MP)"]
+                else:
+                    rows = []
+
+            elif not self.pet.moved:
+                rows = ["Move"]
             else:
-                self.pet.attacking = False
-                self.pet.get_world().reset_attacking()
-                self.pet.moving = False
-                self.pet.get_world().moving = False
+                rows = []
+
+            for row in rows:
+                action = QtWidgets.QWidgetAction(menu)
+                label = QtWidgets.QLabel(row)
+                action.setDefaultWidget(label)
+                menu.addAction(action)
+                # connect the action to a method that handles it
+                action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
+            # show the menu at the position of the event
+            menu.exec(event.screenPos())
+        else:
+            self.pet.attacking = False
+            self.pet.get_world().reset_attacking()
+            self.pet.moving = False
+            self.pet.get_world().moving = False
 
     def handleContextMenuAction(self, row):
+        """
+        Handles various context menu actions fed to it.
+        """
         if row == "Change Team":
             self.pet.change_team()
 
@@ -626,9 +615,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
             self.check_if_won()
     def attack(self):
         """
-
         Attacks the target pet.
-
         """
 
         for i in self.pet.get_world().get_robots():
@@ -652,6 +639,9 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         self.pet.get_world().reset_attacking()
 
     def break_control(self):
+        """
+        Frees the target pet and makes it friendly.
+        """
         self.pet.change_team()
         self.pet.get_world().reset_attacking()
         for i in self.pet.world.get_robots():
@@ -661,6 +651,10 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                 i.attacked = True
 
     def check_if_won(self):
+        """
+        Checks to see if the game has ended, by iterating through all pets and seeing if there are no friendly or NPC pets left.
+        """
+
         blue_found = False
         red_found = False
         for i in self.pet.world.get_robots():
