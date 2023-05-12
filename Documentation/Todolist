@@ -1,6 +1,4 @@
-- Implement tests
-- Level select should only allow loading levels that are already beaten or the one currently being played
-
+- Implement tests -> Done
 - Add graphics to obstacles -> Done
 - Implement Game over screen that is separate from winning screen -> Done
 - Implement character art -> Done

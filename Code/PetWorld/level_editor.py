@@ -2,7 +2,6 @@ import os
 from PyQt6.QtWidgets import QApplication
 from PyQt6 import QtCore
 from gui import GUI
-
 from direction import Direction
 from petworld import *
 from coordinates import *
@@ -21,7 +20,6 @@ def main():
     # Open the savegame
     with open('savedata/level_editor.ptwrld', 'r') as file:
         # Read the lines from the file
-        #current_line = file.readline().rstrip()
         for current_line in file:
             try:
                 current_line = current_line.rstrip()
@@ -78,9 +76,6 @@ def main():
 
     # Start the Qt event loop. (i.e. make it possible to interact with the gui)
     sys.exit(app.exec())
-
-    # Any code below this point will only be executed after the gui is closed.
-
 
 if __name__ == "__main__":
     main()

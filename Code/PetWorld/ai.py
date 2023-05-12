@@ -28,18 +28,13 @@ class Ai():
                     target = j
                     found = True
         if found and pet.health >= int(pet.max_health * 0.5) and pet.mana >= 5:
-            all_pets = self.world.robots
             all_locations = []
             for i in self.world.robots:
                 all_locations.append(i.location)
                 try:
                     if str(self.targets_dict[i]) == str(target):
-                        #attack(i, pet)
-                        #target_pet = i
-                        #all_locations.append(i.location)
 
                         self.attack(i, pet)
-                        #self.attack(target_pet,pet)
                         pet.move_to(target.get_neighbor((random.randint(-1, 1), random.randint(-1, 1))))
                         while pet.location in self.targets:
                             pet.move_to(target.get_neighbor((random.randint(-1, 1), random.randint(-1, 1))))

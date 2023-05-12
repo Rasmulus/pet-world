@@ -44,16 +44,17 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
         """
         Sets various UI elements of the pet as visible upon hovering over it.
         """
-        self.updateAll()
-        self.setZValue(5)
-        self.char_sheet_proxy.setVisible(True)
-        self.char_sheet_proxy.setZValue(10)
-        self.health_bar_proxy.setVisible(True)
-        self.health_bar_proxy.setZValue(10)
-        self.mana_bar_proxy.setVisible(True)
-        self.mana_bar_proxy.setZValue(10)
-        self.name_tag_proxy.setVisible(True)
-        self.name_tag_proxy.setZValue(10)
+        if not self.pet.world.moving:
+            self.updateAll()
+            #self.setZValue(5)
+            self.char_sheet_proxy.setVisible(True)
+            #self.char_sheet_proxy.setZValue(10)
+            self.health_bar_proxy.setVisible(True)
+            #self.health_bar_proxy.setZValue(10)
+            self.mana_bar_proxy.setVisible(True)
+            #self.mana_bar_proxy.setZValue(10)
+            self.name_tag_proxy.setVisible(True)
+            #self.name_tag_proxy.setZValue(10)
 
     def hoverLeaveEvent(self, event):
         """
@@ -464,7 +465,7 @@ class PetGraphicsItem(QtWidgets.QGraphicsPolygonItem):
                         action.triggered.connect(lambda checked, row=row: self.handleContextMenuAction(row))
                     # show the menu at the position of the event
                     menu.exec(event.screenPos())
-                elif percentage_left > 0.2:
+                elif percentage_left > 0.5:
                     menu = QtWidgets.QMenu()
                     # make the font size larger
                     font = menu.font()

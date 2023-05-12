@@ -848,7 +848,6 @@ class GUI(QtWidgets.QMainWindow):
                         action.triggered.connect(
                             lambda checked, row=row: self.handleContextMenuAction(row))
                 # Show the menu at the position of the event
-                # pos = self.view.mapFromGlobal(self.view.mapToGlobal(event.pos()))
                 menu.exec(pos)
 
         if self.world.moving:
@@ -873,7 +872,6 @@ class GUI(QtWidgets.QMainWindow):
                     action.triggered.connect(
                         lambda checked, row=row: self.handleContextMenuAction(row))
                 # Show the menu at the position of the event
-                #pos = self.view.mapFromGlobal(self.view.mapToGlobal(event.pos()))
                 menu.exec(pos)
 
     def handleContextMenuAction(self, row):

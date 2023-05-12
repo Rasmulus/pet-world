@@ -1,51 +1,24 @@
 # Y2_2023_84433: Srategiapeli "PetWorld"
 
-## Checkpoint2
+## Esittely
 
-## Tämänhetkiset ominaisuudet
+Projekti on "turn-based strategy game", eli strategiapeli, jossa pelaajan täytyy pelata tekoälyä vastaan. Sekä pelaaja, että tietokone ohjaavat joukkoa eläinhahmoja, jotka taistelevat keskenään.
+## Tiedosto- ja kansiorakenne
 
-Projekti on "turn-based strategy game", eli strategiapeli, jossa pelaajat tekevät vuoronsa aikana liikkeitä.
-Huomio: Ohjelma on rakennettu käyttäen luentojen RobotWorld ohjelmaa pohjana. Tämän vuoksi pelissä on vielä yhtäläisyyksiä ja jäänteitä tästä ohjelmasta.
-Pyrin jatkaessani projektia tehdä ohjelmastani aina enemmän omani näköisen, niin että RobotWorldin vaikutteet vähenevät.
+- Code -> sisältää kaikki tarvittavat tiedostot ohjelman suorittamiseen
+  - Petworld -> sisältää ohjelmakoodin, sekä kaksi kansiota HUOM: Ohjelma on rakennettu käyttäen luentojen RobotWorld ohjelmaa pohjana. Sisältää siis näinollen muiden koodia.
+  	- assets -> sisältää pelin hyödyntämiä valokuvatiedostoja
+  	- savedata -> sisältää tasotiedostot, sekä pelin tallennukset ja näytönkaappaukset tasoista
+- Documentation -> sisältää projektin dokumentaation
 
-Toistaiseksi olen toteuttanut seuraavat ominaisuudet peliin:
-- Lemmikkihahmo, jolla on seuraavanlaisia ominaisuuksia:
-	- Nimi
-	- Tiimi
-	- Elämä/Health -pisteet
-	- "Movement range", eli kuinka monta ruutua lemmikki pystyy liikkumaan vuoronsa aikana
-	- "Attack range", eli kuinka kauas lemmikin hyökkäys yltää
-	- Vahvuus, eli kuinka paljon elämää lemmikki vie viholliselta hyökätessään
-	- kolme liikettä, joita hahmo voi vuoronsa aikana tehdä "Move", "Attack" ja "Heal"
-	- "Character sheet", widgetti, joka näyttää ajankohtaiset yksityiskohdat lemmikin tiedoista
-	- "health bar" näyttää kuinka paljon elämää hahmolla on jäljellä
-	- "name tag" näyttää lemmikin nimen
-	- "context menu" joka näyttää hahmoa klikatessa mahdolliset liikkeet
-- Ajastimen, joka näyttää kuinka kauan peli on kestänyt
-- Kentän, jossa hahmot voivat liikkua
-- Vuoro-, liike- ja status-logiikan, joka pitää huolen siitä, että peliä voidaan pelata vain sääntöjen mukaisesti
-- Napin, jota painamalla vuoro vaihtuu. Tällöin myös pelin taustakuva vaihtuu reflektoimaan tiimin väriä, joka on paraikaa vuorossa.
-- Kenttäeditorin, jolla voi luoda erikokoisia kenttiä, joihin voi lisätä esteitä ja lemmikkejä
-- Pelien lataaminen ja tallentaminen
-  - pelit tallentuu ihmisluettaviin .ptwrld -tiedostoihin, joita voi halutessa muokata tekstieditorissa, tai kenttäeditorissa
-  - peli tallentaa myös näytönkaappauksia tasoista tallentaessa, jotta pelaajan on helpompi nähdä minkä tason aikoo ladata
-- Eri tasoja
+## Asennusohje
+Ohjelma tarvitsee PyQt6 -kirjaston toimiakseen. Ohjelma ei käytä muita ulkoisia kirjastoja.
 
- ## Käyttöohje
+## Käyttöohje
 
-Ohjelma on jo käyttökelpoinen tässä vaiheessa. Se voidaan ajaa ajamalla main.py tiedosto.
+Ohjelma voidaan ajaa ajamalla main.py tiedosto.
 Peliä pelataan klikkaamalla hahmoja, ja valitsemalla liikkeistä jotka tulevat näkyville.
 Pelissä vuoronsa aikana saa liikuttaa kaikkia hahmojaan kerran, sekä tehdä yksi liike (joko hyökkäys, tai itsensä parantaminen).
-Kun ei enään pysty tekemään muuta, voi lopettaa vuoronsa painamalla "End turn" -nappia, jolloin vuoro siirtyy toiselle pelaajalle.
+Kun ei enään pysty tekemään muuta, voi lopettaa vuoronsa painamalla "End turn" -nappia, jolloin vuoro siirtyy tietokoneelle.
 
-
-
- ## Aikataulu
-
-Olen käyttänyt aikaa projektiin tähän mennessä noin 65 tuntia, eli olen pysynyt suunnitelmassa odotetun mukaan.
-Ei ole ilmennyt vielä muutoksia aikatauluun.
-
- ## Muuta
-
-Ei ole ilmennyt sen kummempia ongelmia tässä vaiheessa.
-Olen luopunut tässä vaiheessa peliohjaintueen implementoinnista.
+Kenttäeditoriin pääsee käsiksi ajamalla level_editor.py. Vaihtoehtoisesti kenttäeditoriin pääsee myös lataamalla level editor graafisen käyttöliittymän kautta.

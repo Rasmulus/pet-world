@@ -3,6 +3,9 @@ from PyQt6.QtCore import QPropertyAnimation
 
 
 class LevelEndWidget(QtWidgets.QDialog):
+    """
+    The class LevelEndWidget is a splash screen widget that is shown when loosing or winning a level.
+    """
     def __init__(self, parent, won, elapsed_time, new_record, record):
         self.result = None
         super().__init__(parent)
@@ -13,7 +16,6 @@ class LevelEndWidget(QtWidgets.QDialog):
         # Create the rounded rectangle shape
         rounded_rect = QtGui.QPainterPath()
         rounded_rect.addRoundedRect(QtCore.QRectF(0, 0, self.width(), self.height()), 20, 20)
-        #self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
 
         # Set the widget mask to the rounded rectangle shape
         path = QtGui.QPainterPath()
@@ -62,8 +64,6 @@ class LevelEndWidget(QtWidgets.QDialog):
                 end_pos = QtCore.QPoint(self.width() - self.new_record_stamp.width(), self.new_record_stamp.y())
                 animation.setStartValue(start_pos)
                 animation.setEndValue(end_pos)
-                # Start the animation
-                #animation.start()
 
             self.next_level_button = QtWidgets.QPushButton("Next Level", self)
             self.next_level_button.setFont(QtGui.QFont("Arial", 30))

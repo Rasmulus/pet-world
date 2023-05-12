@@ -287,6 +287,9 @@ class PetWorld():
             file.write("# Turn\n")
             file.write(f"{self.active_team}\n")
             file.write("\n")
+            file.write("# Obstacle\n")
+            file.write(f"{self.obstacle}\n")
+            file.write("\n")
             file.write("# Pets\n")
             for i in self.robots:
                 location = str(i).split("location ")

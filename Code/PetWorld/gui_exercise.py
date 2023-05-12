@@ -205,6 +205,7 @@ class GuiExercise():
                 brush = QtGui.QBrush(QtGui.QColor(0, 255, 255, 25))
                 rect_item.setBrush(brush)
                 rect_item.setOpacity(0.75)
+                rect_item.setZValue(5)
                 self.highlighted_squares.append(rect_item)
                 self.scene.addItem(rect_item)
                 self.square_coordinates[rect_item] = Coordinates(x, y)
