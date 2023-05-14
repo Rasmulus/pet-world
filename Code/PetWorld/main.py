@@ -57,6 +57,12 @@ def main():
                             if current_line.startswith("#"):
                                 # Reached the next category, break out of the loop
                                 break
+                            elif current_line == "":
+                                current_line = file.readline().rstrip()
+                                if current_line == "":
+                                    break
+                                else:
+                                    exec(current_line)
                             else:
                                 # Execute the line as code
                                 exec(current_line)
